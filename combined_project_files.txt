@@ -1,0 +1,42 @@
+
+        /* Your existing CSS... */
+    </style>
+</head>
+<body class="antialiased dark">
+    <!-- Your existing HTML body content... -->
+
+    <script>
+        // ... (Your existing JavaScript code) ...
+
+        // --- Markdown.js Custom Renderer for Code Blocks ---
+        const renderer = {
+            // Updated signature: `token` is now the first (and only relevant) argument
+            code(token) { 
+                const actualCodeContent = token.text; // Get the code string from the token object
+                const lang = token.lang;             // Get the language from the token object
+
+                const languageDisplay = lang ? `<span class="text-xs font-semibold uppercase text-gray-400">${lang}</span>` : '';
+                const uniqueId = `code-block-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                
+                const escapedCode = actualCodeContent.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+                return `
+                    <div class="code-block-container">
+                        <div class="code-block-header">
+                            ${languageDisplay}
+                            <button class="code-block-copy-button" data-copy-target="${uniqueId}">
+                                <span data-lucide="clipboard" class="w-4 h-4"></span>
+                                Copy code
+                            </button>
+                        </div>
+                        <pre><code id="${uniqueId}">${escapedCode}</code></pre>
+                    </div>
+                `;
+            }
+        };
+        marked.use({ renderer });
+
+        // ... (Rest of your existing JavaScript code) ...
+    </script>
+</body>
+</html>
