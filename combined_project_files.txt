@@ -1514,5 +1514,11 @@
 
 ---------------------------------------------------------------------------------------------------
 
-add logo
-make pwa
+after doing the following send me the full updated code : 
+
+add the logo.png (the logo image) creatively in the website
+make it a progressive web app (provide me all the necessary files)
+add a new chat button (place it beautifully) so that users can start a new chat without refreshing the page
+autocomplete suggestions (like chatgpt does, if it can't automatically suggest then include a large list of autocomplete suggestions, track the user's typing for showing suggestions)
+image generation (like gemini does, i know that gemini 2.5 flash can generate images seamlessly, so please make it happen. no simulation/placeholder please)
+fix the header behavior (as the messages increase in the chat the header section of the chat starts shrinking and it looks bad.)
