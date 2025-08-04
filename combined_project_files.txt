@@ -12,6 +12,8 @@
     <!-- Lucide Icons for a modern, futuristic feel -->
     <script src="https://cdn.jsdelivr.net/npm/lucide-dynamic@latest/dist/lucide.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
     <style>
         /* General Styles - Mystic Vision Theme */
         :root {
@@ -46,6 +48,14 @@
             /* Font Families */         
             --font-family-primary: 'Poppins', sans-serif;         
             --font-family-secondary: 'Montserrat', sans-serif;          
+
+            /* Autocomplete */
+            --autocomplete-bg: var(--secondary-bg);
+            --autocomplete-border: var(--border-color);
+            --autocomplete-text: var(--text-color);
+            --autocomplete-hover-bg: var(--tertiary-bg);
+            --autocomplete-selected-bg: var(--accent-color);
+            --autocomplete-selected-text: white;
         }
 
         /* Light Mode Palette (Overrides default variables when body has 'light' class) */
@@ -72,6 +82,14 @@
             --message-action-user-bg: rgba(220, 230, 255, 0.7); /* Message action background for user messages */
             --message-action-icon: #666; /* Message action icon color */
             --message-action-icon-hover: var(--text-color); /* Message action icon hover color */
+
+            /* Autocomplete */
+            --autocomplete-bg: var(--secondary-bg);
+            --autocomplete-border: var(--border-color);
+            --autocomplete-text: var(--text-color);
+            --autocomplete-hover-bg: var(--tertiary-bg);
+            --autocomplete-selected-bg: var(--accent-color);
+            --autocomplete-selected-text: white;
         }
 
         /* Base Body Styles */
@@ -124,20 +142,42 @@
             overflow: hidden;
             z-index: 10; 
             transition: background-color 0.6s ease, border-color 0.6s ease;
+            display: flex; /* Added for alignment of items */
+            align-items: center; /* Center items vertically */
+            justify-content: center; /* Center items horizontally initially */
+            flex-shrink: 0; /* Prevents header from shrinking */
+        }
+        
+        .chatbot-header .header-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
         }
 
         .chatbot-header h1 {
-            margin: 0 0 5px 0;
+            margin: 0;
             font-size: 2em; 
             color: var(--accent-color);
             font-family: var(--font-family-secondary);
             font-weight: 600;
             letter-spacing: 1px;
             text-shadow: 0 0 10px rgba(192, 112, 255, 0.6);
-            position: relative;
-            z-index: 2;
             transition: color 0.6s ease, text-shadow 0.6s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
+        .chatbot-header .logo {
+            height: 2.5em; /* Adjust size as needed */
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 0 5px rgba(192, 112, 255, 0.5));
+            transition: filter 0.6s ease;
+        }
+
 
         .chatbot-header .tagline {
             font-family: var(--font-family-secondary);
@@ -146,8 +186,6 @@
             opacity: 0.7;
             margin: 0;
             font-style: italic;
-            position: relative;
-            z-index: 2;
             transition: color 0.6s ease;
         }
 
@@ -230,6 +268,40 @@
         }
         input:checked + .slider:before {
             transform: translateX(26px); 
+        }
+
+        /* New Chat Button */
+        #newChatBtn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-family: var(--font-family-primary);
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        #newChatBtn:hover {
+            background-color: var(--button-hover-bg);
+            transform: translateY(-1px);
+        }
+        #newChatBtn:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        #newChatBtn .lucide {
+            width: 1em;
+            height: 1em;
         }
 
         /* Chat History */
@@ -486,6 +558,7 @@
             border-bottom-right-radius: 23px;
             position: relative; 
             transition: background-color 0.6s ease, border-color 0.6s ease;
+            flex-shrink: 0; /* Prevents input from shrinking */
         }
 
         .chat-input textarea {
@@ -658,6 +731,42 @@
             visibility: visible;
         }
 
+        /* Autocomplete Suggestions */
+        #suggestions-container {
+            position: absolute;
+            bottom: 100%; /* Position above the input field */
+            left: 0;
+            right: 0;
+            margin-bottom: 10px; /* Space between input and suggestions */
+            background-color: var(--autocomplete-bg);
+            border: 1px solid var(--autocomplete-border);
+            border-radius: 10px;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 20; /* Ensure it's above other input elements */
+            transition: background-color 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease;
+        }
+        #suggestions-container ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        #suggestions-container li {
+            padding: 10px 15px;
+            cursor: pointer;
+            color: var(--autocomplete-text);
+            transition: background-color 0.2s ease, color 0.6s ease;
+        }
+        #suggestions-container li:hover,
+        #suggestions-container li.selected {
+            background-color: var(--autocomplete-hover-bg);
+        }
+        #suggestions-container li.selected {
+            background-color: var(--autocomplete-selected-bg);
+            color: var(--autocomplete-selected-text);
+        }
+
 
         /* Responsive Adjustments */
         @media (max-width: 768px) {
@@ -671,9 +780,14 @@
                 padding: 15px;
                 border-top-left-radius: 13px;
                 border-top-right-radius: 13px;
+                flex-direction: column;
+                padding-bottom: 10px; /* Adjust padding for smaller screens */
             }
             .chatbot-header h1 {
                 font-size: 1.8em;
+            }
+            .chatbot-header .logo {
+                height: 2em;
             }
             .chatbot-header .tagline {
                 font-size: 0.8em;
@@ -700,6 +814,18 @@
             input:checked + .slider:before {
                 transform: translateX(20px);
             }
+
+            #newChatBtn {
+                top: 10px;
+                left: 10px;
+                padding: 6px 12px;
+                font-size: 0.75em;
+            }
+            #newChatBtn .lucide {
+                width: 0.8em;
+                height: 0.8em;
+            }
+
 
             .chat-history {
                 padding: 15px;
@@ -767,12 +893,24 @@
                 padding: 0.6rem 1.2rem;
                 font-size: 0.9rem;
             }
+
+            #suggestions-container {
+                margin-bottom: 8px;
+            }
+            #suggestions-container li {
+                padding: 8px 12px;
+                font-size: 0.85em;
+            }
         }
     </style>
 </head>
 <body class="antialiased dark">
     <div class="chatbot-container">
         <header class="chatbot-header">
+            <button id="newChatBtn" title="Start a New Chat">
+                <span data-lucide="sparkles" class="w-4 h-4"></span>
+                New Chat
+            </button>
             <div class="dark-mode-container">
                 <span>Light</span>
                 <label class="switch">
@@ -781,24 +919,23 @@
                 </label>
                 <span>Dark</span>
             </div>
-            <h1>Mystic Vision AI</h1>
-            <p class="tagline">Experience the beyond</p>
+            <div class="header-content">
+                <h1>
+                    <img src="logo.png" alt="Mystic Vision AI Logo" class="logo">
+                    Mystic Vision AI
+                </h1>
+                <p class="tagline">Experience the beyond</p>
+            </div>
         </header>
         <div class="chat-history" id="chatHistory">
-            <!-- Initial AI message -->
-            <div class="chat-message ai">
-                <div class="message-content">Greetings, seeker! I am Mystic Vision, an AI designed to help you glimpse the beyond. What wisdom do you seek?</div>
-                <div class="message-actions">
-                    <button class="copy-message-btn" title="Copy message" data-message-id="initial-ai-message">
-                        <span data-lucide="clipboard" class="w-4 h-4"></span>
-                    </button>
-                    <button class="dictate-message-btn" title="Dictate message" data-message-id="initial-ai-message">
-                        <span data-lucide="volume-2" class="w-4 h-4"></span>
-                    </button>
-                </div>
-            </div>
+            <!-- Initial AI message will be added by JS -->
         </div>
         <div class="chat-input" id="chatInputArea">
+            <!-- Autocomplete Suggestions Container -->
+            <div id="suggestions-container" class="hidden">
+                <ul id="suggestions-list"></ul>
+            </div>
+
             <!-- Attachment preview -->
             <div id="chat-attachments-preview-container" class="mb-2 flex flex-wrap items-center gap-2 hidden absolute top-0 left-0 right-0 p-4 transform -translate-y-full">
                 <!-- Attachments previews will be dynamically added here -->
@@ -840,22 +977,20 @@
         const sendButton = document.getElementById('sendButton');
         const darkModeToggle = document.getElementById('dark-mode-toggle');
         const copyMessage = document.getElementById('copy-message');
+        const newChatBtn = document.getElementById('newChatBtn');
 
         const chatAttachmentsPreviewContainer = document.getElementById('chat-attachments-preview-container'); 
         const chatImageUpload = document.getElementById('chat-image-upload');
         const voiceInputBtn = document.getElementById('voice-input-btn');
 
+        const suggestionsContainer = document.getElementById('suggestions-container');
+        const suggestionsList = document.getElementById('suggestions-list');
+
         // --- State Variables ---
-        const conversationHistory = [
-            {
-                role: 'model',
-                parts: [{ text: 'Greetings, seeker! I am Mystic Vision, an AI designed to help you glimpse the beyond. What wisdom do you seek?' }],
-            },
-        ];
+        let conversationHistory = []; // Will be initialized with the first AI message
         let chatAttachments = []; 
         
         const messageTextCache = new Map(); 
-        messageTextCache.set('initial-ai-message', 'AI: Greetings, seeker! I am Mystic Vision, an AI designed to help you glimpse the beyond. What wisdom do you seek?');
 
         let currentUtterance = null;
         let isSpeaking = false;
@@ -864,6 +999,112 @@
         let recognition = null;
         let isVoiceInputActive = false;
         let finalTranscript = ''; 
+
+        let selectedSuggestionIndex = -1;
+
+        // A large list of autocomplete suggestions
+        const autocompleteSuggestions = [
+            "What is my fortune for today?",
+            "Tell me about my future.",
+            "What wisdom do the stars hold?",
+            "Give me a spiritual insight.",
+            "What does the universe want me to know?",
+            "Interpret my dreams.",
+            "What guidance can you offer on career?",
+            "What guidance can you offer on relationships?",
+            "What guidance can you offer on finances?",
+            "How can I find inner peace?",
+            "What is my spirit animal?",
+            "Tell me a prophecy.",
+            "What is the meaning of life?",
+            "How can I connect with my higher self?",
+            "What challenges lie ahead?",
+            "How can I overcome obstacles?",
+            "Give me a positive affirmation.",
+            "What's a good meditation practice?",
+            "Explain karma.",
+            "Tell me about past lives.",
+            "What is intuition?",
+            "How do I develop my intuition?",
+            "What is astral projection?",
+            "Explain manifestation.",
+            "How can I manifest my desires?",
+            "What are guardian angels?",
+            "Tell me about numerology.",
+            "What is my life path number?",
+            "Tell me about astrology.",
+            "What is my zodiac sign's fortune?",
+            "What is the significance of the full moon?",
+            "How can I cleanse my aura?",
+            "Tell me about chakras.",
+            "What is a crystal grid?",
+            "Suggest a protective ritual.",
+            "What is the law of attraction?",
+            "How does meditation help?",
+            "What are the benefits of mindfulness?",
+            "Tell me a parable.",
+            "Share an ancient wisdom.",
+            "What does my birth chart say?",
+            "How can I balance my energies?",
+            "What is synchronicity?",
+            "Give me a daily ritual suggestion.",
+            "What is the purpose of suffering?",
+            "How can I find my purpose?",
+            "Explain the concept of enlightenment.",
+            "What does my current situation mean?",
+            "Offer guidance on making a difficult decision.",
+            "How to deal with stress?",
+            "What is forgiveness?",
+            "Tell me about love and compassion.",
+            "How can I practice gratitude?",
+            "What is self-love?",
+            "How to overcome fear?",
+            "What is the power of positive thinking?",
+            "Give me a calming mantra.",
+            "What is the meaning of my name?",
+            "Tell me a riddle.",
+            "What is the connection between mind, body, and spirit?",
+            "How to improve my sleep?",
+            "What is shadow work?",
+            "Guide me through a visualization exercise.",
+            "What is the significance of repeating numbers?",
+            "Tell me about spiritual awakening.",
+            "How to be present?",
+            "What is the concept of oneness?",
+            "Tell me about divine timing.",
+            "How to trust the process?",
+            "What is the art of letting go?",
+            "How to cultivate inner strength?",
+            "What is compassion fatigue?",
+            "How to set healthy boundaries?",
+            "Tell me about energetic cords.",
+            "What is grounding?",
+            "How to protect my energy?",
+            "What are spiritual guides?",
+            "How to connect with my ancestors?",
+            "What is the role of intuition in decision making?",
+            "Tell me about sacred geometry.",
+            "What is the meaning of silence?",
+            "How to find peace in chaos?",
+            "What is the power of intention?",
+            "How to embrace change?",
+            "Tell me about the cosmic consciousness.",
+            "What is the spiritual meaning of animals?",
+            "How to raise my vibration?",
+            "What is the importance of breathwork?",
+            "Tell me about plant medicine.",
+            "What is the concept of the collective unconscious?",
+            "How to forgive myself?",
+            "What is true happiness?",
+            "How to live authentically?",
+            "Tell me about spiritual healing.",
+            "What is the journey of the soul?"
+        ];
+
+        const initialAIMessage = {
+            role: 'model',
+            parts: [{ text: 'Greetings, seeker! I am Mystic Vision, an AI designed to help you glimpse the beyond. What wisdom do you seek?' }],
+        };
 
         // --- Initialization on Load ---
         window.addEventListener('load', () => {
@@ -874,6 +1115,20 @@
              const isDarkMode = localStorage.getItem('dark-mode') === 'true';
              document.body.classList.toggle('light', !isDarkMode); // Toggle light class based on dark mode status
              darkModeToggle.checked = isDarkMode;
+
+             // Register Service Worker for PWA
+             if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/service-worker.js')
+                .then(registration => {
+                    console.log('ServiceWorker registered: ', registration);
+                })
+                .catch(registrationError => {
+                    console.log('ServiceWorker registration failed: ', registrationError);
+                });
+             }
+
+             // Start a new chat on load to display initial message
+             startNewChat();
         });
 
         // --- Dark Mode Toggle ---
@@ -1289,12 +1544,136 @@
             }
         }
 
+        // --- Autocomplete Functions ---
+        function filterSuggestions(query) {
+            if (!query) return [];
+            const lowerQuery = query.toLowerCase();
+            return autocompleteSuggestions.filter(s => s.toLowerCase().includes(lowerQuery));
+        }
+
+        function displaySuggestions(suggestions) {
+            suggestionsList.innerHTML = '';
+            suggestionsContainer.classList.add('hidden');
+            selectedSuggestionIndex = -1;
+
+            if (suggestions.length === 0) {
+                return;
+            }
+
+            suggestions.forEach((suggestion, index) => {
+                const li = document.createElement('li');
+                li.textContent = suggestion;
+                li.dataset.index = index;
+                li.addEventListener('click', () => {
+                    userInput.value = suggestion;
+                    userInput.focus();
+                    suggestionsContainer.classList.add('hidden');
+                    userInput.style.height = 'auto'; 
+                    userInput.style.height = userInput.scrollHeight + 'px';
+                });
+                suggestionsList.appendChild(li);
+            });
+            suggestionsContainer.classList.remove('hidden');
+        }
+
+        function navigateSuggestions(direction) {
+            const items = Array.from(suggestionsList.children);
+            if (items.length === 0) return;
+
+            if (selectedSuggestionIndex !== -1) {
+                items[selectedSuggestionIndex].classList.remove('selected');
+            }
+
+            if (direction === 'down') {
+                selectedSuggestionIndex = (selectedSuggestionIndex + 1) % items.length;
+            } else if (direction === 'up') {
+                selectedSuggestionIndex = (selectedSuggestionIndex - 1 + items.length) % items.length;
+            }
+
+            items[selectedSuggestionIndex].classList.add('selected');
+            items[selectedSuggestionIndex].scrollIntoView({ block: 'nearest' });
+            userInput.value = items[selectedSuggestionIndex].textContent; // Auto-fill on arrow key
+            userInput.style.height = 'auto'; 
+            userInput.style.height = userInput.scrollHeight + 'px';
+        }
+
+        function selectCurrentSuggestion() {
+            if (selectedSuggestionIndex !== -1) {
+                const selectedText = suggestionsList.children[selectedSuggestionIndex].textContent;
+                userInput.value = selectedText;
+            }
+            suggestionsContainer.classList.add('hidden');
+            selectedSuggestionIndex = -1;
+        }
+
+        // --- New Chat Function ---
+        function startNewChat() {
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+                isSpeaking = false;
+                currentUtterance = null;
+                document.querySelectorAll('.dictate-message-btn').forEach(btn => updateButtonIcon(btn, 'volume-2'));
+            }
+
+            chatHistoryDiv.innerHTML = ''; // Clear existing messages
+            conversationHistory = []; // Reset conversation history
+            chatAttachments = []; // Clear attachments
+            chatImageUpload.value = ''; // Clear file input
+            displayChatAttachments(); // Hide attachment preview
+            userInput.value = '';
+            userInput.style.height = 'auto'; 
+            messageTextCache.clear(); // Clear message text cache
+            suggestionsContainer.classList.add('hidden'); // Hide suggestions
+            selectedSuggestionIndex = -1;
+
+            // Add the initial AI message
+            conversationHistory.push(initialAIMessage);
+            appendChatMessage('ai', initialAIMessage.parts[0].text);
+            
+            userInput.focus();
+        }
+
 
         // --- Event Listeners ---
         userInput.addEventListener('input', () => {
             userInput.style.height = 'auto'; 
             userInput.style.height = userInput.scrollHeight + 'px';
+
+            const query = userInput.value;
+            if (query.length > 0) {
+                const suggestions = filterSuggestions(query);
+                displaySuggestions(suggestions);
+            } else {
+                suggestionsContainer.classList.add('hidden');
+            }
         });
+
+        userInput.addEventListener('keydown', (e) => {
+            if (suggestionsContainer.classList.contains('hidden')) return;
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault(); // Prevent cursor movement
+                navigateSuggestions('down');
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault(); // Prevent cursor movement
+                navigateSuggestions('up');
+            } else if (e.key === 'Enter' && selectedSuggestionIndex !== -1) {
+                e.preventDefault(); // Prevent new line or send
+                selectCurrentSuggestion();
+            } else if (e.key === 'Escape') {
+                suggestionsContainer.classList.add('hidden');
+                selectedSuggestionIndex = -1;
+            }
+        });
+
+        userInput.addEventListener('blur', () => {
+            // Delay hiding to allow click event on suggestion list
+            setTimeout(() => {
+                suggestionsContainer.classList.add('hidden');
+                selectedSuggestionIndex = -1;
+            }, 100); 
+        });
+
 
         sendButton.addEventListener('click', async () => {
             const userMessage = userInput.value.trim();
@@ -1327,6 +1706,8 @@
             chatAttachments = [];
             chatImageUpload.value = ''; 
             displayChatAttachments(); 
+            suggestionsContainer.classList.add('hidden'); // Hide suggestions on send
+            selectedSuggestionIndex = -1;
             
             sendButton.disabled = true;
             
@@ -1355,7 +1736,11 @@
         userInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) { 
                 e.preventDefault(); 
-                sendButton.click();
+                // If a suggestion is selected, it will be handled by keydown on enter
+                // Otherwise, send the message
+                if (selectedSuggestionIndex === -1) {
+                    sendButton.click();
+                }
             }
         });
 
@@ -1508,6 +1893,10 @@
                 return; 
             }
         });
+
+        // Event listener for the new chat button
+        newChatBtn.addEventListener('click', startNewChat);
+
     </script>
 </body>
 </html>
@@ -1516,9 +1905,5 @@
 
 after doing the following send me the full updated code : 
 
-add the logo.png (the logo image) creatively in the website
-make it a progressive web app (provide me all the necessary files)
-add a new chat button (place it beautifully) so that users can start a new chat without refreshing the page
-autocomplete suggestions (like chatgpt does, if it can't automatically suggest then include a large list of autocomplete suggestions, track the user's typing for showing suggestions)
-image generation (like gemini does, i know that gemini 2.5 flash can generate images seamlessly, so please make it happen. no simulation/placeholder please)
-fix the header behavior (as the messages increase in the chat the header section of the chat starts shrinking and it looks bad.)
+include a vast range of helpful autocomplete suggestions (there seems to be only theme based suggestions), increase the number of suggestions significantly.
+improve the mobile respnsiveness so that the website interface look great on mobile devices.
