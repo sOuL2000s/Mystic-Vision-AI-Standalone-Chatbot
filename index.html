@@ -18,27 +18,27 @@
         /* General Styles - Mystic Vision Theme */
         :root {
             /* Dark Mode Palette (Default) */
-            --primary-bg: #0C0C2F; /* Very dark blue-purple */
-            --secondary-bg: #1B1B4A; /* Darker purple-blue - container background */
-            --tertiary-bg: #2B2B60; /* Medium dark purple-blue - header/input area/button base */
-            --text-color: #E0E0E0; /* Light grey text */
+            --primary-bg: #0A0A28; /* Even deeper dark blue-purple, almost black */
+            --secondary-bg: #15153A; /* Darker purple-blue - container background */
+            --tertiary-bg: #22224F; /* Medium dark purple-blue - header/input area/button base */
+            --text-color: #E6E6FA; /* Light lavender text for ethereal feel */
             --accent-color: #C070FF; /* Vibrant mystical purple */
-            --border-color: #2B2B60;
-            --user-bubble: #3A3A75; /* Deeper purple for user */
-            --ai-bubble: #1F1F50; /* Slightly different dark purple for AI */
-            --input-bg: #0C0C2F;
+            --border-color: #2F2F6A; /* Slightly clearer border */
+            --user-bubble: #353570; /* Deeper purple for user */
+            --ai-bubble: #1A1A40; /* Slightly different dark purple for AI */
+            --input-bg: #0C0C2F; /* Keeps the input field very dark */
             --button-hover-bg: #A040FF; /* Slightly darker accent for hover */
-            --shadow-color: rgba(0, 0, 0, 0.5); /* Stronger shadow */
-            --code-bg: #0F0F3D; /* Code block background */
-            --code-text: #f8f8f2; /* Code text color */
-            --code-border: #2B2B60; /* Code border */
-            --code-header-bg: #2B2B60; /* Code header background */
-            --code-header-border: #3A3A75; /* Code header border */
-            --inline-code-bg: rgba(192, 112, 255, 0.2); /* Inline code background */
+            --shadow-color: rgba(0, 0, 0, 0.6); /* Stronger shadow */
+            --code-bg: #0D0D32; /* Code block background */
+            --code-text: #F8F8F8; /* Code text color */
+            --code-border: #2F2F6A; /* Code border */
+            --code-header-bg: #22224F; /* Code header background */
+            --code-header-border: #353570; /* Code header border */
+            --inline-code-bg: rgba(192, 112, 255, 0.25); /* Inline code background */
             --inline-code-color: var(--accent-color); /* Inline code color */
-            --message-action-bg: rgba(19, 19, 26, 0.6); /* Message action background */
-            --message-action-user-bg: rgba(58, 58, 117, 0.6); /* Message action background for user messages */
-            --message-action-icon: #9ca3af; /* Message action icon color */
+            --message-action-bg: rgba(10, 10, 26, 0.7); /* Message action background */
+            --message-action-user-bg: rgba(53, 53, 112, 0.7); /* Message action background for user messages */
+            --message-action-icon: #BEC2D5; /* Lighter icon color */
             --message-action-icon-hover: var(--text-color); /* Message action icon hover color */
 
             /* Common Accent Colors (for alerts/status) */         
@@ -60,26 +60,26 @@
 
         /* Light Mode Palette (Overrides default variables when body has 'light' class) */
         body.light {
-            --primary-bg: #F8F4FF; /* Very pale lavender-white for main background */
+            --primary-bg: #F0F4FF; /* Very pale blue-lavender */
             --secondary-bg: #FFFFFF; /* Pure white for container/card background */
-            --tertiary-bg: #EAE6FF; /* Pale light purple for header/input area/button base */
+            --tertiary-bg: #E0E8FF; /* Pale light blue-purple for header/input area/button base */
             --text-color: #1A0033; /* Very dark purple/black for main text */
             --accent-color: #8C2BFF; /* Slightly richer/darker purple for light mode accent */
-            --border-color: #D8D0E0; /* Soft light purple border */
+            --border-color: #C0C8D8; /* Soft light border */
             --user-bubble: #D8E2FF; /* Light blue-purple, user bubble */
-            --ai-bubble: #F0E8FF; /* Even paler lavender, AI bubble */
-            --input-bg: #F8F8F8; /* Slightly off-white for input field */
+            --ai-bubble: #F0F4FF; /* Even paler lavender, AI bubble */
+            --input-bg: #F8F8FD; /* Slightly off-white for input field */
             --button-hover-bg: #B050FF; /* Slightly darker accent for hover in light mode */
             --shadow-color: rgba(0, 0, 0, 0.15); /* Lighter shadow */
-            --code-bg: #F0F0F5; /* Lighter background for code in light mode */
+            --code-bg: #F5F7FA; /* Lighter background for code in light mode */
             --code-text: #333; /* Code text color */
-            --code-border: #E0E0E5; /* Code border */
-            --code-header-bg: #E0E0E5; /* Code header background */
-            --code-header-border: #D0D0D5; /* Code header border */
-            --inline-code-bg: rgba(130, 0, 200, 0.1); /* Inline code background (LM accent with transparency) */
+            --code-border: #D8DCE5; /* Code border */
+            --code-header-bg: #E8ECF5; /* Code header background */
+            --code-header-border: #D0D4DF; /* Code header border */
+            --inline-code-bg: rgba(130, 0, 200, 0.12); /* Inline code background (LM accent with transparency) */
             --inline-code-color: var(--accent-color); /* Inline code color */
-            --message-action-bg: rgba(255, 255, 255, 0.7); /* Message action background */
-            --message-action-user-bg: rgba(220, 230, 255, 0.7); /* Message action background for user messages */
+            --message-action-bg: rgba(255, 255, 255, 0.8); /* Message action background */
+            --message-action-user-bg: rgba(220, 230, 255, 0.8); /* Message action background for user messages */
             --message-action-icon: #666; /* Message action icon color */
             --message-action-icon-hover: var(--text-color); /* Message action icon hover color */
 
@@ -92,7 +92,7 @@
             --autocomplete-selected-text: white;
         }
 
-        /* Base Body Styles */
+        /* Base Body Styles - MODIFIED for full screen */
         body {
             font-family: var(--font-family-primary);
             background: linear-gradient(135deg, var(--primary-bg), var(--secondary-bg));
@@ -101,51 +101,51 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            overflow: hidden; 
+            height: 100vh; /* Use height for full viewport height */
+            width: 100vw; /* Use width for full viewport width */
+            overflow: hidden; /* Hide overflow to prevent scrollbars on body */
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            transition: background 0.6s ease, color 0.6s ease; /* Smooth transition for background gradient */
+            transition: background 0.6s ease, color 0.6s ease;
         }
 
-        /* Chatbot Container (Main Application) */
+        /* Chatbot Container (Main Application) - MODIFIED for full screen */
         .chatbot-container {
             background-color: var(--secondary-bg);
-            border-radius: 25px;
-            box-shadow: 0 15px 30px var(--shadow-color);
-            width: 90%;
-            max-width: 700px; 
-            height: 90vh; 
+            border-radius: 0; /* Remove border-radius for full screen */
+            box-shadow: none; /* Remove shadow for full screen */
+            width: 100%; /* Occupy full parent width */
+            height: 100%; /* Occupy full parent height */
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            border: 2px solid var(--border-color);
+            border: none; /* Remove border for full screen */
             animation: fadeIn 0.8s ease-out;
             position: relative; 
             transition: background-color 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease;
         }
-
+        /* Keep fadeIn animation */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        /* Header */
+        /* Header - Adjusted for full screen */
         .chatbot-header {
             background-color: var(--tertiary-bg);
             padding: 20px;
             border-bottom: 2px solid var(--border-color);
             text-align: center;
-            border-top-left-radius: 23px;
-            border-top-right-radius: 23px;
+            border-top-left-radius: 0; /* Adjust for full screen */
+            border-top-right-radius: 0; /* Adjust for full screen */
             position: relative;
             overflow: hidden;
             z-index: 10; 
             transition: background-color 0.6s ease, border-color 0.6s ease;
-            display: flex; /* Added for alignment of items */
-            align-items: center; /* Center items vertically */
-            justify-content: center; /* Center items horizontally initially */
-            flex-shrink: 0; /* Prevents header from shrinking */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
         
         .chatbot-header .header-content {
@@ -171,13 +171,12 @@
             gap: 10px;
         }
         .chatbot-header .logo {
-            height: 2.5em; /* Adjust size as needed */
+            height: 2.5em; 
             width: auto;
             object-fit: contain;
             filter: drop-shadow(0 0 5px rgba(192, 112, 255, 0.5));
             transition: filter 0.6s ease;
         }
-
 
         .chatbot-header .tagline {
             font-family: var(--font-family-secondary);
@@ -313,6 +312,7 @@
             flex-direction: column;
             gap: 15px;
             scroll-behavior: smooth;
+            padding-bottom: 30px; /* Increased padding to give more space from input */
         }
 
         .chat-history::-webkit-scrollbar {
@@ -357,7 +357,7 @@
             color: var(--text-color);
             margin-left: auto; /* Pushes user message to the right */
             border-bottom-right-radius: 5px; 
-            background-image: linear-gradient(to bottom right, var(--user-bubble), color-mix(in srgb, var(--user-bubble) 80%, black 20%)); /* Dynamic darker shade */
+            background-image: linear-gradient(to bottom right, var(--user-bubble), color-mix(in srgb, var(--user-bubble) 90%, black 10%)); /* Dynamic darker shade */
         }
 
         .chat-message.ai {
@@ -365,7 +365,7 @@
             color: var(--text-color);
             margin-right: auto; /* Pushes AI message to the left */
             border-bottom-left-radius: 5px; 
-            background-image: linear-gradient(to bottom left, var(--ai-bubble), color-mix(in srgb, var(--ai-bubble) 80%, black 20%)); /* Dynamic darker shade */
+            background-image: linear-gradient(to bottom left, var(--ai-bubble), color-mix(in srgb, var(--ai-bubble) 90%, black 10%)); /* Dynamic darker shade */
         }
 
         /* Markdown Styling within AI messages */
@@ -546,7 +546,7 @@
             transition: background-color 0.6s ease, color 0.6s ease, box-shadow 0.6s ease;
         }
 
-        /* Input Area */
+        /* Input Area - Adjusted for full screen */
         .chat-input {
             padding: 20px;
             border-top: 2px solid var(--border-color);
@@ -554,8 +554,8 @@
             gap: 10px; 
             align-items: end; 
             background-color: var(--tertiary-bg);
-            border-bottom-left-radius: 23px;
-            border-bottom-right-radius: 23px;
+            border-bottom-left-radius: 0; /* Adjust for full screen */
+            border-bottom-right-radius: 0; /* Adjust for full screen */
             position: relative; 
             transition: background-color 0.6s ease, border-color 0.6s ease;
             flex-shrink: 0; 
@@ -581,7 +581,7 @@
 
         .chat-input textarea:focus {
             border-color: var(--accent-color);
-            background-color: color-mix(in srgb, var(--primary-bg) 90%, var(--tertiary-bg) 10%); /* Slightly lighter than primary bg */
+            background-color: color-mix(in srgb, var(--primary-bg) 90%, var(--tertiary-bg) 10%); 
         }
 
         /* Action buttons in input area (Send, Mic, Paperclip) */
@@ -779,63 +779,62 @@
         /* Responsive Adjustments */
         @media (max-width: 768px) {
             .chatbot-container {
-                width: 98%; /* Slightly wider on mobile */
-                height: 98vh; /* Taller on mobile */
-                border-radius: 15px;
-                margin: 1vh auto; /* Center with a slight margin */
+                width: 100vw; 
+                height: 100vh; 
+                border-radius: 0;
+                margin: 0;
             }
 
             .chatbot-header {
-                padding: 12px; /* Reduced padding */
-                border-top-left-radius: 13px;
-                border-top-right-radius: 13px;
-                /* Re-adjusting flex properties to prevent overlapping */
+                padding: 12px; 
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
                 display: flex;
-                flex-direction: column; /* Stack header content */
+                flex-direction: column;
                 align-items: center;
-                gap: 5px; /* Gap between stacked elements */
+                gap: 5px;
             }
             .chatbot-header h1 {
-                font-size: 1.6em; /* Smaller title */
-                margin-top: 10px; /* Push title down a bit from buttons */
+                font-size: 1.6em;
+                margin-top: 10px;
             }
             .chatbot-header .logo {
-                height: 1.8em; /* Smaller logo */
+                height: 1.8em;
             }
             .chatbot-header .tagline {
-                font-size: 0.75em; /* Smaller tagline */
-                margin-bottom: 5px; /* Space from content below */
+                font-size: 0.75em;
+                margin-bottom: 5px;
             }
 
             .dark-mode-container {
-                position: absolute; /* Keep absolute position */
+                position: absolute;
                 top: 10px;
                 right: 10px;
                 gap: 5px;
-                font-size: 0.7em; /* Smaller font for "Light/Dark" */
+                font-size: 0.7em;
             }
             .switch {
-                width: 40px; /* Smaller switch */
+                width: 40px;
                 height: 22px;
                 border-radius: 11px;
             }
             .switch .slider:before {
-                height: 16px; /* Smaller slider circle */
+                height: 16px;
                 width: 16px;
                 left: 3px;
                 bottom: 3px;
             }
             input:checked + .slider:before {
-                transform: translateX(18px); /* Adjust translate for smaller switch */
+                transform: translateX(18px);
             }
 
             #newChatBtn {
-                position: absolute; /* Keep absolute position */
+                position: absolute;
                 top: 10px;
                 left: 10px;
-                padding: 6px 10px; /* Smaller padding */
-                font-size: 0.7em; /* Smaller font */
-                gap: 3px; /* Smaller gap */
+                padding: 6px 10px;
+                font-size: 0.7em;
+                gap: 3px;
             }
             #newChatBtn .lucide {
                 width: 0.7em;
@@ -843,24 +842,24 @@
             }
 
             .chat-history {
-                padding: 10px; /* Reduced padding */
-                gap: 8px; /* Reduced gap between messages */
+                padding: 10px;
+                gap: 8px;
             }
 
             .chat-message {
                 max-width: 95%; /* Wider bubbles for smaller screens */
-                padding: 10px 14px; /* Reduced padding */
-                border-radius: 16px; /* Slightly smaller radius */
-                padding-bottom: 2rem; /* Ensure space for actions */
-                font-size: 0.88rem; /* Slightly smaller font for messages */
+                padding: 10px 14px;
+                border-radius: 16px;
+                padding-bottom: 2rem;
+                font-size: 0.9rem; /* Slightly larger for readability */
             }
 
             .message-actions {
                 bottom: 0.3rem; 
-                right: 0.6rem; /* Closer to edge */
+                right: 0.6rem;
                 gap: 0.3rem;
-                padding: 0.15rem 0.3rem; /* Smaller padding */
-                border-radius: 0.5rem; /* Smaller radius */
+                padding: 0.15rem 0.3rem;
+                border-radius: 0.5rem;
             }
             .message-actions button {
                 padding: 0.1rem;
@@ -872,37 +871,37 @@
 
             .chat-input {
                 padding: 10px;
-                gap: 6px; /* Reduced gap */
-                align-items: center; /* Vertically align items in input row */
-                border-bottom-left-radius: 13px;
-                border-bottom-right-radius: 13px;
-                flex-wrap: wrap; /* Allow wrapping if attachments make it too wide */
+                gap: 6px;
+                align-items: center;
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+                flex-wrap: wrap;
             }
 
             .chat-input textarea {
                 padding: 8px 12px; 
                 font-size: 0.9em;
-                min-height: 38px; /* Slightly more compact */
-                max-height: 120px; /* Limit max height on mobile */
+                min-height: 38px;
+                max-height: 120px;
             }
 
             .chat-input .icon-button {
-                width: 42px; /* Smaller buttons */
+                width: 42px;
                 height: 42px;
             }
             .chat-input .icon-button .lucide {
-                width: 1em; /* Smaller icon */
+                width: 1em;
                 height: 1em;
             }
 
             #chat-attachments-preview-container {
-                padding: 6px; /* Smaller padding */
-                margin-bottom: 8px; /* Closer to input */
+                padding: 6px;
+                margin-bottom: 8px;
             }
             .chat-attachment-preview-item {
-                font-size: 0.75em; /* Smaller font for attachments */
-                padding: 0.3rem 0.5rem; /* Smaller padding */
-                border-radius: 0.75rem; /* Smaller radius */
+                font-size: 0.75em;
+                padding: 0.3rem 0.5rem;
+                border-radius: 0.75rem;
             }
             .chat-attachment-preview-item .remove-attachment-btn .lucide {
                 width: 0.7rem;
@@ -910,9 +909,9 @@
             }
 
             #copy-message {
-                bottom: 1.5rem; /* Closer to bottom */
-                padding: 0.5rem 1rem; /* Smaller padding */
-                font-size: 0.85rem; /* Smaller font */
+                bottom: 1.5rem;
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
             }
 
             #suggestions-container {
@@ -3406,15 +3405,24 @@
             });
 
             userInput.addEventListener('keydown', (e) => {
-                if (suggestionsContainer.classList.contains('hidden')) return;
+                if (suggestionsContainer.classList.contains('hidden')) {
+                    // If suggestions are hidden, handle Enter and Shift+Enter normally
+                    if (e.key === 'Enter' && !e.shiftKey) { 
+                        e.preventDefault(); // Prevent default new line
+                        sendButton.click(); // Send message
+                    }
+                    // For Shift+Enter, the default behavior (new line) is allowed
+                    return;
+                }
 
+                // If suggestions are visible, handle arrow keys and Enter for selection
                 if (e.key === 'ArrowDown') {
                     e.preventDefault(); 
                     navigateSuggestions('down');
                 } else if (e.key === 'ArrowUp') {
                     e.preventDefault(); 
                     navigateSuggestions('up');
-                } else if (e.key === 'Enter' && selectedSuggestionIndex !== -1) {
+                } else if (e.key === 'Enter') { // Handle Enter for selection when suggestions are active
                     e.preventDefault(); 
                     selectCurrentSuggestion();
                 } else if (e.key === 'Escape') {
@@ -3510,15 +3518,6 @@
                 }
             });
             
-            userInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) { 
-                    e.preventDefault(); 
-                    if (selectedSuggestionIndex === -1) {
-                        sendButton.click();
-                    }
-                }
-            });
-
             chatImageUpload.addEventListener('change', async (event) => {
                 const files = Array.from(event.target.files);
                 if (files.length > 0) {

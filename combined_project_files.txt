@@ -14,31 +14,33 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json">
+    <!-- Preload AI logo for faster display -->
+    <link rel="preload" href="logo.png" as="image">
     <style>
         /* General Styles - Mystic Vision Theme */
         :root {
             /* Dark Mode Palette (Default) */
-            --primary-bg: #0C0C2F; /* Very dark blue-purple */
-            --secondary-bg: #1B1B4A; /* Darker purple-blue - container background */
-            --tertiary-bg: #2B2B60; /* Medium dark purple-blue - header/input area/button base */
-            --text-color: #E0E0E0; /* Light grey text */
+            --primary-bg: #0A0A28; /* Even deeper dark blue-purple, almost black */
+            --secondary-bg: #15153A; /* Darker purple-blue - container background */
+            --tertiary-bg: #22224F; /* Medium dark purple-blue - header/input area/button base */
+            --text-color: #E6E6FA; /* Light lavender text for ethereal feel */
             --accent-color: #C070FF; /* Vibrant mystical purple */
-            --border-color: #2B2B60;
-            --user-bubble: #3A3A75; /* Deeper purple for user */
-            --ai-bubble: #1F1F50; /* Slightly different dark purple for AI */
-            --input-bg: #0C0C2F;
+            --border-color: #2F2F6A; /* Slightly clearer border */
+            --user-bubble: #353570; /* Deeper purple for user */
+            --ai-bubble: #1A1A40; /* Slightly different dark purple for AI */
+            --input-bg: #0C0C2F; /* Keeps the input field very dark */
             --button-hover-bg: #A040FF; /* Slightly darker accent for hover */
-            --shadow-color: rgba(0, 0, 0, 0.5); /* Stronger shadow */
-            --code-bg: #0F0F3D; /* Code block background */
-            --code-text: #f8f8f2; /* Code text color */
-            --code-border: #2B2B60; /* Code border */
-            --code-header-bg: #2B2B60; /* Code header background */
-            --code-header-border: #3A3A75; /* Code header border */
-            --inline-code-bg: rgba(192, 112, 255, 0.2); /* Inline code background */
+            --shadow-color: rgba(0, 0, 0, 0.6); /* Stronger shadow */
+            --code-bg: #0D0D32; /* Code block background */
+            --code-text: #F8F8F8; /* Code text color */
+            --code-border: #2F2F6A; /* Code border */
+            --code-header-bg: #22224F; /* Code header background */
+            --code-header-border: #353570; /* Code header border */
+            --inline-code-bg: rgba(192, 112, 255, 0.25); /* Inline code background */
             --inline-code-color: var(--accent-color); /* Inline code color */
-            --message-action-bg: rgba(19, 19, 26, 0.6); /* Message action background */
-            --message-action-user-bg: rgba(58, 58, 117, 0.6); /* Message action background for user messages */
-            --message-action-icon: #9ca3af; /* Message action icon color */
+            --message-action-bg: rgba(10, 10, 26, 0.7); /* Message action background */
+            --message-action-user-bg: rgba(53, 53, 112, 0.7); /* Message action background for user messages */
+            --message-action-icon: #BEC2D5; /* Lighter icon color */
             --message-action-icon-hover: var(--text-color); /* Message action icon hover color */
 
             /* Common Accent Colors (for alerts/status) */         
@@ -60,26 +62,26 @@
 
         /* Light Mode Palette (Overrides default variables when body has 'light' class) */
         body.light {
-            --primary-bg: #F8F4FF; /* Very pale lavender-white for main background */
+            --primary-bg: #F0F4FF; /* Very pale blue-lavender */
             --secondary-bg: #FFFFFF; /* Pure white for container/card background */
-            --tertiary-bg: #EAE6FF; /* Pale light purple for header/input area/button base */
+            --tertiary-bg: #E0E8FF; /* Pale light blue-purple for header/input area/button base */
             --text-color: #1A0033; /* Very dark purple/black for main text */
             --accent-color: #8C2BFF; /* Slightly richer/darker purple for light mode accent */
-            --border-color: #D8D0E0; /* Soft light purple border */
+            --border-color: #C0C8D8; /* Soft light border */
             --user-bubble: #D8E2FF; /* Light blue-purple, user bubble */
-            --ai-bubble: #F0E8FF; /* Even paler lavender, AI bubble */
-            --input-bg: #F8F8F8; /* Slightly off-white for input field */
+            --ai-bubble: #F0F4FF; /* Even paler lavender, AI bubble */
+            --input-bg: #F8F8FD; /* Slightly off-white for input field */
             --button-hover-bg: #B050FF; /* Slightly darker accent for hover in light mode */
             --shadow-color: rgba(0, 0, 0, 0.15); /* Lighter shadow */
-            --code-bg: #F0F0F5; /* Lighter background for code in light mode */
+            --code-bg: #F5F7FA; /* Lighter background for code in light mode */
             --code-text: #333; /* Code text color */
-            --code-border: #E0E0E5; /* Code border */
-            --code-header-bg: #E0E0E5; /* Code header background */
-            --code-header-border: #D0D0D5; /* Code header border */
-            --inline-code-bg: rgba(130, 0, 200, 0.1); /* Inline code background (LM accent with transparency) */
+            --code-border: #D8DCE5; /* Code border */
+            --code-header-bg: #E8ECF5; /* Code header background */
+            --code-header-border: #D0D4DF; /* Code header border */
+            --inline-code-bg: rgba(130, 0, 200, 0.12); /* Inline code background (LM accent with transparency) */
             --inline-code-color: var(--accent-color); /* Inline code color */
-            --message-action-bg: rgba(255, 255, 255, 0.7); /* Message action background */
-            --message-action-user-bg: rgba(220, 230, 255, 0.7); /* Message action background for user messages */
+            --message-action-bg: rgba(255, 255, 255, 0.8); /* Message action background */
+            --message-action-user-bg: rgba(220, 230, 255, 0.8); /* Message action background for user messages */
             --message-action-icon: #666; /* Message action icon color */
             --message-action-icon-hover: var(--text-color); /* Message action icon hover color */
 
@@ -92,7 +94,7 @@
             --autocomplete-selected-text: white;
         }
 
-        /* Base Body Styles */
+        /* Base Body Styles - MODIFIED for full screen */
         body {
             font-family: var(--font-family-primary);
             background: linear-gradient(135deg, var(--primary-bg), var(--secondary-bg));
@@ -101,51 +103,51 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            overflow: hidden; 
+            height: 100vh; /* Use height for full viewport height */
+            width: 100vw; /* Use width for full viewport width */
+            overflow: hidden; /* Hide overflow to prevent scrollbars on body */
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            transition: background 0.6s ease, color 0.6s ease; /* Smooth transition for background gradient */
+            transition: background 0.6s ease, color 0.6s ease;
         }
 
-        /* Chatbot Container (Main Application) */
+        /* Chatbot Container (Main Application) - MODIFIED for full screen */
         .chatbot-container {
             background-color: var(--secondary-bg);
-            border-radius: 25px;
-            box-shadow: 0 15px 30px var(--shadow-color);
-            width: 90%;
-            max-width: 700px; 
-            height: 90vh; 
+            border-radius: 0; /* Remove border-radius for full screen */
+            box-shadow: none; /* Remove shadow for full screen */
+            width: 100%; /* Occupy full parent width */
+            height: 100%; /* Occupy full parent height */
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            border: 2px solid var(--border-color);
+            border: none; /* Remove border for full screen */
             animation: fadeIn 0.8s ease-out;
             position: relative; 
             transition: background-color 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease;
         }
-
+        /* Keep fadeIn animation */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        /* Header */
+        /* Header - Adjusted for full screen */
         .chatbot-header {
             background-color: var(--tertiary-bg);
             padding: 20px;
             border-bottom: 2px solid var(--border-color);
             text-align: center;
-            border-top-left-radius: 23px;
-            border-top-right-radius: 23px;
+            border-top-left-radius: 0; /* Adjust for full screen */
+            border-top-right-radius: 0; /* Adjust for full screen */
             position: relative;
             overflow: hidden;
             z-index: 10; 
             transition: background-color 0.6s ease, border-color 0.6s ease;
-            display: flex; /* Added for alignment of items */
-            align-items: center; /* Center items vertically */
-            justify-content: center; /* Center items horizontally initially */
-            flex-shrink: 0; /* Prevents header from shrinking */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
         
         .chatbot-header .header-content {
@@ -171,13 +173,12 @@
             gap: 10px;
         }
         .chatbot-header .logo {
-            height: 2.5em; /* Adjust size as needed */
+            height: 2.5em; 
             width: auto;
             object-fit: contain;
             filter: drop-shadow(0 0 5px rgba(192, 112, 255, 0.5));
             transition: filter 0.6s ease;
         }
-
 
         .chatbot-header .tagline {
             font-family: var(--font-family-secondary);
@@ -313,6 +314,7 @@
             flex-direction: column;
             gap: 15px;
             scroll-behavior: smooth;
+            padding-bottom: 30px; 
         }
 
         .chat-history::-webkit-scrollbar {
@@ -333,6 +335,55 @@
         }
 
         /* Message Bubbles */
+        .message-wrapper {
+            display: flex;
+            gap: 10px; /* Space between avatar and message bubble */
+            align-items: flex-start; /* Align avatar to top of message */
+            opacity: 0; /* Initial state for animation */
+            transform: translateY(10px); /* Initial state for animation */
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out; /* Animation properties */
+        }
+        .message-wrapper.user {
+            justify-content: flex-end; /* Align user messages to the right */
+        }
+        .message-wrapper.ai {
+            justify-content: flex-start; /* Align AI messages to the left */
+        }
+
+        .message-avatar {
+            width: 32px; /* Avatar size */
+            height: 32px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0; /* Prevent shrinking */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: 600;
+            color: white;
+            background-color: var(--accent-color);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.6s ease;
+        }
+        .message-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .message-wrapper.user .message-avatar {
+            order: 2; /* Place avatar on the right for user messages */
+            background-color: color-mix(in srgb, var(--user-bubble) 90%, black 10%); /* Subtle match to user bubble */
+        }
+        .message-wrapper.ai .message-avatar {
+            order: 1; /* Place avatar on the left for AI messages */
+            background-color: color-mix(in srgb, var(--ai-bubble) 90%, black 10%); /* Subtle match to AI bubble */
+        }
+        .message-wrapper.user .message-avatar .lucide {
+            color: white;
+        }
+
+
         .chat-message {
             max-width: 80%;
             padding: 12px 18px;
@@ -340,24 +391,21 @@
             line-height: 1.5;
             word-wrap: break-word;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            animation: slideIn 0.3s ease-out;
             position: relative; 
             padding-bottom: 2.5rem; 
             font-size: 0.95rem; 
             transition: background-color 0.6s ease, color 0.6s ease, background-image 0.6s ease, box-shadow 0.6s ease;
+            flex-grow: 1; /* Allow message to fill available space */
         }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* Removed @keyframes slideIn on .chat-message as it's now on .message-wrapper */
 
         .chat-message.user {
             background-color: var(--user-bubble);
             color: var(--text-color);
             margin-left: auto; /* Pushes user message to the right */
             border-bottom-right-radius: 5px; 
-            background-image: linear-gradient(to bottom right, var(--user-bubble), color-mix(in srgb, var(--user-bubble) 80%, black 20%)); /* Dynamic darker shade */
+            background-image: linear-gradient(to bottom right, var(--user-bubble), color-mix(in srgb, var(--user-bubble) 95%, black 5%)); 
         }
 
         .chat-message.ai {
@@ -365,7 +413,7 @@
             color: var(--text-color);
             margin-right: auto; /* Pushes AI message to the left */
             border-bottom-left-radius: 5px; 
-            background-image: linear-gradient(to bottom left, var(--ai-bubble), color-mix(in srgb, var(--ai-bubble) 80%, black 20%)); /* Dynamic darker shade */
+            background-image: linear-gradient(to bottom left, var(--ai-bubble), color-mix(in srgb, var(--ai-bubble) 95%, black 5%)); 
         }
 
         /* Markdown Styling within AI messages */
@@ -488,7 +536,7 @@
             color: var(--button-hover-bg); 
         }
 
-        /* Message Action Buttons (Copy/Dictate) */
+        /* Message Action Buttons (Copy/Dictate/Edit/Regenerate) */
         .message-actions {
             position: absolute;
             bottom: 0.5rem;
@@ -532,6 +580,46 @@
         .chat-message.user .message-actions {
             background-color: var(--message-action-user-bg);
         }
+
+        /* Stop Generating Button */
+        #stopGeneratingBtn {
+            position: absolute;
+            bottom: calc(100% + 15px); /* Position above the input area */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--accent-error); /* Red color for stop */
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-family: var(--font-family-primary);
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: background-color 0.3s ease, transform 0.2s ease, opacity 0.3s ease;
+            z-index: 20; /* Ensure it's above input area */
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            opacity: 0;
+            visibility: hidden;
+        }
+        #stopGeneratingBtn.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(-5px); /* Slight lift */
+        }
+        #stopGeneratingBtn:hover {
+            background-color: color-mix(in srgb, var(--accent-error) 80%, black 20%);
+            transform: translateX(-50%) translateY(-7px);
+        }
+        #stopGeneratingBtn:active {
+            transform: translateX(-50%) translateY(-5px);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+
         /* Specific attachment preview styling within messages (not the input area ones) */
         .chat-message-attachment-item {
             display: flex;
@@ -546,7 +634,7 @@
             transition: background-color 0.6s ease, color 0.6s ease, box-shadow 0.6s ease;
         }
 
-        /* Input Area */
+        /* Input Area - Adjusted for full screen */
         .chat-input {
             padding: 20px;
             border-top: 2px solid var(--border-color);
@@ -554,11 +642,11 @@
             gap: 10px; 
             align-items: end; 
             background-color: var(--tertiary-bg);
-            border-bottom-left-radius: 23px;
-            border-bottom-right-radius: 23px;
+            border-bottom-left-radius: 0; 
+            border-bottom-right-radius: 0; 
             position: relative; 
             transition: background-color 0.6s ease, border-color 0.6s ease;
-            flex-shrink: 0; /* Prevents input from shrinking */
+            flex-shrink: 0; 
         }
 
         .chat-input textarea {
@@ -581,7 +669,7 @@
 
         .chat-input textarea:focus {
             border-color: var(--accent-color);
-            background-color: color-mix(in srgb, var(--primary-bg) 90%, var(--tertiary-bg) 10%); /* Slightly lighter than primary bg */
+            background-color: color-mix(in srgb, var(--primary-bg) 90%, var(--tertiary-bg) 10%); 
         }
 
         /* Action buttons in input area (Send, Mic, Paperclip) */
@@ -677,13 +765,21 @@
             margin-top: 0.5rem;
             display: block;
         }
+        #chat-attachments-preview-container {
+            background-color: var(--tertiary-bg);
+            border-radius: 10px;
+            padding: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease;
+        }
         .chat-attachment-preview-item {
             display: flex;
             align-items: center;
             gap: 0.5rem;
             padding: 0.5rem 0.75rem;
             border-radius: 1rem;
-            background-color: var(--tertiary-bg); 
+            background-color: var(--secondary-bg); /* Use secondary for inner items */
             color: var(--text-color); 
             font-size: 0.875rem;
             box-shadow: 0 1px 2px rgba(0,0,0,0.2);
@@ -709,14 +805,14 @@
             transition: border-color 0.6s ease, box-shadow 0.6s ease;
         }
 
-        /* Copy Message Toast */
-        #copy-message {
+        /* General Toast Notification */
+        #toast-notification {
             position: fixed;
             bottom: 3rem; 
             left: 50%;
             transform: translateX(-50%);
             padding: 0.75rem 1.5rem;
-            background-color: var(--accent-success);
+            background-color: var(--accent-success); /* Default to success */
             color: white;
             border-radius: 9999px;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -724,9 +820,12 @@
             visibility: hidden;
             transition: all 0.5s ease-in-out;
             z-index: 100;
+            white-space: nowrap; /* Prevent text wrap */
         }
-
-        #copy-message.show {
+        #toast-notification.error {
+            background-color: var(--accent-error);
+        }
+        #toast-notification.show {
             opacity: 1;
             visibility: visible;
         }
@@ -771,127 +870,150 @@
         /* Responsive Adjustments */
         @media (max-width: 768px) {
             .chatbot-container {
-                width: 95%;
-                height: 95vh;
-                border-radius: 15px;
+                width: 100vw; 
+                height: 100vh; 
+                border-radius: 0;
+                margin: 0;
             }
 
             .chatbot-header {
-                padding: 15px;
-                border-top-left-radius: 13px;
-                border-top-right-radius: 13px;
+                padding: 12px; 
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+                display: flex;
                 flex-direction: column;
-                padding-bottom: 10px; /* Adjust padding for smaller screens */
+                align-items: center;
+                gap: 5px;
             }
             .chatbot-header h1 {
-                font-size: 1.8em;
+                font-size: 1.6em;
+                margin-top: 10px;
             }
             .chatbot-header .logo {
-                height: 2em;
+                height: 1.8em;
             }
             .chatbot-header .tagline {
-                font-size: 0.8em;
+                font-size: 0.75em;
+                margin-bottom: 5px;
             }
+
             .dark-mode-container {
+                position: absolute;
                 top: 10px;
                 right: 10px;
                 gap: 5px;
-            }
-            .dark-mode-container span {
                 font-size: 0.7em;
             }
             .switch {
-                width: 44px;
-                height: 24px;
-                border-radius: 12px;
+                width: 40px;
+                height: 22px;
+                border-radius: 11px;
             }
             .switch .slider:before {
-                height: 18px;
-                width: 18px;
+                height: 16px;
+                width: 16px;
                 left: 3px;
                 bottom: 3px;
             }
             input:checked + .slider:before {
-                transform: translateX(20px);
+                transform: translateX(18px);
             }
 
             #newChatBtn {
+                position: absolute;
                 top: 10px;
                 left: 10px;
-                padding: 6px 12px;
-                font-size: 0.75em;
+                padding: 6px 10px;
+                font-size: 0.7em;
+                gap: 3px;
             }
             #newChatBtn .lucide {
-                width: 0.8em;
-                height: 0.8em;
+                width: 0.7em;
+                height: 0.7em;
             }
 
-
             .chat-history {
-                padding: 15px;
-                gap: 10px;
+                padding: 10px;
+                gap: 8px;
+            }
+            
+            .message-avatar {
+                width: 28px; /* Smaller avatar on mobile */
+                height: 28px;
             }
 
             .chat-message {
-                max-width: 90%;
-                padding: 10px 15px;
-                border-radius: 18px;
-                padding-bottom: 2rem; 
-                font-size: 0.9rem;
+                max-width: 95%; /* Wider bubbles for smaller screens */
+                padding: 10px 14px;
+                border-radius: 16px;
+                padding-bottom: 2rem;
+                font-size: 0.9rem; /* Slightly larger for readability */
             }
 
             .message-actions {
                 bottom: 0.3rem; 
-                right: 0.8rem;
+                right: 0.6rem;
                 gap: 0.3rem;
-                padding: 0.2rem 0.4rem;
-                border-radius: 0.6rem;
+                padding: 0.15rem 0.3rem;
+                border-radius: 0.5rem;
             }
             .message-actions button {
                 padding: 0.1rem;
             }
             .message-actions button .lucide {
-                width: 0.9rem;
-                height: 0.9rem;
+                width: 0.8rem;
+                height: 0.8rem;
+            }
+
+            #stopGeneratingBtn {
+                bottom: calc(100% + 10px); /* Adjust position for mobile */
+                padding: 6px 12px;
+                font-size: 0.75em;
             }
 
             .chat-input {
                 padding: 10px;
-                gap: 8px;
-                align-items: center; 
-                border-bottom-left-radius: 13px;
-                border-bottom-right-radius: 13px;
+                gap: 6px;
+                align-items: center;
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+                flex-wrap: wrap;
             }
 
             .chat-input textarea {
                 padding: 8px 12px; 
                 font-size: 0.9em;
-                min-height: 36px; 
+                min-height: 38px;
+                max-height: 120px;
             }
 
             .chat-input .icon-button {
-                width: 40px; 
-                height: 40px;
+                width: 42px;
+                height: 42px;
             }
             .chat-input .icon-button .lucide {
-                width: 1.1em; 
-                height: 1.1em;
+                width: 1em;
+                height: 1em;
             }
 
+            #chat-attachments-preview-container {
+                padding: 6px;
+                margin-bottom: 8px;
+            }
             .chat-attachment-preview-item {
-                font-size: 0.8em;
-                padding: 0.4rem 0.6rem;
-                border-radius: 0.8rem;
+                font-size: 0.75em;
+                padding: 0.3rem 0.5rem;
+                border-radius: 0.75rem;
             }
             .chat-attachment-preview-item .remove-attachment-btn .lucide {
-                width: 0.8rem;
-                height: 0.8rem;
+                width: 0.7rem;
+                height: 0.7rem;
             }
 
-            #copy-message {
-                bottom: 2rem;
-                padding: 0.6rem 1.2rem;
-                font-size: 0.9rem;
+            #toast-notification {
+                bottom: 1.5rem;
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
             }
 
             #suggestions-container {
@@ -931,13 +1053,19 @@
             <!-- Initial AI message will be added by JS -->
         </div>
         <div class="chat-input" id="chatInputArea">
+            <!-- Stop Generating Button -->
+            <button id="stopGeneratingBtn" class="hidden" title="Stop generating">
+                <span data-lucide="square" class="w-4 h-4"></span>
+                Stop generating
+            </button>
+
             <!-- Autocomplete Suggestions Container -->
             <div id="suggestions-container" class="hidden">
                 <ul id="suggestions-list"></ul>
             </div>
 
             <!-- Attachment preview -->
-            <div id="chat-attachments-preview-container" class="mb-2 flex flex-wrap items-center gap-2 hidden absolute top-0 left-0 right-0 p-4 transform -translate-y-full">
+            <div id="chat-attachments-preview-container" class="mb-2 flex flex-wrap items-center gap-2 hidden absolute left-4 right-4" style="bottom: 100%; transform: translateY(-10px);">
                 <!-- Attachments previews will be dynamically added here -->
             </div>
 
@@ -961,48 +1089,35 @@
         </div>
     </div>
 
-    <!-- Temporary message for clipboard copy -->
-    <div id="copy-message">Text copied to clipboard!</div>
+    <!-- General Toast Notification -->
+    <div id="toast-notification" class="hidden"></div>
 
     <script>
         // !! IMPORTANT: REPLACE WITH YOUR ACTUAL GEMINI API KEY !!
         // !! DO NOT USE THIS METHOD IN PRODUCTION. USE A SERVER-SIDE PROXY. !!
+        // The key below is a placeholder and WILL NOT WORK.
         const GEMINI_API_KEY = 'AIzaSyC7twxprKoApUjR4uebBS-12KVyZTkuvrw'; // <--- REPLACE THIS WITH YOUR ACTUAL KEY
         const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${GEMINI_API_KEY}`;
+        const LOCAL_STORAGE_KEY = 'mysticVisionChatHistory';
 
-        // --- DOM Elements ---
-        const chatbotContainer = document.querySelector('.chatbot-container');
-        const chatHistoryDiv = document.getElementById('chatHistory');
-        const userInput = document.getElementById('userInput');
-        const sendButton = document.getElementById('sendButton');
-        const darkModeToggle = document.getElementById('dark-mode-toggle');
-        const copyMessage = document.getElementById('copy-message');
-        const newChatBtn = document.getElementById('newChatBtn');
-
-        const chatAttachmentsPreviewContainer = document.getElementById('chat-attachments-preview-container'); 
-        const chatImageUpload = document.getElementById('chat-image-upload');
-        const voiceInputBtn = document.getElementById('voice-input-btn');
-
-        const suggestionsContainer = document.getElementById('suggestions-container');
-        const suggestionsList = document.getElementById('suggestions-list');
-
-        // --- State Variables ---
+        // --- Global State Variables and Constants ---
         let conversationHistory = []; // Will be initialized with the first AI message
         let chatAttachments = []; 
-        
-        const messageTextCache = new Map(); 
-
+        const messageTextCache = new Map(); // Stores raw message text for copy/dictate
         let currentUtterance = null;
         let isSpeaking = false;
-
         let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         let recognition = null;
         let isVoiceInputActive = false;
         let finalTranscript = ''; 
-
         let selectedSuggestionIndex = -1;
+        let abortController = null; // For stopping AI generation
 
-        // A large list of autocomplete suggestions
+        const initialAIMessage = {
+            role: 'model',
+            parts: [{ text: 'Greetings, seeker! I am Mystic Vision, an AI designed to help you glimpse the beyond. What wisdom do you seek?' }],
+        };
+
         const autocompleteSuggestions = [
             // General/Utility
             "What is the capital of France?",
@@ -1344,7 +1459,7 @@
             "Explain peer pressure.",
             "What is healthy self-esteem in school-age children?",
             "How to teach responsibility to school-age children?",
-            "Tips for managing screen time for school-age children.",
+            "Tips for managing screen time for school-age children?",
             "What is adolescent development?",
             "How to communicate with teenagers?",
             "Explain puberty.",
@@ -1907,7 +2022,7 @@
             "How to use AI in marketing?",
             "Tips for AI-powered customer service.",
             "What is AI ethics?",
-            "How to ensure AI transparency?",
+            "How to ensure AI fairness?",
             "Explain AI bias.",
             "What are ethical guidelines for AI?",
             "How to develop responsible AI systems?",
@@ -2293,7 +2408,7 @@
             "How to write a press release?",
             "Explain media relations.",
             "What are crisis communication plans?",
-            "How to manage negative online reviews?",
+            "How to manage negative publicity?",
             "Tips for building brand loyalty.",
             "What is experiential marketing?",
             "How to create memorable brand experiences?",
@@ -2807,42 +2922,20 @@
             "Tips for ethical eating choices."
         ];
 
-        const initialAIMessage = {
-            role: 'model',
-            parts: [{ text: 'Greetings, seeker! I am Mystic Vision, an AI designed to help you glimpse the beyond. What wisdom do you seek?' }],
-        };
-
-        // --- Initialization on Load ---
-        window.addEventListener('load', () => {
-             createIcons();
-             userInput.style.height = userInput.scrollHeight + 'px';
-
-             // Initialize Dark Mode based on localStorage or default
-             const isDarkMode = localStorage.getItem('dark-mode') === 'true';
-             document.body.classList.toggle('light', !isDarkMode); // Toggle light class based on dark mode status
-             darkModeToggle.checked = isDarkMode;
-
-             // Register Service Worker for PWA
-             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/service-worker.js')
-                .then(registration => {
-                    console.log('ServiceWorker registered: ', registration);
-                })
-                .catch(registrationError => {
-                    console.log('ServiceWorker registration failed: ', registrationError);
-                });
-             }
-
-             // Start a new chat on load to display initial message
-             startNewChat();
-        });
-
-        // --- Dark Mode Toggle ---
-        darkModeToggle.addEventListener('change', () => {
-            const isChecked = darkModeToggle.checked;
-            document.body.classList.toggle('light', !isChecked); // Add/remove light class
-            localStorage.setItem('dark-mode', isChecked);
-        });
+        // --- DOM Elements (Declared here, assigned in load event) ---
+        let chatbotContainer;
+        let chatHistoryDiv;
+        let userInput;
+        let sendButton;
+        let darkModeToggle;
+        let toastNotification; // Changed from copyMessage to a general toast
+        let newChatBtn;
+        let chatAttachmentsPreviewContainer;
+        let chatImageUpload;
+        let voiceInputBtn;
+        let suggestionsContainer;
+        let suggestionsList;
+        let stopGeneratingBtn; // New button
 
         // --- Lucide Icon Helper ---
         const createIcons = () => {
@@ -2890,10 +2983,9 @@
 
         // --- Markdown.js Custom Renderer for Code Blocks ---
         const renderer = {
-            // Updated signature: `token` is now the first (and only relevant) argument
             code(token) { 
-                const actualCodeContent = token.text; // Get the code string from the token object
-                const lang = token.lang;             // Get the language from the token object
+                const actualCodeContent = token.text; 
+                const lang = token.lang;             
 
                 const languageDisplay = lang ? `<span class="text-xs font-semibold uppercase text-gray-400">${lang}</span>` : '';
                 const uniqueId = `code-block-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -2917,64 +3009,114 @@
         marked.use({ renderer });
 
         // --- Chat UI & Logic ---
-        function appendChatMessage(role, text, attachments = []) {
+        function appendChatMessage(msgRole, msgParts, msgId) { // Simplified signature to take msgParts directly
+            const messageWrapper = document.createElement('div');
+            messageWrapper.classList.add('message-wrapper', msgRole);
+
+            const avatarDiv = document.createElement('div');
+            avatarDiv.classList.add('message-avatar');
+            if (msgRole === 'model') {
+                const img = document.createElement('img');
+                img.src = 'logo.png'; // Assuming logo.png is your AI avatar
+                img.alt = 'Mystic Vision AI Avatar';
+                avatarDiv.appendChild(img);
+            } else { // user
+                const userIcon = document.createElement('span');
+                userIcon.setAttribute('data-lucide', 'user');
+                userIcon.classList.add('w-5', 'h-5'); // Adjusted size for avatar icon
+                avatarDiv.appendChild(userIcon);
+            }
+            messageWrapper.appendChild(avatarDiv);
+
+
             const messageDiv = document.createElement('div');
-            messageDiv.classList.add('chat-message', role);
+            messageDiv.classList.add('chat-message', msgRole);
             
-            const messageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-            messageDiv.dataset.messageId = messageId;
+            const id = msgId || `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            messageDiv.dataset.messageId = id;
             
             let contentHTML = '';
             let rawMessageContentForCache = ''; 
 
-            if (role === 'user') {
-                rawMessageContentForCache = `You: ${text}`;
-                contentHTML += `<span class="font-bold">You:</span> ${text}`;
-                if (attachments.length > 0) {
+            // Extract primary text content from parts
+            const mainTextPart = msgParts.find(p => typeof p.text === 'string');
+            const actualText = mainTextPart ? mainTextPart.text : '';
+
+            if (msgRole === 'user') {
+                rawMessageContentForCache = actualText; 
+                
+                // Only show the text content if it's not just whitespace
+                if (actualText.trim()) {
+                    contentHTML += `<div class="font-bold hidden">You:</div> ${actualText}`; 
+                } else if (msgParts.some(p => p.inlineData)) { // If no text, but attachments exist
+                    contentHTML += `<div class="font-bold hidden">You:</div> <em>(Sent attachment)</em>`; // Visual cue
+                    rawMessageContentForCache += ' (Sent attachment)'; // For copy/dictate
+                } else {
+                     // Fallback for messages with no text and no attachments (should ideally be prevented by the initial check)
+                     contentHTML += `<div class="font-bold hidden">You:</div> <em>(Empty message)</em>`;
+                     rawMessageContentForCache += ' (Empty message)';
+                }
+
+                // Handle attachments for user message
+                const attachmentParts = msgParts.filter(p => p.inlineData);
+                if (attachmentParts.length > 0) {
                     contentHTML += `<div class="mt-2 flex flex-wrap gap-2">`;
-                    attachments.forEach(attachment => {
-                        if (attachment.mimeType.startsWith('image/')) {
-                            contentHTML += `<img src="data:${attachment.mimeType};base64,${attachment.data}" alt="${attachment.name || 'User attachment'}" class="chat-image w-24 h-24 object-cover">`;
+                    attachmentParts.forEach(attachment => {
+                        // `attachment` here is an object like `{ inlineData: { mimeType, data }, name: "..." }`
+                        // or just `{ inlineData: { mimeType, data } }`
+                        const fileName = attachment.name || (attachment.inlineData?.mimeType.split('/').pop() || 'File').toUpperCase();
+                        if (attachment.inlineData.mimeType.startsWith('image/')) {
+                            contentHTML += `<img src="data:${attachment.inlineData.mimeType};base64,${attachment.inlineData.data}" alt="${fileName}" class="chat-image w-24 h-24 object-cover">`;
                         } else {
                             contentHTML += `
                                 <div class="chat-message-attachment-item">
-                                    <span data-lucide="${getFileIcon(attachment.mimeType)}" class="w-4 h-4 flex-shrink-0"></span>
-                                    <span class="truncate max-w-[120px]">${attachment.name || 'File'}</span>
+                                    <span data-lucide="${getFileIcon(attachment.inlineData.mimeType)}" class="w-4 h-4 flex-shrink-0"></span>
+                                    <span class="truncate max-w-[120px]">${fileName}</span>
                                 </div>
                             `;
                         }
                     });
                     contentHTML += `</div>`;
-                    rawMessageContentForCache += `\n[Attachments: ${attachments.map(a => a.name).join(', ')}]`;
                 }
-            } else { 
-                rawMessageContentForCache = `AI: ${text}`;
-                contentHTML = `<div class="message-content">${marked.parse(text)}</div>`;
+            } else { // AI message
+                rawMessageContentForCache = actualText;
+                contentHTML = `<div class="message-content">${marked.parse(actualText)}</div>`;
             }
             
-            messageTextCache.set(messageId, rawMessageContentForCache); 
+            messageTextCache.set(id, rawMessageContentForCache); 
 
+            // Add action buttons
             const actionsHTML = `
                 <div class="message-actions">
-                    <button class="copy-message-btn" title="Copy message" data-message-id="${messageId}">
+                    <button class="copy-message-btn" title="Copy message" data-message-id="${id}">
                         <span data-lucide="clipboard" class="w-4 h-4"></span>
                     </button>
-                    <button class="dictate-message-btn" title="Dictate message" data-message-id="${messageId}">
+                    <button class="dictate-message-btn" title="Dictate message" data-message-id="${id}">
                         <span data-lucide="volume-2" class="w-4 h-4"></span>
                     </button>
+                    ${msgRole === 'user' ? `
+                        <button class="edit-message-btn" title="Edit message" data-message-id="${id}">
+                            <span data-lucide="edit" class="w-4 h-4"></span>
+                        </button>` : ''}
+                    ${msgRole === 'model' ? `
+                        <button class="regenerate-message-btn" title="Regenerate response" data-message-id="${id}">
+                            <span data-lucide="rotate-ccw" class="w-4 h-4"></span>
+                        </button>` : ''}
                 </div>
             `;
             
             messageDiv.innerHTML = contentHTML + actionsHTML;
-            chatHistoryDiv.appendChild(messageDiv);
+            messageWrapper.appendChild(messageDiv);
+            chatHistoryDiv.appendChild(messageWrapper);
             
             setTimeout(() => {
-                messageDiv.style.transform = 'scale(1)';
+                messageWrapper.style.opacity = '1'; 
+                messageWrapper.style.transform = 'translateY(0)';
             }, 10);
             
             chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-            
             createIcons(); 
+            saveChatHistory();
         }
 
         function toggleLoading(show) {
@@ -2983,24 +3125,32 @@
                 if (!loadingIndicator) {
                     loadingIndicator = document.createElement('div');
                     loadingIndicator.id = 'loadingIndicator';
-                    loadingIndicator.classList.add('p-4', 'text-center', 'text-gray-500', 'text-sm', 'ai-message'); 
+                    // Use message-wrapper and message-avatar structure for consistency
+                    loadingIndicator.classList.add('message-wrapper', 'ai');
                     loadingIndicator.innerHTML = `
-                        <div class="loader-container h-8">
-                            <div class="loader-dot"></div>
-                            <div class="loader-dot"></div>
-                            <div class="loader-dot"></div>
+                        <div class="message-avatar">
+                            <img src="logo.png" alt="Mystic Vision AI Avatar">
                         </div>
-                        <span class="mt-2 block">AI is typing...</span>
+                        <div class="chat-message ai">
+                            <div class="loader-container h-8">
+                                <div class="loader-dot"></div>
+                                <div class="loader-dot"></div>
+                                <div class="loader-dot"></div>
+                            </div>
+                            <span class="mt-2 block">AI is typing...</span>
+                        </div>
                     `;
                     chatHistoryDiv.appendChild(loadingIndicator);
                 }
                 loadingIndicator.style.display = 'flex';
-                loadingIndicator.style.flexDirection = 'column'; 
+                loadingIndicator.style.flexDirection = 'row'; 
+                stopGeneratingBtn.classList.add('show');
                 chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
             } else {
                 if (loadingIndicator) {
                     loadingIndicator.remove(); 
                 }
+                stopGeneratingBtn.classList.remove('show');
             }
         }
 
@@ -3035,22 +3185,24 @@
             }
         }
 
-        function showCopyMessage() {
-            copyMessage.classList.add('show');
+        function showToast(message, type = 'success', duration = 3000) {
+            toastNotification.textContent = message;
+            toastNotification.className = ''; // Clear existing classes
+            toastNotification.classList.add('toast-notification', 'show', type);
             setTimeout(() => {
-                copyMessage.classList.remove('show');
-            }, 3000);
+                toastNotification.classList.remove('show');
+            }, duration);
         }
 
         function copyToClipboard(text) { 
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(text)
                     .then(() => {
-                        showCopyMessage();
+                        showToast('Copied to clipboard!');
                     })
                     .catch(err => {
                         console.error('Failed to copy: ', err);
-                        alert('Failed to copy text. Please copy manually.'); 
+                        showToast('Failed to copy text.', 'error');
                     });
             } else {
                 const tempTextArea = document.createElement('textarea');
@@ -3059,10 +3211,10 @@
                 tempTextArea.select();
                 try {
                     document.execCommand('copy');
-                    showCopyMessage();
+                    showToast('Copied to clipboard!');
                 } catch (err) {
                     console.error('Failed to copy (fallback):', err);
-                    alert('Failed to copy text. Please copy manually.'); 
+                    showToast('Failed to copy text.', 'error');
                 }
                 document.body.removeChild(tempTextArea);
             }
@@ -3070,7 +3222,7 @@
 
         function toggleSpeech(text, buttonElement) {
             if (!window.speechSynthesis) {
-                alert('Speech synthesis not supported in this browser.');
+                showToast('Speech synthesis not supported in this browser.', 'error');
                 return;
             }
 
@@ -3113,7 +3265,7 @@
             };
             utterance.onerror = (event) => {
                 console.error('Speech synthesis error:', event.error);
-                alert('Failed to dictate message. Check console for details.');
+                showToast('Failed to dictate message.', 'error');
                 isSpeaking = false;
                 currentUtterance = null;
                 updateButtonIcon(buttonElement, 'volume-2');
@@ -3122,81 +3274,37 @@
             window.speechSynthesis.speak(utterance);
         }
 
-        // --- Speech Recognition Setup ---
-        if (SpeechRecognition) {
-            recognition = new SpeechRecognition();
-            recognition.continuous = true; 
-            recognition.interimResults = true; 
-            recognition.lang = 'en-US';
-
-            recognition.onstart = () => {
-                isVoiceInputActive = true;
-                voiceInputBtn.classList.add('voice-input-active');
-                updateButtonIcon(voiceInputBtn, 'mic-off', 'w-5 h-5'); 
-                userInput.placeholder = 'Listening... Speak now.';
-                finalTranscript = ''; 
-                userInput.value = ''; 
-            };
-
-            recognition.onresult = (event) => {
-                let interimTranscript = '';
-                for (let i = event.resultIndex; i < event.results.length; ++i) {
-                    if (event.results[i].isFinal) {
-                        finalTranscript += event.results[i][0].transcript + ' '; 
-                    } else {
-                        interimTranscript += event.results[i][0].transcript;
-                    }
-                }
-                userInput.value = finalTranscript + interimTranscript; 
-                userInput.scrollLeft = userInput.scrollWidth; 
-                userInput.style.height = 'auto'; 
-                userInput.style.height = userInput.scrollHeight + 'px';
-            };
-
-            recognition.onend = () => {
-                isVoiceInputActive = false;
-                voiceInputBtn.classList.remove('voice-input-active');
-                updateButtonIcon(voiceInputBtn, 'mic', 'w-5 h-5'); 
-                userInput.placeholder = 'Type your message...';
-
-                if (finalTranscript.trim() !== '') {
-                    userInput.value = finalTranscript.trim(); 
-                } else if (userInput.value.trim() === '') {
-                    userInput.value = ''; 
-                }
-                userInput.style.height = 'auto'; 
-                userInput.style.height = userInput.scrollHeight + 'px';
-            };
-
-            recognition.onerror = (event) => {
-                isVoiceInputActive = false; 
-                voiceInputBtn.classList.remove('voice-input-active');
-                updateButtonIcon(voiceInputBtn, 'mic', 'w-5 h-5'); 
-                userInput.placeholder = 'Type your message...';
-
-                console.error('Speech recognition error:', event.error);
-                let errorMessage = `Speech recognition error: ${event.error}`;
-                if (event.error === 'not-allowed') {
-                    errorMessage = 'Microphone access denied. Please allow microphone access in your browser settings.';
-                } else if (event.error === 'no-speech') {
-                    console.log('No speech detected, recognition ended.');
-                    if (finalTranscript.trim() === '') { userInput.value = ''; }
-                    return; 
-                } else if (event.error === 'network') {
-                    errorMessage = 'Speech recognition network error. This often means a firewall, proxy, or browser extension is blocking access to Google\'s speech services. Please try disabling extensions or testing in incognito mode.';
-                }
-                alert(errorMessage); 
-            };
-        } else {
-            console.warn('Web Speech API (SpeechRecognition) not supported in this browser. Voice input button will be hidden.');
-            voiceInputBtn.style.display = 'none'; 
-        }
-
         // --- API Call Function ---
         async function callGeminiAPI(payload) {
-            if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY" || !GEMINI_API_KEY || GEMINI_API_KEY === "") { 
-                throw new Error("API Key is not set or is the default placeholder. Please replace 'YOUR_GEMINI_API_KEY' in the script with your actual Gemini API key.");
+            if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || !GEMINI_API_KEY || GEMINI_API_KEY === "") { 
+                showToast("API Key is not set! Please replace 'YOUR_GEMINI_API_KEY_HERE' in the script with your actual Gemini API key.", 'error', 5000);
+                throw new Error("API Key is not set or is the default placeholder. Please replace 'YOUR_GEMINI_API_KEY_HERE' in the script with your actual Gemini API key.");
             }
+
+            // --- CRITICAL FIX: Filter out non-API-compliant properties before sending ---
+            const apiContents = payload.contents.map(message => {
+                const apiMessage = {
+                    role: message.role,
+                    parts: message.parts.map(part => {
+                        if (part.inlineData) {
+                            // Ensure inlineData only contains mimeType and data, as per API spec
+                            return {
+                                inlineData: {
+                                    mimeType: part.inlineData.mimeType,
+                                    data: part.inlineData.data
+                                }
+                            };
+                        }
+                        return { text: part.text }; // Ensure text parts are also correctly structured
+                    })
+                };
+                return apiMessage;
+            });
+
+            const apiPayload = {
+                contents: apiContents
+            };
+            // --- END CRITICAL FIX ---
 
             let response;
             let result;
@@ -3205,17 +3313,22 @@
             const maxRetries = 3;
             let delay = 1000; 
 
+            abortController = new AbortController(); // New AbortController for each request
+            const signal = abortController.signal;
+
             while (retryCount < maxRetries && !success) {
                 try {
                     response = await fetch(API_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
+                        body: JSON.stringify(apiPayload), // Use the cleaned payload
+                        signal: signal // Pass the abort signal
                     });
 
                     if (response.status === 429) { 
                         if (retryCount < maxRetries - 1) {
                             console.warn(`API rate limit exceeded. Retrying in ${delay / 1000}s...`);
+                            showToast(`Rate limit exceeded. Retrying...`, 'error');
                             await new Promise(res => setTimeout(res, delay));
                             delay *= 2; 
                             retryCount++;
@@ -3230,8 +3343,14 @@
                         success = true;
                     }
                 } catch (err) {
+                    if (err.name === 'AbortError') {
+                        console.log('Fetch aborted by user.');
+                        showToast('AI generation stopped.', 'error');
+                        throw err; // Propagate abort error
+                    }
                     if (retryCount < maxRetries - 1) {
                         console.warn(`Fetch error: ${err.message}. Retrying in ${delay / 1000}s...`);
+                        showToast(`Network error. Retrying...`, 'error');
                         await new Promise(res => setTimeout(res, delay));
                         delay *= 2;
                         retryCount++;
@@ -3270,7 +3389,8 @@
                 const li = document.createElement('li');
                 li.textContent = suggestion;
                 li.dataset.index = index;
-                li.addEventListener('click', () => {
+                li.addEventListener('mousedown', (e) => { // Use mousedown to prevent blur before click
+                    e.preventDefault(); 
                     userInput.value = suggestion;
                     userInput.focus();
                     suggestionsContainer.classList.add('hidden');
@@ -3298,19 +3418,72 @@
 
             items[selectedSuggestionIndex].classList.add('selected');
             items[selectedSuggestionIndex].scrollIntoView({ block: 'nearest' });
-            userInput.value = items[selectedSuggestionIndex].textContent; // Auto-fill on arrow key
-            userInput.style.height = 'auto'; 
-            userInput.style.height = userInput.scrollHeight + 'px';
+            // Do NOT auto-fill on arrow key navigation for ChatGPT-like behavior
+            // userInput.value = items[selectedSuggestionIndex].textContent; 
+            // userInput.style.height = 'auto'; 
+            // userInput.style.height = userInput.scrollHeight + 'px';
         }
 
         function selectCurrentSuggestion() {
             if (selectedSuggestionIndex !== -1) {
                 const selectedText = suggestionsList.children[selectedSuggestionIndex].textContent;
                 userInput.value = selectedText;
+                userInput.style.height = 'auto'; 
+                userInput.style.height = userInput.scrollHeight + 'px';
             }
             suggestionsContainer.classList.add('hidden');
             selectedSuggestionIndex = -1;
         }
+
+        // --- History Management (Local Storage) ---
+        function saveChatHistory() {
+            try {
+                // Filter out the non-serializable File object from attachments for saving
+                const serializableHistory = conversationHistory.map(msg => {
+                    const clonedMsg = { ...msg }; // Shallow copy
+                    if (clonedMsg.role === 'user' && clonedMsg.parts) {
+                        clonedMsg.parts = clonedMsg.parts.map(part => {
+                            const clonedPart = { ...part };
+                            if (clonedPart.inlineData && clonedPart.inlineData.file) {
+                                // Remove the File object, keep mimeType, data, and name
+                                const { file, ...restOfInlineData } = clonedPart.inlineData;
+                                clonedPart.inlineData = restOfInlineData;
+                            }
+                            return clonedPart;
+                        });
+                    }
+                    return clonedMsg;
+                });
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(serializableHistory));
+            } catch (e) {
+                console.error("Error saving chat history to local storage:", e);
+                showToast("Failed to save chat history.", 'error');
+            }
+        }
+
+        function loadChatHistory() {
+            try {
+                const savedHistory = localStorage.getItem(LOCAL_STORAGE_KEY);
+                if (savedHistory) {
+                    conversationHistory = JSON.parse(savedHistory);
+                    chatHistoryDiv.innerHTML = ''; // Clear current display
+                    messageTextCache.clear(); // Clear cache for fresh population
+                    conversationHistory.forEach(msg => {
+                        // When loading, re-append. Parts contain inlineData with mimeType/data, which is enough for display.
+                        // The 'file' property (Blob) is intentionally not reconstructed as it's not needed for display
+                        // and complicates re-uploading (which is handled by `editLastUserMessage` recreating blobs).
+                        appendChatMessage(msg.role, msg.parts, msg.messageId); // Pass parts directly
+                    });
+                    return true;
+                }
+            } catch (e) {
+                console.error("Error loading chat history from local storage:", e);
+                showToast("Failed to load chat history. Starting fresh.", 'error');
+                localStorage.removeItem(LOCAL_STORAGE_KEY); // Clear corrupt history
+            }
+            return false;
+        }
+
 
         // --- New Chat Function ---
         function startNewChat() {
@@ -3333,55 +3506,41 @@
             selectedSuggestionIndex = -1;
 
             // Add the initial AI message
-            conversationHistory.push(initialAIMessage);
-            appendChatMessage('ai', initialAIMessage.parts[0].text);
+            const initialAIResponseText = initialAIMessage.parts[0].text;
+            const initialAIMessageId = `msg-${Date.now()}-initial`;
+            conversationHistory.push({ role: 'model', parts: [{ text: initialAIResponseText }], messageId: initialAIMessageId });
+            appendChatMessage('ai', [{ text: initialAIResponseText }], initialAIMessageId); // Pass parts directly
             
             userInput.focus();
+            saveChatHistory(); // Save initial state
         }
 
+        // --- Paste Functionality ---
+        async function processPastedFile(file) {
+            const allowedTypes = [
+                'image/', 'text/', 'application/pdf',
+                'application/json', 'text/csv', 'application/xml', 'text/markdown'
+            ];
+            const isAllowed = allowedTypes.some(type => file.type.startsWith(type)) || file.name.endsWith('.md');
 
-        // --- Event Listeners ---
-        userInput.addEventListener('input', () => {
-            userInput.style.height = 'auto'; 
-            userInput.style.height = userInput.scrollHeight + 'px';
-
-            const query = userInput.value;
-            if (query.length > 0) {
-                const suggestions = filterSuggestions(query);
-                displaySuggestions(suggestions);
+            if (isAllowed) {
+                if (file.size > 10 * 1024 * 1024) { 
+                    showToast(`File "${file.name}" is too large (>10MB). Max 10MB per file.`, 'error');
+                    return;
+                }
+                try {
+                    const { mimeType, data } = await fileToBase64(file);
+                    chatAttachments.push({ file, mimeType, data, name: file.name }); // Store file object for future use
+                } catch (error) {
+                    showToast(`Failed to read pasted file ${file.name}.`, 'error');
+                    console.error('Pasted file read error:', error);
+                }
             } else {
-                suggestionsContainer.classList.add('hidden');
+                showToast(`Pasted file type not supported: "${file.name}" (${file.type}).`, 'error');
             }
-        });
+        }
 
-        userInput.addEventListener('keydown', (e) => {
-            if (suggestionsContainer.classList.contains('hidden')) return;
-
-            if (e.key === 'ArrowDown') {
-                e.preventDefault(); // Prevent cursor movement
-                navigateSuggestions('down');
-            } else if (e.key === 'ArrowUp') {
-                e.preventDefault(); // Prevent cursor movement
-                navigateSuggestions('up');
-            } else if (e.key === 'Enter' && selectedSuggestionIndex !== -1) {
-                e.preventDefault(); // Prevent new line or send
-                selectCurrentSuggestion();
-            } else if (e.key === 'Escape') {
-                suggestionsContainer.classList.add('hidden');
-                selectedSuggestionIndex = -1;
-            }
-        });
-
-        userInput.addEventListener('blur', () => {
-            // Delay hiding to allow click event on suggestion list
-            setTimeout(() => {
-                suggestionsContainer.classList.add('hidden');
-                selectedSuggestionIndex = -1;
-            }, 100); 
-        });
-
-
-        sendButton.addEventListener('click', async () => {
+        async function sendMessage() {
             const userMessage = userInput.value.trim();
             if (!userMessage && chatAttachments.length === 0) {
                 return;
@@ -3399,20 +3558,23 @@
                 userParts.push({
                     inlineData: {
                         mimeType: attachment.mimeType,
-                        data: attachment.data
+                        data: attachment.data,
+                        // Store original name and mimeType for better re-display/edit functionality
+                        name: attachment.name 
                     }
                 });
             }
 
-            conversationHistory.push({ role: 'user', parts: userParts });
-            appendChatMessage('user', userMessage, chatAttachments);
+            const newUserMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            conversationHistory.push({ role: 'user', parts: userParts, messageId: newUserMessageId });
+            appendChatMessage('user', userParts, newUserMessageId); // Pass parts directly
             
             userInput.value = '';
             userInput.style.height = 'auto'; 
             chatAttachments = [];
             chatImageUpload.value = ''; 
             displayChatAttachments(); 
-            suggestionsContainer.classList.add('hidden'); // Hide suggestions on send
+            suggestionsContainer.classList.add('hidden'); 
             selectedSuggestionIndex = -1;
             
             sendButton.disabled = true;
@@ -3426,189 +3588,532 @@
                 
                 const responseText = await callGeminiAPI(payload);
                 
-                conversationHistory.push({ role: 'model', parts: [{ text: responseText }] });
-                appendChatMessage('ai', responseText);
+                const newAIMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                conversationHistory.push({ role: 'model', parts: [{ text: responseText }], messageId: newAIMessageId });
+                appendChatMessage('ai', [{ text: responseText }], newAIMessageId); // Pass parts directly
                 
             } catch (error) {
                 console.error('Chat API call failed:', error);
-                appendChatMessage('ai', `Oops! Something went wrong. Please try again. (${error.message})`);
+                if (error.name !== 'AbortError') { // Don't show error toast if it was an intentional abort
+                    appendChatMessage('ai', [{ text: `Oops! Something went wrong. Please try again. (${error.message})` }]); // Pass parts directly
+                    showToast(`API error: ${error.message}`, 'error', 5000);
+                }
             } finally {
                 sendButton.disabled = false;
                 toggleLoading(false);
                 userInput.focus();
             }
-        });
-        
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) { 
-                e.preventDefault(); 
-                // If a suggestion is selected, it will be handled by keydown on enter
-                // Otherwise, send the message
-                if (selectedSuggestionIndex === -1) {
-                    sendButton.click();
-                }
+        }
+
+        async function regenerateLastAIMessage() {
+            // Find the last AI message
+            const lastAIMessageIndex = conversationHistory.findIndexLast(msg => msg.role === 'model');
+            if (lastAIMessageIndex === -1) {
+                showToast("No AI message to regenerate.", 'error');
+                return;
             }
-        });
+            
+            // Remove the last AI message from history and DOM
+            const lastAIMessage = conversationHistory.splice(lastAIMessageIndex, 1)[0];
+            document.querySelector(`[data-message-id="${lastAIMessage.messageId}"]`).parentElement.remove(); // Remove its wrapper
 
-        chatImageUpload.addEventListener('change', async (event) => {
-            const files = Array.from(event.target.files);
-            if (files.length > 0) {
-                for (const file of files) {
-                    const allowedTypes = [
-                        'image/', 'text/', 'application/pdf',
-                        'application/json', 'text/csv', 'application/xml', 'text/markdown'
-                    ];
-                    const isAllowed = allowedTypes.some(type => file.type.startsWith(type)) || file.name.endsWith('.md');
-
-                    if (isAllowed) {
-                        if (file.size > 10 * 1024 * 1024) { 
-                            alert(`File "${file.name}" is too large (>${10}MB). Max 10MB per file.`);
-                            continue;
-                        }
-                        try {
-                            const { mimeType, data } = await fileToBase64(file);
-                            chatAttachments.push({ file, mimeType, data, name: file.name });
-                        } catch (error) {
-                            alert(`Failed to read chat file ${file.name}.`);
-                            console.error('Chat file read error:', error);
-                        }
-                    } else {
-                        alert(`File type not supported for chat: "${file.name}" (${file.type}).`);
-                    }
+            // Find the user message preceding the removed AI message (if any)
+            const lastUserMessageIndex = conversationHistory.findIndexLast(msg => msg.role === 'user');
+            if (lastUserMessageIndex === -1 && conversationHistory.length === 0) { // If there are no user messages and nothing in history left
+                showToast("No previous user message to regenerate from. Start a new chat or send a message.", 'error');
+                // Re-add the initial AI message if removed and no user messages
+                if (lastAIMessage.messageId.includes('initial')) {
+                    conversationHistory.push(initialAIMessage);
+                    appendChatMessage('ai', initialAIMessage.parts, initialAIMessage.messageId); // Pass parts directly
                 }
-                displayChatAttachments();
+                return;
+            } else if (lastUserMessageIndex === -1 && conversationHistory.length > 0) {
+                 // This case means the only thing left is initial message from AI or similar, not a user message.
+                 // This shouldn't happen if the history is managed correctly by regenerate button appearing only on AI message.
+                 showToast("Cannot regenerate without a preceding user message.", 'error');
+                 // Re-add the AI message that was removed for regeneration attempt
+                 conversationHistory.push(lastAIMessage); 
+                 appendChatMessage(lastAIMessage.role, lastAIMessage.parts, lastAIMessage.messageId); // Pass parts directly
+                 return;
+            }
+
+
+            sendButton.disabled = true;
+            toggleLoading(true);
+
+            try {
+                const payload = {
+                    contents: conversationHistory, // Send the history *up to* the last user message
+                };
+
+                const responseText = await callGeminiAPI(payload);
+                
+                const newAIMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                conversationHistory.push({ role: 'model', parts: [{ text: responseText }], messageId: newAIMessageId });
+                appendChatMessage('ai', [{ text: responseText }], newAIMessageId); // Pass parts directly
+                showToast("AI response regenerated!");
+
+            } catch (error) {
+                console.error('Regenerate API call failed:', error);
+                if (error.name !== 'AbortError') {
+                    // Re-add the original AI message if regeneration failed and wasn't aborted
+                    conversationHistory.push(lastAIMessage); 
+                    appendChatMessage(lastAIMessage.role, lastAIMessage.parts, lastAIMessage.messageId); // Pass parts directly
+                    showToast(`Failed to regenerate: ${error.message}`, 'error', 5000);
+                }
+            } finally {
+                sendButton.disabled = false;
+                toggleLoading(false);
                 userInput.focus();
             }
-            chatImageUpload.value = ''; 
-        });
+        }
 
-        chatAttachmentsPreviewContainer.addEventListener('click', (event) => {
-            const removeBtn = event.target.closest('.remove-attachment-btn');
-            if (removeBtn) {
-                const attachmentDiv = removeBtn.closest('[data-index]');
-                if (attachmentDiv) {
-                    const index = parseInt(attachmentDiv.dataset.index);
-                    chatAttachments.splice(index, 1); 
-                    displayChatAttachments(); 
+        async function editLastUserMessage(messageId) {
+            const messageIndex = conversationHistory.findIndex(msg => msg.messageId === messageId && msg.role === 'user');
+            if (messageIndex === -1) {
+                showToast("User message not found or cannot be edited.", 'error');
+                return;
+            }
+
+            const messageToEdit = conversationHistory[messageIndex];
+            
+            // Populate input with message text
+            userInput.value = messageToEdit.parts.find(p => typeof p.text === 'string')?.text || ''; // Ensure it gets text part
+            userInput.style.height = 'auto';
+            userInput.style.height = userInput.scrollHeight + 'px';
+
+            // Populate attachments from the message's parts
+            chatAttachments = [];
+            messageToEdit.parts.filter(p => p.inlineData).forEach(part => {
+                // Reconstruct a "file" like object (Blob) from base64 data for preview/re-processing if needed.
+                // Note: The actual File object (with path, lastModifiedDate etc.) cannot be fully reconstructed from base64.
+                // For simplicity in this context, it's a minimal Blob acting as a "file".
+                const byteCharacters = atob(part.inlineData.data);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], { type: part.inlineData.mimeType });
+
+                chatAttachments.push({
+                    file: blob, // Store the recreated blob
+                    mimeType: part.inlineData.mimeType,
+                    data: part.inlineData.data,
+                    name: part.inlineData.name || `attachment.${part.inlineData.mimeType.split('/').pop()}` // Use stored name or guess
+                });
+            });
+            displayChatAttachments();
+
+            // Remove the user message and all subsequent messages from history and DOM
+            conversationHistory.splice(messageIndex);
+            
+            // Remove messages from DOM after the edited message (and the edited message itself)
+            let editedMessageWrapper = document.querySelector(`[data-message-id="${messageId}"]`);
+            if (editedMessageWrapper) {
+                // Get the parent wrapper (message-wrapper) for removal
+                let parentWrapper = editedMessageWrapper.parentElement;
+                while (parentWrapper) {
+                    let nextSibling = parentWrapper.nextElementSibling;
+                    parentWrapper.remove();
+                    parentWrapper = nextSibling;
+                }
+            }
+            
+            showToast("Message loaded for editing.", 'success');
+            userInput.focus();
+            saveChatHistory(); // Save truncated history
+        }
+
+
+        // Find last element in array helper
+        if (!Array.prototype.findIndexLast) {
+            Array.prototype.findIndexLast = function(predicate) {
+                for (let i = this.length - 1; i >= 0; i--) {
+                    if (predicate(this[i])) {
+                        return i;
+                    }
+                }
+                return -1;
+            };
+        }
+
+        // --- Initialization on Load ---
+        window.addEventListener('load', () => {
+            // --- Assign DOM Elements after the page is fully loaded ---
+            chatbotContainer = document.querySelector('.chatbot-container');
+            chatHistoryDiv = document.getElementById('chatHistory');
+            userInput = document.getElementById('userInput');
+            sendButton = document.getElementById('sendButton');
+            darkModeToggle = document.getElementById('dark-mode-toggle');
+            toastNotification = document.getElementById('toast-notification'); 
+            newChatBtn = document.getElementById('newChatBtn');
+            chatAttachmentsPreviewContainer = document.getElementById('chat-attachments-preview-container');
+            chatImageUpload = document.getElementById('chat-image-upload');
+            voiceInputBtn = document.getElementById('voice-input-btn');
+            suggestionsContainer = document.getElementById('suggestions-container');
+            suggestionsList = document.getElementById('suggestions-list');
+            stopGeneratingBtn = document.getElementById('stopGeneratingBtn');
+
+            createIcons();
+            userInput.style.height = userInput.scrollHeight + 'px';
+
+            // Initialize Dark Mode based on localStorage or default
+            const isDarkMode = localStorage.getItem('dark-mode') === 'true';
+            document.body.classList.toggle('light', !isDarkMode); // Toggle light class based on dark mode status
+            darkModeToggle.checked = isDarkMode;
+
+            // Register Service Worker for PWA
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/service-worker.js')
+                .then(registration => {
+                    console.log('ServiceWorker registered: ', registration);
+                })
+                .catch(registrationError => {
+                    console.log('ServiceWorker registration failed: ', registrationError);
+                });
+            }
+
+            // Load history or start a new chat
+            if (!loadChatHistory()) {
+                startNewChat();
+            } else {
+                chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight; // Scroll to bottom on load
+                userInput.focus();
+            }
+
+            // --- Speech Recognition Setup (Must be inside load to ensure voiceInputBtn exists) ---
+            if (SpeechRecognition) {
+                recognition = new SpeechRecognition();
+                recognition.continuous = true; 
+                recognition.interimResults = true; 
+                recognition.lang = 'en-US';
+
+                recognition.onstart = () => {
+                    isVoiceInputActive = true;
+                    voiceInputBtn.classList.add('voice-input-active');
+                    updateButtonIcon(voiceInputBtn, 'mic-off', 'w-5 h-5'); 
+                    userInput.placeholder = 'Listening... Speak now.';
+                    finalTranscript = ''; 
+                    userInput.value = ''; 
+                };
+
+                recognition.onresult = (event) => {
+                    let interimTranscript = '';
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        if (event.results[i].isFinal) {
+                            finalTranscript += event.results[i][0].transcript + ' '; 
+                        } else {
+                            interimTranscript += event.results[i][0].transcript;
+                        }
+                    }
+                    userInput.value = finalTranscript + interimTranscript; 
+                    userInput.scrollLeft = userInput.scrollWidth; 
+                    userInput.style.height = 'auto'; 
+                    userInput.style.height = userInput.scrollHeight + 'px';
+                };
+
+                recognition.onend = () => {
+                    isVoiceInputActive = false;
+                    voiceInputBtn.classList.remove('voice-input-active');
+                    updateButtonIcon(voiceInputBtn, 'mic', 'w-5 h-5'); 
+                    userInput.placeholder = 'Type your message...';
+
+                    if (finalTranscript.trim() !== '') {
+                        userInput.value = finalTranscript.trim(); 
+                    } else if (userInput.value.trim() === '') {
+                        userInput.value = ''; 
+                    }
+                    userInput.style.height = 'auto'; 
+                    userInput.style.height = userInput.scrollHeight + 'px';
+                };
+
+                recognition.onerror = (event) => {
+                    isVoiceInputActive = false; 
+                    voiceInputBtn.classList.remove('voice-input-active');
+                    updateButtonIcon(voiceInputBtn, 'mic', 'w-5 h-5'); 
+                    userInput.placeholder = 'Type your message...';
+
+                    console.error('Speech recognition error:', event.error);
+                    let errorMessage = `Speech recognition error: ${event.error}`;
+                    if (event.error === 'not-allowed') {
+                        errorMessage = 'Microphone access denied. Please allow microphone access in your browser settings.';
+                    } else if (event.error === 'no-speech') {
+                        console.log('No speech detected, recognition ended.');
+                        if (finalTranscript.trim() === '') { userInput.value = ''; }
+                        return; 
+                    } else if (event.error === 'network') {
+                        errorMessage = 'Speech recognition network error. This often means a firewall, proxy, or browser extension is blocking access to Google\'s speech services. Please try disabling extensions or testing in incognito mode.';
+                    }
+                    showToast(errorMessage, 'error'); 
+                };
+            } else {
+                console.warn('Web Speech API (SpeechRecognition) not supported in this browser. Voice input button will be hidden.');
+                voiceInputBtn.style.display = 'none'; 
+            }
+
+            // --- Event Listeners (Must be attached after elements are assigned) ---
+            darkModeToggle.addEventListener('change', () => {
+                const isChecked = darkModeToggle.checked;
+                document.body.classList.toggle('light', !isChecked);
+                localStorage.setItem('dark-mode', isChecked);
+            });
+
+            userInput.addEventListener('input', () => {
+                userInput.style.height = 'auto'; 
+                userInput.style.height = userInput.scrollHeight + 'px';
+
+                const query = userInput.value;
+                if (query.length > 0) {
+                    const suggestions = filterSuggestions(query);
+                    displaySuggestions(suggestions);
+                } else {
+                    suggestionsContainer.classList.add('hidden');
+                }
+            });
+
+            userInput.addEventListener('keydown', (e) => {
+                // Autocomplete navigation
+                if (!suggestionsContainer.classList.contains('hidden')) {
+                    if (e.key === 'ArrowDown') {
+                        e.preventDefault(); 
+                        navigateSuggestions('down');
+                        return; 
+                    } else if (e.key === 'ArrowUp') {
+                        e.preventDefault(); 
+                        navigateSuggestions('up');
+                        return;
+                    } else if (e.key === 'Enter') { 
+                        e.preventDefault(); 
+                        selectCurrentSuggestion();
+                        return;
+                    } else if (e.key === 'Escape') {
+                        suggestionsContainer.classList.add('hidden');
+                        selectedSuggestionIndex = -1;
+                        return;
+                    }
+                }
+
+                // Send message on Enter, new line on Shift+Enter (ChatGPT style)
+                if (e.key === 'Enter' && !e.shiftKey) { 
+                    e.preventDefault(); 
+                    sendButton.click(); 
+                }
+                // For Shift+Enter, the default behavior (new line) is allowed
+            });
+
+            userInput.addEventListener('blur', () => {
+                // Delay hiding to allow click on suggestions
+                setTimeout(() => {
+                    suggestionsContainer.classList.add('hidden');
+                    selectedSuggestionIndex = -1;
+                }, 100); 
+            });
+
+            userInput.addEventListener('paste', async (e) => {
+                const items = e.clipboardData.items;
+                let filePasted = false;
+
+                for (let i = 0; i < items.length; i++) {
+                    const item = items[i];
+                    if (item.kind === 'file') {
+                        e.preventDefault(); 
+                        const file = item.getAsFile();
+                        if (file) {
+                            filePasted = true;
+                            await processPastedFile(file);
+                        }
+                    }
+                }
+
+                if (filePasted) {
+                    displayChatAttachments();
                     userInput.focus();
                 }
-            }
-        });
+            });
 
-        voiceInputBtn.addEventListener('click', () => {
-            if (recognition) {
-                if (isVoiceInputActive) {
-                    recognition.stop(); 
-                } else {
-                    finalTranscript = ''; 
-                    recognition.start();
+            sendButton.addEventListener('click', sendMessage);
+            
+            chatImageUpload.addEventListener('change', async (event) => {
+                const files = Array.from(event.target.files);
+                if (files.length > 0) {
+                    for (const file of files) {
+                        const allowedTypes = [
+                            'image/', 'text/', 'application/pdf',
+                            'application/json', 'text/csv', 'application/xml', 'text/markdown'
+                        ];
+                        const isAllowed = allowedTypes.some(type => file.type.startsWith(type)) || file.name.endsWith('.md');
+
+                        if (isAllowed) {
+                            if (file.size > 10 * 1024 * 1024) { 
+                                showToast(`File "${file.name}" is too large (>${10}MB). Max 10MB per file.`, 'error');
+                                continue;
+                            }
+                            try {
+                                const { mimeType, data } = await fileToBase64(file);
+                                chatAttachments.push({ file, mimeType, data, name: file.name });
+                            } catch (error) {
+                                showToast(`Failed to read chat file ${file.name}.`, 'error');
+                                console.error('Chat file read error:', error);
+                            }
+                        } else {
+                            showToast(`File type not supported for chat: "${file.name}" (${file.type}).`, 'error');
+                        }
+                    }
+                    displayChatAttachments();
+                    userInput.focus();
                 }
-            } else {
-                alert('Speech recognition is not supported in this browser.');
-            }
-        });
+                chatImageUpload.value = ''; 
+            });
 
-        chatbotContainer.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            chatbotContainer.classList.add('drag-over-active');
-        });
-
-        chatbotContainer.addEventListener('dragleave', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            chatbotContainer.classList.remove('drag-over-active');
-        });
-
-        chatbotContainer.addEventListener('drop', async (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            chatbotContainer.classList.remove('drag-over-active');
-
-            const files = Array.from(e.dataTransfer.files);
-            if (files.length > 0) {
-                for (const file of files) {
-                    const allowedTypes = [
-                        'image/', 'text/', 'application/pdf',
-                        'application/json', 'text/csv', 'application/xml', 'text/markdown'
-                    ];
-                    const isAllowed = allowedTypes.some(type => file.type.startsWith(type)) || file.name.endsWith('.md');
-
-                    if (isAllowed) {
-                         if (file.size > 10 * 1024 * 1024) { 
-                            alert(`File "${file.name}" is too large (>${10}MB). Max 10MB per file.`);
-                            continue;
-                        }
-                        try {
-                            const { mimeType, data } = await fileToBase64(file);
-                            chatAttachments.push({ file, mimeType, data, name: file.name });
-                        } catch (error) {
-                            alert(`Failed to read chat file ${file.name}.`);
-                            console.error('Chat file read error:', error);
-                        }
-                    } else {
-                        alert(`File type not supported for chat: "${file.name}" (${file.type}).`);
+            chatAttachmentsPreviewContainer.addEventListener('click', (event) => {
+                const removeBtn = event.target.closest('.remove-attachment-btn');
+                if (removeBtn) {
+                    const attachmentDiv = removeBtn.closest('[data-index]');
+                    if (attachmentDiv) {
+                        const index = parseInt(attachmentDiv.dataset.index);
+                        chatAttachments.splice(index, 1); 
+                        displayChatAttachments(); 
+                        userInput.focus();
                     }
                 }
-                displayChatAttachments();
-                userInput.focus();
-            }
-        });
-        
-        chatHistoryDiv.addEventListener('click', (event) => {
-            const codeCopyButton = event.target.closest('.code-block-copy-button');
-            if (codeCopyButton) {
-                const targetId = codeCopyButton.dataset.copyTarget;
-                const codeElement = document.getElementById(targetId);
-                if (codeElement) {
-                    const codeToCopy = codeElement.textContent;
-                    updateButtonIcon(codeCopyButton, 'check', 'w-4 h-4'); 
-                    copyToClipboard(codeToCopy); 
-                    setTimeout(() => { 
-                        updateButtonIcon(codeCopyButton, 'clipboard', 'w-4 h-4'); 
-                    }, 2000);
+            });
+
+            voiceInputBtn.addEventListener('click', () => {
+                if (recognition) {
+                    if (isVoiceInputActive) {
+                        recognition.stop(); 
+                    } else {
+                        finalTranscript = ''; 
+                        recognition.start();
+                    }
+                } else {
+                    showToast('Speech recognition is not supported in this browser.', 'error');
+                }
+            });
+
+            // Stop Generating Button Listener
+            stopGeneratingBtn.addEventListener('click', () => {
+                if (abortController) {
+                    abortController.abort(); // Cancel the fetch request
+                }
+                toggleLoading(false); // Hide loading indicator immediately
+            });
+
+            chatbotContainer.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                chatbotContainer.classList.add('drag-over-active');
+            });
+
+            chatbotContainer.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                chatbotContainer.classList.remove('drag-over-active');
+            });
+
+            chatbotContainer.addEventListener('drop', async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                chatbotContainer.classList.remove('drag-over-active');
+
+                const files = Array.from(e.dataTransfer.files);
+                if (files.length > 0) {
+                    for (const file of files) {
+                        const allowedTypes = [
+                            'image/', 'text/', 'application/pdf',
+                            'application/json', 'text/csv', 'application/xml', 'text/markdown'
+                        ];
+                        const isAllowed = allowedTypes.some(type => file.type.startsWith(type)) || file.name.endsWith('.md');
+
+                        if (isAllowed) {
+                            if (file.size > 10 * 1024 * 1024) { 
+                                showToast(`File "${file.name}" is too large (>${10}MB). Max 10MB per file.`, 'error');
+                                continue;
+                            }
+                            try {
+                                const { mimeType, data } = await fileToBase64(file);
+                                chatAttachments.push({ file, mimeType, data, name: file.name });
+                            } catch (error) {
+                                showToast(`Failed to read chat file ${file.name}.`, 'error');
+                                console.error('Chat file read error:', error);
+                            }
+                        } else {
+                            showToast(`File type not supported for chat: "${file.name}" (${file.type}).`, 'error');
+                        }
+                    }
+                    displayChatAttachments();
+                    userInput.focus();
+                }
+            });
+            
+            chatHistoryDiv.addEventListener('click', (event) => {
+                const codeCopyButton = event.target.closest('.code-block-copy-button');
+                if (codeCopyButton) {
+                    const targetId = codeCopyButton.dataset.copyTarget;
+                    const codeElement = document.getElementById(targetId);
+                    if (codeElement) {
+                        const codeToCopy = codeElement.textContent;
+                        updateButtonIcon(codeCopyButton, 'check', 'w-4 h-4'); 
+                        copyToClipboard(codeToCopy); 
+                        setTimeout(() => { 
+                            updateButtonIcon(codeCopyButton, 'clipboard', 'w-4 h-4'); 
+                        }, 2000);
+                        return; 
+                    }
+                }
+
+                const chatCopyButton = event.target.closest('.copy-message-btn');
+                if (chatCopyButton) {
+                    const messageId = chatCopyButton.dataset.messageId;
+                    const messageContent = messageTextCache.get(messageId);
+                    if (messageContent) {
+                        updateButtonIcon(chatCopyButton, 'check');
+                        copyToClipboard(messageContent); 
+                        setTimeout(() => { 
+                            updateButtonIcon(chatCopyButton, 'clipboard');
+                        }, 2000);
+                    } else {
+                        showToast('Message content not found for copying.', 'error');
+                    }
                     return; 
                 }
-            }
 
-            const chatCopyButton = event.target.closest('.copy-message-btn');
-            if (chatCopyButton) {
-                const messageId = chatCopyButton.dataset.messageId;
-                const messageContent = messageTextCache.get(messageId);
-                if (messageContent) {
-                    updateButtonIcon(chatCopyButton, 'check');
-                    copyToClipboard(messageContent); 
-                    setTimeout(() => { 
-                        updateButtonIcon(chatCopyButton, 'clipboard');
-                    }, 2000);
-                } else {
-                    alert('Message content not found for copying.');
+                const dictateButton = event.target.closest('.dictate-message-btn');
+                if (dictateButton) {
+                    const messageId = dictateButton.dataset.messageId;
+                    const messageContent = messageTextCache.get(messageId);
+                    if (messageContent) {
+                        toggleSpeech(messageContent, dictateButton);
+                    } else {
+                        showToast('Message content not found for dictation.', 'error');
+                    }
+                    return; 
                 }
-                return; 
-            }
 
-            const dictateButton = event.target.closest('.dictate-message-btn');
-            if (dictateButton) {
-                const messageId = dictateButton.dataset.messageId;
-                const messageContent = messageTextCache.get(messageId);
-                if (messageContent) {
-                    toggleSpeech(messageContent, dictateButton);
-                } else {
-                    alert('Message content not found for dictation.');
+                const editButton = event.target.closest('.edit-message-btn');
+                if (editButton) {
+                    const messageId = editButton.dataset.messageId;
+                    editLastUserMessage(messageId);
+                    return;
                 }
-                return; 
-            }
+
+                const regenerateButton = event.target.closest('.regenerate-message-btn');
+                if (regenerateButton) {
+                    regenerateLastAIMessage();
+                    return;
+                }
+            });
+
+            // Event listener for the new chat button
+            newChatBtn.addEventListener('click', startNewChat);
         });
-
-        // Event listener for the new chat button
-        newChatBtn.addEventListener('click', startNewChat);
-
     </script>
 </body>
 </html>
 
----------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 
-after doing the following send me the updated code : 
+after doing the followng send me the updated code :
 
-The main version of the website is. Great. But the mobile version of the website is not that smooth or responsive. or good looking. So please fix that. And be a little creative about. Which element to place where. Use your creativity to make the. For mobile devices. Specifically. And I want you to do another thing for me. Which is. Let the users copy paste. Images and other files onto the text box. Text input area. of the user. Thank you.
+i want you to show the file name and file logo(filetype)
