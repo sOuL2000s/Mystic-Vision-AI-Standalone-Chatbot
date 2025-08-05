@@ -558,7 +558,7 @@
             border-bottom-right-radius: 23px;
             position: relative; 
             transition: background-color 0.6s ease, border-color 0.6s ease;
-            flex-shrink: 0; /* Prevents input from shrinking */
+            flex-shrink: 0; 
         }
 
         .chat-input textarea {
@@ -677,13 +677,21 @@
             margin-top: 0.5rem;
             display: block;
         }
+        #chat-attachments-preview-container {
+            background-color: var(--tertiary-bg);
+            border-radius: 10px;
+            padding: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease;
+        }
         .chat-attachment-preview-item {
             display: flex;
             align-items: center;
             gap: 0.5rem;
             padding: 0.5rem 0.75rem;
             border-radius: 1rem;
-            background-color: var(--tertiary-bg); 
+            background-color: var(--secondary-bg); /* Use secondary for inner items */
             color: var(--text-color); 
             font-size: 0.875rem;
             box-shadow: 0 1px 2px rgba(0,0,0,0.2);
@@ -771,127 +779,140 @@
         /* Responsive Adjustments */
         @media (max-width: 768px) {
             .chatbot-container {
-                width: 95%;
-                height: 95vh;
+                width: 98%; /* Slightly wider on mobile */
+                height: 98vh; /* Taller on mobile */
                 border-radius: 15px;
+                margin: 1vh auto; /* Center with a slight margin */
             }
 
             .chatbot-header {
-                padding: 15px;
+                padding: 12px; /* Reduced padding */
                 border-top-left-radius: 13px;
                 border-top-right-radius: 13px;
-                flex-direction: column;
-                padding-bottom: 10px; /* Adjust padding for smaller screens */
+                /* Re-adjusting flex properties to prevent overlapping */
+                display: flex;
+                flex-direction: column; /* Stack header content */
+                align-items: center;
+                gap: 5px; /* Gap between stacked elements */
             }
             .chatbot-header h1 {
-                font-size: 1.8em;
+                font-size: 1.6em; /* Smaller title */
+                margin-top: 10px; /* Push title down a bit from buttons */
             }
             .chatbot-header .logo {
-                height: 2em;
+                height: 1.8em; /* Smaller logo */
             }
             .chatbot-header .tagline {
-                font-size: 0.8em;
+                font-size: 0.75em; /* Smaller tagline */
+                margin-bottom: 5px; /* Space from content below */
             }
+
             .dark-mode-container {
+                position: absolute; /* Keep absolute position */
                 top: 10px;
                 right: 10px;
                 gap: 5px;
-            }
-            .dark-mode-container span {
-                font-size: 0.7em;
+                font-size: 0.7em; /* Smaller font for "Light/Dark" */
             }
             .switch {
-                width: 44px;
-                height: 24px;
-                border-radius: 12px;
+                width: 40px; /* Smaller switch */
+                height: 22px;
+                border-radius: 11px;
             }
             .switch .slider:before {
-                height: 18px;
-                width: 18px;
+                height: 16px; /* Smaller slider circle */
+                width: 16px;
                 left: 3px;
                 bottom: 3px;
             }
             input:checked + .slider:before {
-                transform: translateX(20px);
+                transform: translateX(18px); /* Adjust translate for smaller switch */
             }
 
             #newChatBtn {
+                position: absolute; /* Keep absolute position */
                 top: 10px;
                 left: 10px;
-                padding: 6px 12px;
-                font-size: 0.75em;
+                padding: 6px 10px; /* Smaller padding */
+                font-size: 0.7em; /* Smaller font */
+                gap: 3px; /* Smaller gap */
             }
             #newChatBtn .lucide {
-                width: 0.8em;
-                height: 0.8em;
+                width: 0.7em;
+                height: 0.7em;
             }
 
-
             .chat-history {
-                padding: 15px;
-                gap: 10px;
+                padding: 10px; /* Reduced padding */
+                gap: 8px; /* Reduced gap between messages */
             }
 
             .chat-message {
-                max-width: 90%;
-                padding: 10px 15px;
-                border-radius: 18px;
-                padding-bottom: 2rem; 
-                font-size: 0.9rem;
+                max-width: 95%; /* Wider bubbles for smaller screens */
+                padding: 10px 14px; /* Reduced padding */
+                border-radius: 16px; /* Slightly smaller radius */
+                padding-bottom: 2rem; /* Ensure space for actions */
+                font-size: 0.88rem; /* Slightly smaller font for messages */
             }
 
             .message-actions {
                 bottom: 0.3rem; 
-                right: 0.8rem;
+                right: 0.6rem; /* Closer to edge */
                 gap: 0.3rem;
-                padding: 0.2rem 0.4rem;
-                border-radius: 0.6rem;
+                padding: 0.15rem 0.3rem; /* Smaller padding */
+                border-radius: 0.5rem; /* Smaller radius */
             }
             .message-actions button {
                 padding: 0.1rem;
             }
             .message-actions button .lucide {
-                width: 0.9rem;
-                height: 0.9rem;
+                width: 0.8rem;
+                height: 0.8rem;
             }
 
             .chat-input {
                 padding: 10px;
-                gap: 8px;
-                align-items: center; 
+                gap: 6px; /* Reduced gap */
+                align-items: center; /* Vertically align items in input row */
                 border-bottom-left-radius: 13px;
                 border-bottom-right-radius: 13px;
+                flex-wrap: wrap; /* Allow wrapping if attachments make it too wide */
             }
 
             .chat-input textarea {
                 padding: 8px 12px; 
                 font-size: 0.9em;
-                min-height: 36px; 
+                min-height: 38px; /* Slightly more compact */
+                max-height: 120px; /* Limit max height on mobile */
             }
 
             .chat-input .icon-button {
-                width: 40px; 
-                height: 40px;
+                width: 42px; /* Smaller buttons */
+                height: 42px;
             }
             .chat-input .icon-button .lucide {
-                width: 1.1em; 
-                height: 1.1em;
+                width: 1em; /* Smaller icon */
+                height: 1em;
             }
 
+            #chat-attachments-preview-container {
+                padding: 6px; /* Smaller padding */
+                margin-bottom: 8px; /* Closer to input */
+            }
             .chat-attachment-preview-item {
-                font-size: 0.8em;
-                padding: 0.4rem 0.6rem;
-                border-radius: 0.8rem;
+                font-size: 0.75em; /* Smaller font for attachments */
+                padding: 0.3rem 0.5rem; /* Smaller padding */
+                border-radius: 0.75rem; /* Smaller radius */
             }
             .chat-attachment-preview-item .remove-attachment-btn .lucide {
-                width: 0.8rem;
-                height: 0.8rem;
+                width: 0.7rem;
+                height: 0.7rem;
             }
 
             #copy-message {
-                bottom: 2rem;
-                padding: 0.6rem 1.2rem;
-                font-size: 0.9rem;
+                bottom: 1.5rem; /* Closer to bottom */
+                padding: 0.5rem 1rem; /* Smaller padding */
+                font-size: 0.85rem; /* Smaller font */
             }
 
             #suggestions-container {
@@ -937,7 +958,8 @@
             </div>
 
             <!-- Attachment preview -->
-            <div id="chat-attachments-preview-container" class="mb-2 flex flex-wrap items-center gap-2 hidden absolute top-0 left-0 right-0 p-4 transform -translate-y-full">
+            <!-- Adjusted positioning to be absolute relative to chat-input with a calculated bottom -->
+            <div id="chat-attachments-preview-container" class="mb-2 flex flex-wrap items-center gap-2 hidden absolute left-4 right-4" style="bottom: 100%; transform: translateY(-10px);">
                 <!-- Attachments previews will be dynamically added here -->
             </div>
 
@@ -967,42 +989,27 @@
     <script>
         // !! IMPORTANT: REPLACE WITH YOUR ACTUAL GEMINI API KEY !!
         // !! DO NOT USE THIS METHOD IN PRODUCTION. USE A SERVER-SIDE PROXY. !!
+        // The key below is a placeholder and WILL NOT WORK.
         const GEMINI_API_KEY = 'AIzaSyC7twxprKoApUjR4uebBS-12KVyZTkuvrw'; // <--- REPLACE THIS WITH YOUR ACTUAL KEY
         const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${GEMINI_API_KEY}`;
 
-        // --- DOM Elements ---
-        const chatbotContainer = document.querySelector('.chatbot-container');
-        const chatHistoryDiv = document.getElementById('chatHistory');
-        const userInput = document.getElementById('userInput');
-        const sendButton = document.getElementById('sendButton');
-        const darkModeToggle = document.getElementById('dark-mode-toggle');
-        const copyMessage = document.getElementById('copy-message');
-        const newChatBtn = document.getElementById('newChatBtn');
-
-        const chatAttachmentsPreviewContainer = document.getElementById('chat-attachments-preview-container'); 
-        const chatImageUpload = document.getElementById('chat-image-upload');
-        const voiceInputBtn = document.getElementById('voice-input-btn');
-
-        const suggestionsContainer = document.getElementById('suggestions-container');
-        const suggestionsList = document.getElementById('suggestions-list');
-
-        // --- State Variables ---
+        // --- Global State Variables and Constants ---
         let conversationHistory = []; // Will be initialized with the first AI message
         let chatAttachments = []; 
-        
         const messageTextCache = new Map(); 
-
         let currentUtterance = null;
         let isSpeaking = false;
-
         let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         let recognition = null;
         let isVoiceInputActive = false;
         let finalTranscript = ''; 
-
         let selectedSuggestionIndex = -1;
 
-        // A large list of autocomplete suggestions
+        const initialAIMessage = {
+            role: 'model',
+            parts: [{ text: 'Greetings, seeker! I am Mystic Vision, an AI designed to help you glimpse the beyond. What wisdom do you seek?' }],
+        };
+
         const autocompleteSuggestions = [
             // General/Utility
             "What is the capital of France?",
@@ -1344,7 +1351,7 @@
             "Explain peer pressure.",
             "What is healthy self-esteem in school-age children?",
             "How to teach responsibility to school-age children?",
-            "Tips for managing screen time for school-age children.",
+            "Tips for managing screen time for school-age children?",
             "What is adolescent development?",
             "How to communicate with teenagers?",
             "Explain puberty.",
@@ -2807,42 +2814,19 @@
             "Tips for ethical eating choices."
         ];
 
-        const initialAIMessage = {
-            role: 'model',
-            parts: [{ text: 'Greetings, seeker! I am Mystic Vision, an AI designed to help you glimpse the beyond. What wisdom do you seek?' }],
-        };
-
-        // --- Initialization on Load ---
-        window.addEventListener('load', () => {
-             createIcons();
-             userInput.style.height = userInput.scrollHeight + 'px';
-
-             // Initialize Dark Mode based on localStorage or default
-             const isDarkMode = localStorage.getItem('dark-mode') === 'true';
-             document.body.classList.toggle('light', !isDarkMode); // Toggle light class based on dark mode status
-             darkModeToggle.checked = isDarkMode;
-
-             // Register Service Worker for PWA
-             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/service-worker.js')
-                .then(registration => {
-                    console.log('ServiceWorker registered: ', registration);
-                })
-                .catch(registrationError => {
-                    console.log('ServiceWorker registration failed: ', registrationError);
-                });
-             }
-
-             // Start a new chat on load to display initial message
-             startNewChat();
-        });
-
-        // --- Dark Mode Toggle ---
-        darkModeToggle.addEventListener('change', () => {
-            const isChecked = darkModeToggle.checked;
-            document.body.classList.toggle('light', !isChecked); // Add/remove light class
-            localStorage.setItem('dark-mode', isChecked);
-        });
+        // --- DOM Elements (Declared here, assigned in load event) ---
+        let chatbotContainer;
+        let chatHistoryDiv;
+        let userInput;
+        let sendButton;
+        let darkModeToggle;
+        let copyMessage;
+        let newChatBtn;
+        let chatAttachmentsPreviewContainer;
+        let chatImageUpload;
+        let voiceInputBtn;
+        let suggestionsContainer;
+        let suggestionsList;
 
         // --- Lucide Icon Helper ---
         const createIcons = () => {
@@ -2890,10 +2874,9 @@
 
         // --- Markdown.js Custom Renderer for Code Blocks ---
         const renderer = {
-            // Updated signature: `token` is now the first (and only relevant) argument
             code(token) { 
-                const actualCodeContent = token.text; // Get the code string from the token object
-                const lang = token.lang;             // Get the language from the token object
+                const actualCodeContent = token.text; 
+                const lang = token.lang;             
 
                 const languageDisplay = lang ? `<span class="text-xs font-semibold uppercase text-gray-400">${lang}</span>` : '';
                 const uniqueId = `code-block-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -3122,80 +3105,10 @@
             window.speechSynthesis.speak(utterance);
         }
 
-        // --- Speech Recognition Setup ---
-        if (SpeechRecognition) {
-            recognition = new SpeechRecognition();
-            recognition.continuous = true; 
-            recognition.interimResults = true; 
-            recognition.lang = 'en-US';
-
-            recognition.onstart = () => {
-                isVoiceInputActive = true;
-                voiceInputBtn.classList.add('voice-input-active');
-                updateButtonIcon(voiceInputBtn, 'mic-off', 'w-5 h-5'); 
-                userInput.placeholder = 'Listening... Speak now.';
-                finalTranscript = ''; 
-                userInput.value = ''; 
-            };
-
-            recognition.onresult = (event) => {
-                let interimTranscript = '';
-                for (let i = event.resultIndex; i < event.results.length; ++i) {
-                    if (event.results[i].isFinal) {
-                        finalTranscript += event.results[i][0].transcript + ' '; 
-                    } else {
-                        interimTranscript += event.results[i][0].transcript;
-                    }
-                }
-                userInput.value = finalTranscript + interimTranscript; 
-                userInput.scrollLeft = userInput.scrollWidth; 
-                userInput.style.height = 'auto'; 
-                userInput.style.height = userInput.scrollHeight + 'px';
-            };
-
-            recognition.onend = () => {
-                isVoiceInputActive = false;
-                voiceInputBtn.classList.remove('voice-input-active');
-                updateButtonIcon(voiceInputBtn, 'mic', 'w-5 h-5'); 
-                userInput.placeholder = 'Type your message...';
-
-                if (finalTranscript.trim() !== '') {
-                    userInput.value = finalTranscript.trim(); 
-                } else if (userInput.value.trim() === '') {
-                    userInput.value = ''; 
-                }
-                userInput.style.height = 'auto'; 
-                userInput.style.height = userInput.scrollHeight + 'px';
-            };
-
-            recognition.onerror = (event) => {
-                isVoiceInputActive = false; 
-                voiceInputBtn.classList.remove('voice-input-active');
-                updateButtonIcon(voiceInputBtn, 'mic', 'w-5 h-5'); 
-                userInput.placeholder = 'Type your message...';
-
-                console.error('Speech recognition error:', event.error);
-                let errorMessage = `Speech recognition error: ${event.error}`;
-                if (event.error === 'not-allowed') {
-                    errorMessage = 'Microphone access denied. Please allow microphone access in your browser settings.';
-                } else if (event.error === 'no-speech') {
-                    console.log('No speech detected, recognition ended.');
-                    if (finalTranscript.trim() === '') { userInput.value = ''; }
-                    return; 
-                } else if (event.error === 'network') {
-                    errorMessage = 'Speech recognition network error. This often means a firewall, proxy, or browser extension is blocking access to Google\'s speech services. Please try disabling extensions or testing in incognito mode.';
-                }
-                alert(errorMessage); 
-            };
-        } else {
-            console.warn('Web Speech API (SpeechRecognition) not supported in this browser. Voice input button will be hidden.');
-            voiceInputBtn.style.display = 'none'; 
-        }
-
         // --- API Call Function ---
         async function callGeminiAPI(payload) {
-            if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY" || !GEMINI_API_KEY || GEMINI_API_KEY === "") { 
-                throw new Error("API Key is not set or is the default placeholder. Please replace 'YOUR_GEMINI_API_KEY' in the script with your actual Gemini API key.");
+            if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || !GEMINI_API_KEY || GEMINI_API_KEY === "") { 
+                throw new Error("API Key is not set or is the default placeholder. Please replace 'YOUR_GEMINI_API_KEY_HERE' in the script with your actual Gemini API key.");
             }
 
             let response;
@@ -3339,270 +3252,426 @@
             userInput.focus();
         }
 
+        // --- Paste Functionality ---
+        async function processPastedFile(file) {
+            const allowedTypes = [
+                'image/', 'text/', 'application/pdf',
+                'application/json', 'text/csv', 'application/xml', 'text/markdown'
+            ];
+            const isAllowed = allowedTypes.some(type => file.type.startsWith(type)) || file.name.endsWith('.md');
 
-        // --- Event Listeners ---
-        userInput.addEventListener('input', () => {
-            userInput.style.height = 'auto'; 
+            if (isAllowed) {
+                if (file.size > 10 * 1024 * 1024) { 
+                    alert(`File "${file.name}" is too large (>10MB). Max 10MB per file.`);
+                    return;
+                }
+                try {
+                    const { mimeType, data } = await fileToBase64(file);
+                    chatAttachments.push({ file, mimeType, data, name: file.name });
+                } catch (error) {
+                    alert(`Failed to read pasted file ${file.name}.`);
+                    console.error('Pasted file read error:', error);
+                }
+            } else {
+                alert(`Pasted file type not supported: "${file.name}" (${file.type}).`);
+            }
+        }
+
+        // --- Initialization on Load ---
+        window.addEventListener('load', () => {
+            // --- Assign DOM Elements after the page is fully loaded ---
+            chatbotContainer = document.querySelector('.chatbot-container');
+            chatHistoryDiv = document.getElementById('chatHistory');
+            userInput = document.getElementById('userInput');
+            sendButton = document.getElementById('sendButton');
+            darkModeToggle = document.getElementById('dark-mode-toggle');
+            copyMessage = document.getElementById('copy-message');
+            newChatBtn = document.getElementById('newChatBtn');
+            chatAttachmentsPreviewContainer = document.getElementById('chat-attachments-preview-container');
+            chatImageUpload = document.getElementById('chat-image-upload');
+            voiceInputBtn = document.getElementById('voice-input-btn');
+            suggestionsContainer = document.getElementById('suggestions-container');
+            suggestionsList = document.getElementById('suggestions-list');
+
+            createIcons();
             userInput.style.height = userInput.scrollHeight + 'px';
 
-            const query = userInput.value;
-            if (query.length > 0) {
-                const suggestions = filterSuggestions(query);
-                displaySuggestions(suggestions);
-            } else {
-                suggestionsContainer.classList.add('hidden');
-            }
-        });
+            // Initialize Dark Mode based on localStorage or default
+            const isDarkMode = localStorage.getItem('dark-mode') === 'true';
+            document.body.classList.toggle('light', !isDarkMode); // Toggle light class based on dark mode status
+            darkModeToggle.checked = isDarkMode;
 
-        userInput.addEventListener('keydown', (e) => {
-            if (suggestionsContainer.classList.contains('hidden')) return;
-
-            if (e.key === 'ArrowDown') {
-                e.preventDefault(); // Prevent cursor movement
-                navigateSuggestions('down');
-            } else if (e.key === 'ArrowUp') {
-                e.preventDefault(); // Prevent cursor movement
-                navigateSuggestions('up');
-            } else if (e.key === 'Enter' && selectedSuggestionIndex !== -1) {
-                e.preventDefault(); // Prevent new line or send
-                selectCurrentSuggestion();
-            } else if (e.key === 'Escape') {
-                suggestionsContainer.classList.add('hidden');
-                selectedSuggestionIndex = -1;
-            }
-        });
-
-        userInput.addEventListener('blur', () => {
-            // Delay hiding to allow click event on suggestion list
-            setTimeout(() => {
-                suggestionsContainer.classList.add('hidden');
-                selectedSuggestionIndex = -1;
-            }, 100); 
-        });
-
-
-        sendButton.addEventListener('click', async () => {
-            const userMessage = userInput.value.trim();
-            if (!userMessage && chatAttachments.length === 0) {
-                return;
-            }
-            
-            if (isVoiceInputActive && recognition) {
-                recognition.stop();
-            }
-
-            const userParts = [];
-            if (userMessage) {
-                userParts.push({ text: userMessage });
-            }
-            for (const attachment of chatAttachments) {
-                userParts.push({
-                    inlineData: {
-                        mimeType: attachment.mimeType,
-                        data: attachment.data
-                    }
+            // Register Service Worker for PWA
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/service-worker.js')
+                .then(registration => {
+                    console.log('ServiceWorker registered: ', registration);
+                })
+                .catch(registrationError => {
+                    console.log('ServiceWorker registration failed: ', registrationError);
                 });
             }
 
-            conversationHistory.push({ role: 'user', parts: userParts });
-            appendChatMessage('user', userMessage, chatAttachments);
-            
-            userInput.value = '';
-            userInput.style.height = 'auto'; 
-            chatAttachments = [];
-            chatImageUpload.value = ''; 
-            displayChatAttachments(); 
-            suggestionsContainer.classList.add('hidden'); // Hide suggestions on send
-            selectedSuggestionIndex = -1;
-            
-            sendButton.disabled = true;
-            
-            toggleLoading(true);
-            
-            try {
-                const payload = {
-                    contents: conversationHistory,
+            // Start a new chat on load to display initial message
+            startNewChat();
+
+            // --- Speech Recognition Setup (Must be inside load to ensure voiceInputBtn exists) ---
+            if (SpeechRecognition) {
+                recognition = new SpeechRecognition();
+                recognition.continuous = true; 
+                recognition.interimResults = true; 
+                recognition.lang = 'en-US';
+
+                recognition.onstart = () => {
+                    isVoiceInputActive = true;
+                    voiceInputBtn.classList.add('voice-input-active');
+                    updateButtonIcon(voiceInputBtn, 'mic-off', 'w-5 h-5'); 
+                    userInput.placeholder = 'Listening... Speak now.';
+                    finalTranscript = ''; 
+                    userInput.value = ''; 
                 };
-                
-                const responseText = await callGeminiAPI(payload);
-                
-                conversationHistory.push({ role: 'model', parts: [{ text: responseText }] });
-                appendChatMessage('ai', responseText);
-                
-            } catch (error) {
-                console.error('Chat API call failed:', error);
-                appendChatMessage('ai', `Oops! Something went wrong. Please try again. (${error.message})`);
-            } finally {
-                sendButton.disabled = false;
-                toggleLoading(false);
-                userInput.focus();
+
+                recognition.onresult = (event) => {
+                    let interimTranscript = '';
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        if (event.results[i].isFinal) {
+                            finalTranscript += event.results[i][0].transcript + ' '; 
+                        } else {
+                            interimTranscript += event.results[i][0].transcript;
+                        }
+                    }
+                    userInput.value = finalTranscript + interimTranscript; 
+                    userInput.scrollLeft = userInput.scrollWidth; 
+                    userInput.style.height = 'auto'; 
+                    userInput.style.height = userInput.scrollHeight + 'px';
+                };
+
+                recognition.onend = () => {
+                    isVoiceInputActive = false;
+                    voiceInputBtn.classList.remove('voice-input-active');
+                    updateButtonIcon(voiceInputBtn, 'mic', 'w-5 h-5'); 
+                    userInput.placeholder = 'Type your message...';
+
+                    if (finalTranscript.trim() !== '') {
+                        userInput.value = finalTranscript.trim(); 
+                    } else if (userInput.value.trim() === '') {
+                        userInput.value = ''; 
+                    }
+                    userInput.style.height = 'auto'; 
+                    userInput.style.height = userInput.scrollHeight + 'px';
+                };
+
+                recognition.onerror = (event) => {
+                    isVoiceInputActive = false; 
+                    voiceInputBtn.classList.remove('voice-input-active');
+                    updateButtonIcon(voiceInputBtn, 'mic', 'w-5 h-5'); 
+                    userInput.placeholder = 'Type your message...';
+
+                    console.error('Speech recognition error:', event.error);
+                    let errorMessage = `Speech recognition error: ${event.error}`;
+                    if (event.error === 'not-allowed') {
+                        errorMessage = 'Microphone access denied. Please allow microphone access in your browser settings.';
+                    } else if (event.error === 'no-speech') {
+                        console.log('No speech detected, recognition ended.');
+                        if (finalTranscript.trim() === '') { userInput.value = ''; }
+                        return; 
+                    } else if (event.error === 'network') {
+                        errorMessage = 'Speech recognition network error. This often means a firewall, proxy, or browser extension is blocking access to Google\'s speech services. Please try disabling extensions or testing in incognito mode.';
+                    }
+                    alert(errorMessage); 
+                };
+            } else {
+                console.warn('Web Speech API (SpeechRecognition) not supported in this browser. Voice input button will be hidden.');
+                voiceInputBtn.style.display = 'none'; 
             }
-        });
-        
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) { 
-                e.preventDefault(); 
-                // If a suggestion is selected, it will be handled by keydown on enter
-                // Otherwise, send the message
-                if (selectedSuggestionIndex === -1) {
-                    sendButton.click();
+
+            // --- Event Listeners (Must be attached after elements are assigned) ---
+            darkModeToggle.addEventListener('change', () => {
+                const isChecked = darkModeToggle.checked;
+                document.body.classList.toggle('light', !isChecked);
+                localStorage.setItem('dark-mode', isChecked);
+            });
+
+            userInput.addEventListener('input', () => {
+                userInput.style.height = 'auto'; 
+                userInput.style.height = userInput.scrollHeight + 'px';
+
+                const query = userInput.value;
+                if (query.length > 0) {
+                    const suggestions = filterSuggestions(query);
+                    displaySuggestions(suggestions);
+                } else {
+                    suggestionsContainer.classList.add('hidden');
                 }
-            }
-        });
+            });
 
-        chatImageUpload.addEventListener('change', async (event) => {
-            const files = Array.from(event.target.files);
-            if (files.length > 0) {
-                for (const file of files) {
-                    const allowedTypes = [
-                        'image/', 'text/', 'application/pdf',
-                        'application/json', 'text/csv', 'application/xml', 'text/markdown'
-                    ];
-                    const isAllowed = allowedTypes.some(type => file.type.startsWith(type)) || file.name.endsWith('.md');
+            userInput.addEventListener('keydown', (e) => {
+                if (suggestionsContainer.classList.contains('hidden')) return;
 
-                    if (isAllowed) {
-                        if (file.size > 10 * 1024 * 1024) { 
-                            alert(`File "${file.name}" is too large (>${10}MB). Max 10MB per file.`);
-                            continue;
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault(); 
+                    navigateSuggestions('down');
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault(); 
+                    navigateSuggestions('up');
+                } else if (e.key === 'Enter' && selectedSuggestionIndex !== -1) {
+                    e.preventDefault(); 
+                    selectCurrentSuggestion();
+                } else if (e.key === 'Escape') {
+                    suggestionsContainer.classList.add('hidden');
+                    selectedSuggestionIndex = -1;
+                }
+            });
+
+            userInput.addEventListener('blur', () => {
+                setTimeout(() => {
+                    suggestionsContainer.classList.add('hidden');
+                    selectedSuggestionIndex = -1;
+                }, 100); 
+            });
+
+            userInput.addEventListener('paste', async (e) => {
+                const items = e.clipboardData.items;
+                let filePasted = false;
+
+                for (let i = 0; i < items.length; i++) {
+                    const item = items[i];
+                    if (item.kind === 'file') {
+                        e.preventDefault(); 
+                        const file = item.getAsFile();
+                        if (file) {
+                            filePasted = true;
+                            await processPastedFile(file);
                         }
-                        try {
-                            const { mimeType, data } = await fileToBase64(file);
-                            chatAttachments.push({ file, mimeType, data, name: file.name });
-                        } catch (error) {
-                            alert(`Failed to read chat file ${file.name}.`);
-                            console.error('Chat file read error:', error);
-                        }
-                    } else {
-                        alert(`File type not supported for chat: "${file.name}" (${file.type}).`);
                     }
                 }
-                displayChatAttachments();
-                userInput.focus();
-            }
-            chatImageUpload.value = ''; 
-        });
 
-        chatAttachmentsPreviewContainer.addEventListener('click', (event) => {
-            const removeBtn = event.target.closest('.remove-attachment-btn');
-            if (removeBtn) {
-                const attachmentDiv = removeBtn.closest('[data-index]');
-                if (attachmentDiv) {
-                    const index = parseInt(attachmentDiv.dataset.index);
-                    chatAttachments.splice(index, 1); 
-                    displayChatAttachments(); 
+                if (filePasted) {
+                    displayChatAttachments();
                     userInput.focus();
                 }
-            }
-        });
+            });
 
-        voiceInputBtn.addEventListener('click', () => {
-            if (recognition) {
-                if (isVoiceInputActive) {
-                    recognition.stop(); 
-                } else {
-                    finalTranscript = ''; 
-                    recognition.start();
+            sendButton.addEventListener('click', async () => {
+                const userMessage = userInput.value.trim();
+                if (!userMessage && chatAttachments.length === 0) {
+                    return;
                 }
-            } else {
-                alert('Speech recognition is not supported in this browser.');
-            }
-        });
+                
+                if (isVoiceInputActive && recognition) {
+                    recognition.stop();
+                }
 
-        chatbotContainer.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            chatbotContainer.classList.add('drag-over-active');
-        });
-
-        chatbotContainer.addEventListener('dragleave', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            chatbotContainer.classList.remove('drag-over-active');
-        });
-
-        chatbotContainer.addEventListener('drop', async (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            chatbotContainer.classList.remove('drag-over-active');
-
-            const files = Array.from(e.dataTransfer.files);
-            if (files.length > 0) {
-                for (const file of files) {
-                    const allowedTypes = [
-                        'image/', 'text/', 'application/pdf',
-                        'application/json', 'text/csv', 'application/xml', 'text/markdown'
-                    ];
-                    const isAllowed = allowedTypes.some(type => file.type.startsWith(type)) || file.name.endsWith('.md');
-
-                    if (isAllowed) {
-                         if (file.size > 10 * 1024 * 1024) { 
-                            alert(`File "${file.name}" is too large (>${10}MB). Max 10MB per file.`);
-                            continue;
+                const userParts = [];
+                if (userMessage) {
+                    userParts.push({ text: userMessage });
+                }
+                for (const attachment of chatAttachments) {
+                    userParts.push({
+                        inlineData: {
+                            mimeType: attachment.mimeType,
+                            data: attachment.data
                         }
-                        try {
-                            const { mimeType, data } = await fileToBase64(file);
-                            chatAttachments.push({ file, mimeType, data, name: file.name });
-                        } catch (error) {
-                            alert(`Failed to read chat file ${file.name}.`);
-                            console.error('Chat file read error:', error);
-                        }
-                    } else {
-                        alert(`File type not supported for chat: "${file.name}" (${file.type}).`);
+                    });
+                }
+
+                conversationHistory.push({ role: 'user', parts: userParts });
+                appendChatMessage('user', userMessage, chatAttachments);
+                
+                userInput.value = '';
+                userInput.style.height = 'auto'; 
+                chatAttachments = [];
+                chatImageUpload.value = ''; 
+                displayChatAttachments(); 
+                suggestionsContainer.classList.add('hidden'); 
+                selectedSuggestionIndex = -1;
+                
+                sendButton.disabled = true;
+                
+                toggleLoading(true);
+                
+                try {
+                    const payload = {
+                        contents: conversationHistory,
+                    };
+                    
+                    const responseText = await callGeminiAPI(payload);
+                    
+                    conversationHistory.push({ role: 'model', parts: [{ text: responseText }] });
+                    appendChatMessage('ai', responseText);
+                    
+                } catch (error) {
+                    console.error('Chat API call failed:', error);
+                    appendChatMessage('ai', `Oops! Something went wrong. Please try again. (${error.message})`);
+                } finally {
+                    sendButton.disabled = false;
+                    toggleLoading(false);
+                    userInput.focus();
+                }
+            });
+            
+            userInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) { 
+                    e.preventDefault(); 
+                    if (selectedSuggestionIndex === -1) {
+                        sendButton.click();
                     }
                 }
-                displayChatAttachments();
-                userInput.focus();
-            }
-        });
-        
-        chatHistoryDiv.addEventListener('click', (event) => {
-            const codeCopyButton = event.target.closest('.code-block-copy-button');
-            if (codeCopyButton) {
-                const targetId = codeCopyButton.dataset.copyTarget;
-                const codeElement = document.getElementById(targetId);
-                if (codeElement) {
-                    const codeToCopy = codeElement.textContent;
-                    updateButtonIcon(codeCopyButton, 'check', 'w-4 h-4'); 
-                    copyToClipboard(codeToCopy); 
-                    setTimeout(() => { 
-                        updateButtonIcon(codeCopyButton, 'clipboard', 'w-4 h-4'); 
-                    }, 2000);
+            });
+
+            chatImageUpload.addEventListener('change', async (event) => {
+                const files = Array.from(event.target.files);
+                if (files.length > 0) {
+                    for (const file of files) {
+                        const allowedTypes = [
+                            'image/', 'text/', 'application/pdf',
+                            'application/json', 'text/csv', 'application/xml', 'text/markdown'
+                        ];
+                        const isAllowed = allowedTypes.some(type => file.type.startsWith(type)) || file.name.endsWith('.md');
+
+                        if (isAllowed) {
+                            if (file.size > 10 * 1024 * 1024) { 
+                                alert(`File "${file.name}" is too large (>${10}MB). Max 10MB per file.`);
+                                continue;
+                            }
+                            try {
+                                const { mimeType, data } = await fileToBase64(file);
+                                chatAttachments.push({ file, mimeType, data, name: file.name });
+                            } catch (error) {
+                                alert(`Failed to read chat file ${file.name}.`);
+                                console.error('Chat file read error:', error);
+                            }
+                        } else {
+                            alert(`File type not supported for chat: "${file.name}" (${file.type}).`);
+                        }
+                    }
+                    displayChatAttachments();
+                    userInput.focus();
+                }
+                chatImageUpload.value = ''; 
+            });
+
+            chatAttachmentsPreviewContainer.addEventListener('click', (event) => {
+                const removeBtn = event.target.closest('.remove-attachment-btn');
+                if (removeBtn) {
+                    const attachmentDiv = removeBtn.closest('[data-index]');
+                    if (attachmentDiv) {
+                        const index = parseInt(attachmentDiv.dataset.index);
+                        chatAttachments.splice(index, 1); 
+                        displayChatAttachments(); 
+                        userInput.focus();
+                    }
+                }
+            });
+
+            voiceInputBtn.addEventListener('click', () => {
+                if (recognition) {
+                    if (isVoiceInputActive) {
+                        recognition.stop(); 
+                    } else {
+                        finalTranscript = ''; 
+                        recognition.start();
+                    }
+                } else {
+                    alert('Speech recognition is not supported in this browser.');
+                }
+            });
+
+            chatbotContainer.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                chatbotContainer.classList.add('drag-over-active');
+            });
+
+            chatbotContainer.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                chatbotContainer.classList.remove('drag-over-active');
+            });
+
+            chatbotContainer.addEventListener('drop', async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                chatbotContainer.classList.remove('drag-over-active');
+
+                const files = Array.from(e.dataTransfer.files);
+                if (files.length > 0) {
+                    for (const file of files) {
+                        const allowedTypes = [
+                            'image/', 'text/', 'application/pdf',
+                            'application/json', 'text/csv', 'application/xml', 'text/markdown'
+                        ];
+                        const isAllowed = allowedTypes.some(type => file.type.startsWith(type)) || file.name.endsWith('.md');
+
+                        if (isAllowed) {
+                            if (file.size > 10 * 1024 * 1024) { 
+                                alert(`File "${file.name}" is too large (>${10}MB). Max 10MB per file.`);
+                                continue;
+                            }
+                            try {
+                                const { mimeType, data } = await fileToBase64(file);
+                                chatAttachments.push({ file, mimeType, data, name: file.name });
+                            } catch (error) {
+                                alert(`Failed to read chat file ${file.name}.`);
+                                console.error('Chat file read error:', error);
+                            }
+                        } else {
+                            alert(`File type not supported for chat: "${file.name}" (${file.type}).`);
+                        }
+                    }
+                    displayChatAttachments();
+                    userInput.focus();
+                }
+            });
+            
+            chatHistoryDiv.addEventListener('click', (event) => {
+                const codeCopyButton = event.target.closest('.code-block-copy-button');
+                if (codeCopyButton) {
+                    const targetId = codeCopyButton.dataset.copyTarget;
+                    const codeElement = document.getElementById(targetId);
+                    if (codeElement) {
+                        const codeToCopy = codeElement.textContent;
+                        updateButtonIcon(codeCopyButton, 'check', 'w-4 h-4'); 
+                        copyToClipboard(codeToCopy); 
+                        setTimeout(() => { 
+                            updateButtonIcon(codeCopyButton, 'clipboard', 'w-4 h-4'); 
+                        }, 2000);
+                        return; 
+                    }
+                }
+
+                const chatCopyButton = event.target.closest('.copy-message-btn');
+                if (chatCopyButton) {
+                    const messageId = chatCopyButton.dataset.messageId;
+                    const messageContent = messageTextCache.get(messageId);
+                    if (messageContent) {
+                        updateButtonIcon(chatCopyButton, 'check');
+                        copyToClipboard(messageContent); 
+                        setTimeout(() => { 
+                            updateButtonIcon(chatCopyButton, 'clipboard');
+                        }, 2000);
+                    } else {
+                        alert('Message content not found for copying.');
+                    }
                     return; 
                 }
-            }
 
-            const chatCopyButton = event.target.closest('.copy-message-btn');
-            if (chatCopyButton) {
-                const messageId = chatCopyButton.dataset.messageId;
-                const messageContent = messageTextCache.get(messageId);
-                if (messageContent) {
-                    updateButtonIcon(chatCopyButton, 'check');
-                    copyToClipboard(messageContent); 
-                    setTimeout(() => { 
-                        updateButtonIcon(chatCopyButton, 'clipboard');
-                    }, 2000);
-                } else {
-                    alert('Message content not found for copying.');
+                const dictateButton = event.target.closest('.dictate-message-btn');
+                if (dictateButton) {
+                    const messageId = dictateButton.dataset.messageId;
+                    const messageContent = messageTextCache.get(messageId);
+                    if (messageContent) {
+                        toggleSpeech(messageContent, dictateButton);
+                    } else {
+                        alert('Message content not found for dictation.');
+                    }
+                    return; 
                 }
-                return; 
-            }
+            });
 
-            const dictateButton = event.target.closest('.dictate-message-btn');
-            if (dictateButton) {
-                const messageId = dictateButton.dataset.messageId;
-                const messageContent = messageTextCache.get(messageId);
-                if (messageContent) {
-                    toggleSpeech(messageContent, dictateButton);
-                } else {
-                    alert('Message content not found for dictation.');
-                }
-                return; 
-            }
+            // Event listener for the new chat button
+            newChatBtn.addEventListener('click', startNewChat);
         });
-
-        // Event listener for the new chat button
-        newChatBtn.addEventListener('click', startNewChat);
-
     </script>
 </body>
 </html>
