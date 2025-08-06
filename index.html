@@ -597,6 +597,8 @@
             position: relative; /* For actions inside */
             padding-bottom: 2.5rem; /* Ensure space for actions */
             transition: background-color 0.6s ease, color 0.6s ease, background-image 0.6s ease, box-shadow 0.6s ease;
+            min-width: 0;
+            overflow: auto;
         }
 
         .chat-message.user {
@@ -685,7 +687,7 @@
             border-radius: 0.75rem; 
             margin-top: 1rem;
             margin-bottom: 1rem;
-            overflow: hidden; 
+            overflow-y: hidden; 
             border: 1px solid var(--code-border); 
             box-shadow: 0 4px 8px rgba(0,0,0,0.3);
             transition: background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease;
@@ -3185,7 +3187,12 @@
                 const uniqueId = `code-block-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
                 
                 // Prism.js expects the raw (unescaped) code string and will handle escaping and highlighting.
-                const codeForPrism = actualCodeContent; 
+                const escapedCode = actualCodeContent
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;'); 
 
                 return `
                     <div class="code-block-container">
@@ -3196,7 +3203,7 @@
                                 Copy code
                             </button>
                         </div>
-                        <pre><code id="${uniqueId}" class="language-${lang || 'plaintext'}">${codeForPrism}</code></pre>
+                        <pre><code id="${uniqueId}" class="language-${lang || 'plaintext'}">${escapedCode}</code></pre>
                     </div>
                 `;
             }
@@ -3234,16 +3241,22 @@
             const messageBubbleContent = document.createElement('div');
             messageBubbleContent.classList.add('message-bubble-content');
 
+            // Create the actual message content area *inside* the bubble
+            const messageContentDiv = document.createElement('div');
+            messageContentDiv.classList.add('message-content');
+
             if (role === 'user') {
                 rawMessageContentForCache = `You: ${text}`;
-                let contentHTML = `<span>${text}</span>`; // Removed 'font-bold' for cleaner copy, it's implied by role
+                messageContentDiv.innerHTML = `<span>${text}</span>`; // User text is plain HTML
+
                 if (attachments.length > 0) {
-                    contentHTML += `<div class="mt-2 flex flex-wrap gap-2">`;
+                    const attachmentsContainer = document.createElement('div');
+                    attachmentsContainer.classList.add('mt-2', 'flex', 'flex-wrap', 'gap-2');
                     attachments.forEach(attachment => {
                         if (attachment.mimeType.startsWith('image/')) {
-                            contentHTML += `<img src="data:${attachment.mimeType};base64,${attachment.data}" alt="${attachment.name || 'User attachment'}" class="chat-image w-24 h-24 object-cover">`;
+                            attachmentsContainer.innerHTML += `<img src="data:${attachment.mimeType};base64,${attachment.data}" alt="${attachment.name || 'User attachment'}" class="chat-image w-24 h-24 object-cover">`;
                         } else {
-                            contentHTML += `
+                            attachmentsContainer.innerHTML += `
                                 <div class="chat-message-attachment-item">
                                     <span data-lucide="${getFileIcon(attachment.mimeType)}" class="w-4 h-4 flex-shrink-0"></span>
                                     <span class="truncate max-w-[120px]">${attachment.name || 'File'}</span>
@@ -3251,42 +3264,42 @@
                             `;
                         }
                     });
-                    contentHTML += `</div>`;
+                    messageContentDiv.appendChild(attachmentsContainer);
                     rawMessageContentForCache += `\n[Attachments: ${attachments.map(a => a.name).join(', ')}]`;
                 }
-                messageBubbleContent.innerHTML = contentHTML;
-
+                
+                messageBubbleContent.appendChild(messageContentDiv); // Append user content to bubble
                 messageDiv.appendChild(messageBubbleContent);
                 messageDiv.appendChild(avatarElement); 
-            } else { 
+            } else { // AI message
                 rawMessageContentForCache = `AI: ${text}`;
-                // Append initial content, Prism.highlightAllUnder will be called externally later
-                messageBubbleContent.innerHTML = `<div class="message-content">${marked.parse(text)}</div>`;
+                messageContentDiv.innerHTML = marked.parse(text); // Parse markdown into this specific content div
                 
+                messageBubbleContent.appendChild(messageContentDiv); // Append AI content to bubble
                 messageDiv.appendChild(avatarElement); 
                 messageDiv.appendChild(messageBubbleContent);
             }
             
-            // Add common actions to the messageBubbleContent
-            const actionsHTML = `
-                <div class="message-actions">
-                    <button class="copy-message-btn" title="Copy message" data-message-id="${messageId}">
-                        <span data-lucide="clipboard" class="w-4 h-4"></span>
-                    </button>
-                    <button class="dictate-message-btn" title="Dictate message" data-message-id="${messageId}">
-                        <span data-lucide="volume-2" class="w-4 h-4"></span>
-                    </button>
-                    ${role === 'user' ? `
-                    <button class="edit-message-btn" title="Edit message" data-message-id="${messageId}">
-                        <span data-lucide="pencil" class="w-4 h-4"></span>
-                    </button>` : `
-                    <button class="regenerate-message-btn" title="Regenerate response" data-message-id="${messageId}">
-                        <span data-lucide="rotate-ccw" class="w-4 h-4"></span>
-                    </button>`
-                    }
-                </div>
+            // Add common actions to the messageBubbleContent (as a separate child)
+            const actionsDiv = document.createElement('div');
+            actionsDiv.classList.add('message-actions');
+            actionsDiv.innerHTML = `
+                <button class="copy-message-btn" title="Copy message" data-message-id="${messageId}">
+                    <span data-lucide="clipboard" class="w-4 h-4"></span>
+                </button>
+                <button class="dictate-message-btn" title="Dictate message" data-message-id="${messageId}">
+                    <span data-lucide="volume-2" class="w-4 h-4"></span>
+                </button>
+                ${role === 'user' ? `
+                <button class="edit-message-btn" title="Edit message" data-message-id="${messageId}">
+                    <span data-lucide="pencil" class="w-4 h-4"></span>
+                </button>` : `
+                <button class="regenerate-message-btn" title="Regenerate response" data-message-id="${messageId}">
+                    <span data-lucide="rotate-ccw" class="w-4 h-4"></span>
+                </button>`
+                }
             `;
-            messageBubbleContent.innerHTML += actionsHTML; 
+            messageBubbleContent.appendChild(actionsDiv); // Append actions as a *new child* of the bubble
 
             messageTextCache.set(messageId, rawMessageContentForCache); 
             chatHistoryDiv.appendChild(messageDiv);
@@ -3297,8 +3310,9 @@
             
             chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
             createIcons(); 
-            // Return the element that contains the Markdown content for Prism to target
-            return messageBubbleContent.querySelector('.message-content'); 
+
+            // Return the specific message content div for Prism to target if needed immediately
+            return messageContentDiv; 
         }
 
         let isApiCallInProgress = false; 
@@ -3339,66 +3353,75 @@
         }
 
         // Simulate typing function (now receives the inner message-content div)
-        function simulateTyping(messageContentDiv, text, delay = 20) {
+        // Keep this outside the function, or pass it if it's dynamic
+        // let currentTypingInterval = null; // Already declared globally in your code
+
+        function simulateTyping(messageContentDiv, text, delay = 1) { // Changed default delay to 1ms
             if (!messageContentDiv) return;
 
-            messageContentDiv.innerHTML = ''; 
+            messageContentDiv.innerHTML = ''; // Clear content once at the start
             let currentTypedText = '';
             let i = 0;
-            
+            const renderBatchSize = 10; // Number of characters to type before re-rendering Markdown/Prism
+
+            // Clear any previous typing interval to prevent multiple animations
             if (currentTypingInterval) {
                 clearInterval(currentTypingInterval);
+                currentTypingInterval = null;
             }
 
             currentTypingInterval = setInterval(() => {
-                if (!isGeneratingResponse) { 
+                // Stop condition for AI generation (e.g., if stop button is clicked)
+                if (!isGeneratingResponse) {
                     clearInterval(currentTypingInterval);
                     currentTypingInterval = null;
-                    // Ensure final state is parsed and highlighted if stopped early
-                    messageContentDiv.innerHTML = marked.parse(currentTypedText); 
+                    // Ensure the final, complete text is rendered and highlighted
+                    messageContentDiv.innerHTML = marked.parse(text);
                     if (typeof Prism !== 'undefined') {
-                        Prism.highlightAllUnder(messageContentDiv.closest('.chat-message')); 
+                        Prism.highlightAllUnder(messageContentDiv.closest('.chat-message'));
                     }
-                    toggleLoading(false); 
+                    toggleLoading(false); // Hide loading indicator
                     return;
                 }
 
                 if (i < text.length) {
                     currentTypedText += text.charAt(i);
-                    // Always parse markdown for consistent visual during typing
-                    // marked.parse handles code block rendering, Prism highlights it after DOM update
-                    messageContentDiv.innerHTML = marked.parse(currentTypedText); 
-                    
-                    // Only highlight the new parts for performance, but Prism.highlightAllUnder
-                    // is efficient enough and handles newly added blocks well.
-                    if (typeof Prism !== 'undefined') {
-                        // Highlight the new content as it's added.
-                        // Prism.highlightAllUnder highlights all `code` elements within the given parent.
-                        Prism.highlightAllUnder(messageContentDiv); 
+
+                    // Only re-render Markdown and highlight in batches or at the very end
+                    // This is the key optimization for speed.
+                    if ((i + 1) % renderBatchSize === 0 || i === text.length - 1) {
+                        messageContentDiv.innerHTML = marked.parse(currentTypedText);
+                        if (typeof Prism !== 'undefined') {
+                            // Only highlight the current message content div
+                            Prism.highlightAllUnder(messageContentDiv);
+                        }
                     }
                     
                     i++;
-                    chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight; 
+                    // Scroll to bottom only when content is visually updated or at the end
+                    chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
                 } else {
+                    // Typing finished
                     clearInterval(currentTypingInterval);
                     currentTypingInterval = null;
-                    // Final parse and highlight after full text is typed
-                    messageContentDiv.innerHTML = marked.parse(text); 
+                    
+                    // Final, full render and highlight to ensure everything is perfect
+                    messageContentDiv.innerHTML = marked.parse(text);
                     if (typeof Prism !== 'undefined') {
-                        Prism.highlightAllUnder(messageContentDiv.closest('.chat-message')); 
+                        Prism.highlightAllUnder(messageContentDiv.closest('.chat-message'));
                     }
                     chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-                    toggleLoading(false); 
-                    isGeneratingResponse = false; 
-                    saveCurrentChat(); 
+                    toggleLoading(false); // Hide loading indicator
+                    isGeneratingResponse = false; // Reset generation flag
+                    saveCurrentChat(); // Save the completed chat
 
-                    // Trigger chat renaming if it's a new chat and has a generic title
+                    // Trigger chat renaming if needed
                     const chatMeta = allChats.find(chat => chat.id === currentChatId);
                     if (chatMeta && (chatMeta.title === 'Untitled Chat' || chatMeta.title === 'Chat with Attachments')) {
                         summarizeChatAndRename(currentChatId, conversationHistory);
                     }
                 }
-            }, delay);
+            }, delay); // Use the specified delay (default 1ms)
         }
 
 
@@ -3778,20 +3801,19 @@
 
 
         function loadChat(chatToLoadId) {
-            if (currentChatId && currentChatId !== chatToLoadId) { // Save current chat if switching to a different one
-                saveCurrentChat(); 
+            if (currentChatId && currentChatId !== chatToLoadId) {
+                saveCurrentChat();
             }
 
             const storedHistory = localStorage.getItem(`mv-chat-${chatToLoadId}`);
             if (storedHistory) {
                 conversationHistory = JSON.parse(storedHistory);
-                currentChatId = chatToLoadId; 
+                currentChatId = chatToLoadId;
 
-                chatHistoryDiv.innerHTML = ''; 
+                chatHistoryDiv.innerHTML = ''; // Clear existing messages
                 conversationHistory.forEach(msg => {
                     let textContent = '';
                     let attachments = [];
-                    // Properly extract text and attachments from message parts
                     msg.parts.forEach(part => {
                         if (part.text) {
                             textContent = part.text;
@@ -3799,39 +3821,47 @@
                             attachments.push({
                                 mimeType: part.inlineData.mimeType,
                                 data: part.inlineData.data,
-                                name: part.inlineData.name || 'Attachment' // Fallback name
+                                name: part.inlineData.name || 'Attachment'
                             });
                         }
                     });
-                    appendChatMessage(msg.role, textContent, attachments, msg.id); 
+                    // appendChatMessage now correctly creates and appends the message
+                    appendChatMessage(msg.role, textContent, attachments, msg.id);
                 });
-                
-                // IMPORTANT FIX: Re-apply Prism.js highlighting after all messages are loaded
+
+                // IMPORTANT: Apply Prism.js highlighting AFTER all messages are in the DOM.
+                // A slightly longer delay (e.g., 100-200ms) or requestAnimationFrame is often more reliable
                 if (typeof Prism !== 'undefined') {
-                    Prism.highlightAllUnder(chatHistoryDiv);
+                    requestAnimationFrame(() => { // Executes after the browser has finished painting
+                        Prism.highlightAllUnder(chatHistoryDiv); // Highlights all code blocks within chatHistoryDiv
+                    });
+                    // Or use setTimeout, if requestAnimationFrame causes issues on older browsers:
+                    // setTimeout(() => {
+                    //     Prism.highlightAllUnder(chatHistoryDiv);
+                    // }, 150); // Increased delay
                 }
 
                 chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
                 userInput.value = '';
-                userInput.style.height = 'auto'; 
+                userInput.style.height = 'auto';
                 chatAttachments = [];
                 chatImageUpload.value = '';
                 displayChatAttachments();
                 suggestionsContainer.classList.add('hidden');
                 selectedSuggestionIndex = -1;
-                userInput.dataset.editingMessageId = ''; 
-                updateButtonIcon(sendButton, 'send', 'w-5 h-5'); 
-                
+                userInput.dataset.editingMessageId = '';
+                updateButtonIcon(sendButton, 'send', 'w-5 h-5');
+
                 if (window.innerWidth <= 768) {
-                    chatSidebar.classList.remove('active-mobile-sidebar'); 
-                    mobileToggleSidebarBtn.style.display = 'flex'; 
+                    chatSidebar.classList.remove('active-mobile-sidebar');
+                    mobileToggleSidebarBtn.style.display = 'flex';
                 }
 
                 userInput.focus();
-                renderPrevChatsList(); 
+                renderPrevChatsList();
             } else {
                 console.error(`Chat with ID ${chatToLoadId} not found.`);
-                startNewChat(); 
+                startNewChat();
             }
         }
 
@@ -3867,39 +3897,47 @@
                 toggleLoading(false);
             }
 
-            saveCurrentChat(); 
+                saveCurrentChat(); // Save the previously active chat
 
-            chatHistoryDiv.innerHTML = ''; 
-            conversationHistory = []; 
-            chatAttachments = []; 
-            chatImageUpload.value = ''; 
-            displayChatAttachments(); 
-            userInput.value = '';
-            userInput.style.height = 'auto'; 
-            messageTextCache.clear(); 
-            suggestionsContainer.classList.add('hidden'); 
-            selectedSuggestionIndex = -1;
-            userInput.dataset.editingMessageId = ''; 
-            updateButtonIcon(sendButton, 'send', 'w-5 h-5'); 
+                chatHistoryDiv.innerHTML = '';
+                conversationHistory = [];
+                chatAttachments = [];
+                chatImageUpload.value = '';
+                displayChatAttachments();
+                userInput.value = '';
+                userInput.style.height = 'auto';
+                messageTextCache.clear();
+                suggestionsContainer.classList.add('hidden');
+                selectedSuggestionIndex = -1;
+                userInput.dataset.editingMessageId = '';
+                updateButtonIcon(sendButton, 'send', 'w-5 h-5');
 
-            currentChatId = `chat-${Date.now()}`; 
+                currentChatId = `chat-${Date.now()}`;
 
-            const initialAiContentDiv = appendChatMessage('ai', initialAIMessage.parts[0].text);
-            conversationHistory.push({ ...initialAIMessage, id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` }); 
-            
-            // IMPORTANT FIX: Apply Prism.js for the initial message
-            if (typeof Prism !== 'undefined') {
-                Prism.highlightAllUnder(chatHistoryDiv);
+                // Append the initial AI message using the modified appendChatMessage
+                // The returned initialAiContentDiv is the specific content part, but Prism.highlightAllUnder(chatHistoryDiv) is more robust for single messages too.
+                appendChatMessage('ai', initialAIMessage.parts[0].text);
+                conversationHistory.push({ ...initialAIMessage, id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` });
+
+                // IMPORTANT: Apply Prism.js for the initial message after it's added.
+                if (typeof Prism !== 'undefined') {
+                    requestAnimationFrame(() => {
+                        Prism.highlightAllUnder(chatHistoryDiv);
+                    });
+                    // Or using setTimeout:
+                    // setTimeout(() => {
+                    //     Prism.highlightAllUnder(chatHistoryDiv);
+                    // }, 150);
+                }
+
+                if (window.innerWidth <= 768) {
+                    chatSidebar.classList.remove('active-mobile-sidebar');
+                    mobileToggleSidebarBtn.style.display = 'flex';
+                }
+
+                userInput.focus();
+                renderPrevChatsList();
             }
-
-            if (window.innerWidth <= 768) {
-                chatSidebar.classList.remove('active-mobile-sidebar');
-                mobileToggleSidebarBtn.style.display = 'flex'; 
-            }
-
-            userInput.focus();
-            renderPrevChatsList(); 
-        }
 
         // --- Paste Functionality ---
         async function processPastedFile(file) {
@@ -4141,12 +4179,11 @@
                     if (messageDivToEdit) {
                         const originalIndex = Array.from(chatHistoryDiv.children).indexOf(messageDivToEdit);
                         if (originalIndex !== -1) {
-                            // Update the conversation history with the edited user message
+                            // 1. Update the conversation history with the edited user message and new/retained attachments
                             conversationHistory[originalIndex].parts = [];
                             if (editedText) {
                                 conversationHistory[originalIndex].parts.push({ text: editedText });
                             }
-                            // Add new attachments if any during edit
                             if (chatAttachments.length > 0) {
                                 for(const attachment of chatAttachments) {
                                     conversationHistory[originalIndex].parts.push({
@@ -4155,23 +4192,31 @@
                                 }
                             }
 
-                            // Remove messages from UI and history after the edited message
+                            // 2. Remove all messages from UI and history *after* the edited message
                             while (chatHistoryDiv.children.length > originalIndex + 1) {
                                 chatHistoryDiv.lastChild.remove();
                                 conversationHistory.pop();
                             }
                             
-                            // Re-render the edited message content in the UI
-                            const userContentBubble = messageDivToEdit.querySelector('.message-bubble-content');
-                            if (userContentBubble) {
-                                let updatedContentHTML = `<span>${editedText}</span>`;
+                            // 3. Re-render the edited message content in the UI
+                            // Find the message bubble content div
+                            const messageBubbleContent = messageDivToEdit.querySelector('.message-bubble-content');
+                            if (messageBubbleContent) {
+                                messageBubbleContent.innerHTML = ''; // Clear its children completely
+
+                                // Create and append the new message content div
+                                const messageContentDiv = document.createElement('div');
+                                messageContentDiv.classList.add('message-content');
+                                messageContentDiv.innerHTML = `<span>${editedText}</span>`;
+
                                 if (chatAttachments.length > 0) {
-                                    let attachmentHTML = `<div class="mt-2 flex flex-wrap gap-2">`;
+                                    const attachmentsContainer = document.createElement('div');
+                                    attachmentsContainer.classList.add('mt-2', 'flex', 'flex-wrap', 'gap-2');
                                     chatAttachments.forEach(attachment => {
                                         if (attachment.mimeType.startsWith('image/')) {
-                                            attachmentHTML += `<img src="data:${attachment.mimeType};base64,${attachment.data}" alt="${attachment.name || 'User attachment'}" class="chat-image w-24 h-24 object-cover">`;
+                                            attachmentsContainer.innerHTML += `<img src="data:${attachment.mimeType};base64,${attachment.data}" alt="${attachment.name || 'User attachment'}" class="chat-image w-24 h-24 object-cover">`;
                                         } else {
-                                            attachmentHTML += `
+                                            attachmentsContainer.innerHTML += `
                                                 <div class="chat-message-attachment-item">
                                                     <span data-lucide="${getFileIcon(attachment.mimeType)}" class="w-4 h-4 flex-shrink-0"></span>
                                                     <span class="truncate max-w-[120px]">${attachment.name || 'File'}</span>
@@ -4179,25 +4224,27 @@
                                             `;
                                         }
                                     });
-                                    attachmentHTML += `</div>`;
-                                    updatedContentHTML += attachmentHTML;
+                                    messageContentDiv.appendChild(attachmentsContainer);
                                 }
-                                userContentBubble.innerHTML = updatedContentHTML;
-                                // Re-add action buttons
-                                userContentBubble.innerHTML += `
-                                    <div class="message-actions">
-                                        <button class="copy-message-btn" title="Copy message" data-message-id="${editingMessageId}">
-                                            <span data-lucide="clipboard" class="w-4 h-4"></span>
-                                        </button>
-                                        <button class="dictate-message-btn" title="Dictate message" data-message-id="${editingMessageId}">
-                                            <span data-lucide="volume-2" class="w-4 h-4"></span>
-                                        </button>
-                                        <button class="edit-message-btn" title="Edit message" data-message-id="${editingMessageId}">
-                                            <span data-lucide="pencil" class="w-4 h-4"></span>
-                                        </button>
-                                    </div>
+                                messageBubbleContent.appendChild(messageContentDiv); // Add updated content
+                                
+                                // Re-add action buttons (create new element for them)
+                                const actionsDiv = document.createElement('div');
+                                actionsDiv.classList.add('message-actions');
+                                actionsDiv.innerHTML = `
+                                    <button class="copy-message-btn" title="Copy message" data-message-id="${editingMessageId}">
+                                        <span data-lucide="clipboard" class="w-4 h-4"></span>
+                                    </button>
+                                    <button class="dictate-message-btn" title="Dictate message" data-message-id="${editingMessageId}">
+                                        <span data-lucide="volume-2" class="w-4 h-4"></span>
+                                    </button>
+                                    <button class="edit-message-btn" title="Edit message" data-message-id="${editingMessageId}">
+                                        <span data-lucide="pencil" class="w-4 h-4"></span>
+                                    </button>
                                 `;
-                                createIcons();
+                                messageBubbleContent.appendChild(actionsDiv); // Append actions as a new child
+
+                                createIcons(); // Re-create Lucide icons for the newly added elements
                             }
                             messageTextCache.set(editingMessageId, `You: ${editedText}`); 
                             messageDivToEdit.classList.remove('editing'); 
@@ -4432,23 +4479,50 @@
                     return; 
                 }
 
+                // Inside chatHistoryDiv.addEventListener('click', ...)
                 const editButton = event.target.closest('.edit-message-btn');
                 if (editButton) {
                     const messageId = editButton.dataset.messageId;
-                    const messageDiv = editButton.closest('.chat-message');
+                    const messageDivToEdit = document.querySelector(`.chat-message[data-message-id="${messageId}"]`);
                     
-                    const messageContent = messageTextCache.get(messageId); 
-                    if (messageContent) {
-                        userInput.value = messageContent.replace('You: ', '').replace(/\[Attachments:.*?\]/g, '').trim(); 
-                        userInput.focus();
-                        userInput.style.height = 'auto';
-                        userInput.style.height = userInput.scrollHeight + 'px';
+                    if (messageDivToEdit) {
+                        const originalIndex = Array.from(chatHistoryDiv.children).indexOf(messageDivToEdit);
+                        if (originalIndex !== -1) {
+                            // Get the original message from history to reconstruct attachments if any
+                            const originalMessage = conversationHistory[originalIndex];
+                            
+                            // Extract original text (without "You: " or attachment notes)
+                            let originalText = '';
+                            let originalAttachments = [];
+                            originalMessage.parts.forEach(part => {
+                                if (part.text) {
+                                    originalText = part.text;
+                                } else if (part.inlineData) {
+                                    // Reconstruct the file object-like structure for the attachment array
+                                    originalAttachments.push({
+                                        file: null, // We don't have the original File object, but mimeType and data are enough
+                                        mimeType: part.inlineData.mimeType,
+                                        data: part.inlineData.data,
+                                        name: part.inlineData.name || 'Attachment' // Use stored name or fallback
+                                    });
+                                }
+                            });
 
-                        chatHistoryDiv.querySelectorAll('.chat-message').forEach(msg => msg.classList.remove('editing'));
-                        messageDiv.classList.add('editing'); 
+                            // Populate the input with the original text and attachments
+                            userInput.value = originalText;
+                            chatAttachments = originalAttachments; // Load attachments for display
+                            displayChatAttachments(); // Render attachments in the input preview
 
-                        userInput.dataset.editingMessageId = messageId; 
-                        updateButtonIcon(sendButton, 'save', 'w-5 h-5');
+                            userInput.focus();
+                            userInput.style.height = 'auto';
+                            userInput.style.height = userInput.scrollHeight + 'px';
+
+                            chatHistoryDiv.querySelectorAll('.chat-message').forEach(msg => msg.classList.remove('editing'));
+                            messageDivToEdit.classList.add('editing');
+
+                            userInput.dataset.editingMessageId = messageId;
+                            updateButtonIcon(sendButton, 'save', 'w-5 h-5');
+                        }
                     }
                     return;
                 }
