@@ -12,6 +12,8 @@
     <!-- Lucide Icons for a modern, futuristic feel -->
     <script src="https://cdn.jsdelivr.net/npm/lucide-dynamic@latest/dist/lucide.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Prism.js for code syntax highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json">
     <style>
@@ -56,6 +58,12 @@
             --autocomplete-hover-bg: var(--tertiary-bg);
             --autocomplete-selected-bg: var(--accent-color);
             --autocomplete-selected-text: white;
+
+            /* Cosmic Animation Colors */
+            --cosmic-glow-color-1: #C070FF; /* Vibrant mystical purple */
+            --cosmic-glow-color-2: #7B2FEE; /* Deeper mystical purple */
+            --cosmic-star-color: #E6E6FA; /* Light lavender for stars */
+            --user-avatar-bg: #4A4A80; /* Background for generic user avatar */
         }
 
         /* Light Mode Palette (Overrides default variables when body has 'light' class) */
@@ -90,6 +98,12 @@
             --autocomplete-hover-bg: var(--tertiary-bg);
             --autocomplete-selected-bg: var(--accent-color);
             --autocomplete-selected-text: white;
+
+            /* Cosmic Animation Colors Light Mode */
+            --cosmic-glow-color-1: #8C2BFF; 
+            --cosmic-glow-color-2: #6A1DCC;
+            --cosmic-star-color: #333;
+            --user-avatar-bg: #C0C8D8; /* Lighter background for generic user avatar */
         }
 
         /* Base Body Styles - MODIFIED for full screen */
@@ -107,17 +121,41 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             transition: background 0.6s ease, color 0.6s ease;
+            position: relative; /* Needed for cosmic background pseudo-element */
         }
 
-        /* Chatbot Container (Main Application) - MODIFIED for full screen */
+        /* Cosmic Body Background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Subtle nebula effect with radial gradients */
+            background: radial-gradient(circle at 15% 50%, rgba(192, 112, 255, 0.05) 0%, transparent 40%),
+                        radial-gradient(circle at 85% 20%, rgba(123, 47, 238, 0.08) 0%, transparent 35%),
+                        radial-gradient(circle at 40% 90%, rgba(192, 112, 255, 0.06) 0%, transparent 30%);
+            background-size: 200% 200%; /* Make gradients larger to animate */
+            animation: cosmicNebula 20s infinite alternate ease-in-out;
+            z-index: -1; /* Behind everything */
+            pointer-events: none; /* Don't block clicks */
+            transition: background 0.6s ease;
+        }
+
+        @keyframes cosmicNebula {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        /* Chatbot Container (Main Application) - Now a flex container */
         .chatbot-container {
             background-color: var(--secondary-bg);
             border-radius: 0; /* Remove border-radius for full screen */
             box-shadow: none; /* Remove shadow for full screen */
             width: 100%; /* Occupy full parent width */
             height: 100%; /* Occupy full parent height */
-            display: flex;
-            flex-direction: column;
+            display: flex; /* Make it a flex container for sidebar + main content */
             overflow: hidden;
             border: none; /* Remove border for full screen */
             animation: fadeIn 0.8s ease-out;
@@ -130,14 +168,171 @@
             to { opacity: 1; }
         }
 
-        /* Header - Adjusted for full screen */
+        /* NEW: Chat Sidebar */
+        .chat-sidebar {
+            width: 280px; /* Default open width for desktop */
+            flex-shrink: 0; /* Prevents sidebar from shrinking */
+            background-color: var(--tertiary-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 15px;
+            transition: width 0.3s ease-in-out, transform 0.3s ease-in-out, background-color 0.6s ease, border-color 0.6s ease;
+            z-index: 20; /* Ensure sidebar is above main content if needed */
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3); /* Subtle shadow */
+        }
+
+        .chat-sidebar .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .chat-sidebar .sidebar-header h3 {
+            margin: 0;
+            color: var(--accent-color);
+            font-family: var(--font-family-secondary);
+            font-size: 1.2em;
+        }
+        /* New Chat Button (now within sidebar) */
+        #newChatBtn {
+            position: static; /* No longer absolutely positioned */
+            margin-right: 10px; /* Space from 'My Chats' title */
+            background-color: var(--accent-color);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-family: var(--font-family-primary);
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            z-index: 3; 
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        #newChatBtn:hover {
+            background-color: var(--button-hover-bg);
+            transform: translateY(-1px);
+        }
+        #newChatBtn:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        #newChatBtn .lucide {
+            width: 0.9em;
+            height: 0.9em;
+        }
+
+        /* Toggle Sidebar Button (inside sidebar, 'X' icon for mobile close) */
+        #toggleSidebarBtn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: none; /* Hidden by default, shown on mobile when sidebar open */
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease;
+        }
+        #toggleSidebarBtn:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .sidebar-chat-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1; /* Allow list to take remaining space */
+            overflow-y: auto; /* Scroll for chat list */
+        }
+        .sidebar-chat-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-chat-list::-webkit-scrollbar-track {
+            background: var(--primary-bg); 
+            border-radius: 10px;
+        }
+
+        .sidebar-chat-list::-webkit-scrollbar-thumb {
+            background-color: var(--accent-color); 
+            border-radius: 10px;
+            border: 1px solid var(--primary-bg); 
+        }
+
+        .sidebar-chat-list li {
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.6s ease;
+            font-size: 0.9em;
+        }
+        .sidebar-chat-list li:hover {
+            background-color: var(--primary-bg); /* Darker on hover */
+        }
+        .sidebar-chat-list li.active-chat {
+            background-color: var(--accent-color); /* Highlight active chat */
+            color: white;
+            font-weight: 600;
+        }
+        .sidebar-chat-list li.active-chat .delete-chat-btn {
+            color: rgba(255,255,255,0.8);
+        }
+        .sidebar-chat-list li.active-chat .delete-chat-btn:hover {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+        }
+        .sidebar-chat-list .delete-chat-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            color: var(--accent-error);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+            flex-shrink: 0;
+        }
+        .sidebar-chat-list .delete-chat-btn:hover {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: var(--accent-error);
+        }
+
+        /* NEW: Main Chat Content */
+        .chat-main-content {
+            flex-grow: 1; /* Takes remaining space */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Important for chat history scroll */
+            transition: width 0.3s ease-in-out;
+        }
+
+        /* Header - Adjusted for sleekness */
         .chatbot-header {
             background-color: var(--tertiary-bg);
-            padding: 20px;
-            border-bottom: 2px solid var(--border-color);
+            padding: 15px; /* Reduced padding */
+            border-bottom: 1px solid var(--border-color); /* Thinner border */
             text-align: center;
-            border-top-left-radius: 0; /* Adjust for full screen */
-            border-top-right-radius: 0; /* Adjust for full screen */
+            border-top-left-radius: 0; 
+            border-top-right-radius: 0; 
             position: relative;
             overflow: hidden;
             z-index: 10; 
@@ -154,33 +349,33 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
+            gap: 3px; /* Reduced gap */
         }
 
         .chatbot-header h1 {
             margin: 0;
-            font-size: 2em; 
+            font-size: 1.8em; /* Smaller font size */
             color: var(--accent-color);
             font-family: var(--font-family-secondary);
             font-weight: 600;
             letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(192, 112, 255, 0.6);
+            text-shadow: 0 0 10px var(--cosmic-glow-color-1), 0 0 20px var(--cosmic-glow-color-2);
             transition: color 0.6s ease, text-shadow 0.6s ease;
             display: flex;
             align-items: center;
             gap: 10px;
         }
         .chatbot-header .logo {
-            height: 2.5em; 
+            height: 1.8em; /* Smaller logo */
             width: auto;
             object-fit: contain;
-            filter: drop-shadow(0 0 5px rgba(192, 112, 255, 0.5));
+            filter: drop-shadow(0 0 5px var(--cosmic-glow-color-1));
             transition: filter 0.6s ease;
         }
 
         .chatbot-header .tagline {
             font-family: var(--font-family-secondary);
-            font-size: 0.9em;
+            font-size: 0.8em; /* Smaller tagline */
             color: var(--text-color);
             opacity: 0.7;
             margin: 0;
@@ -195,9 +390,9 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle at center, rgba(192, 112, 255, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle at center, var(--cosmic-glow-color-1) 0%, transparent 70%);
             transform: rotate(45deg);
-            animation: headerGlow 8s infinite alternate ease-in-out;
+            animation: headerGlow 8s infinite alternate ease-in-out, pulseGlow 4s infinite alternate ease-in-out;
             z-index: 1;
             transition: background 0.6s ease;
         }
@@ -207,29 +402,34 @@
             50% { transform: scale(1.1) rotate(180deg); opacity: 0.8; }
             100% { transform: scale(0.8) rotate(360deg); opacity: 0.6; }
         }
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 15px var(--cosmic-glow-color-1); }
+            100% { box-shadow: 0 0 25px var(--cosmic-glow-color-2); }
+        }
 
-        /* Dark Mode Toggle Switch */
+        /* Dark Mode Toggle Switch - Adjusted */
         .dark-mode-container {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 15px; /* Adjusted position */
+            right: 15px; /* Adjusted position */
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px; /* Reduced gap */
             z-index: 3;
             font-family: var(--font-family-primary);
         }
         .dark-mode-container span {
             color: var(--text-color); 
             transition: color 0.6s ease;
+            font-size: 0.8em; /* Smaller text */
         }
 
         .switch { 
             position: relative;
             display: inline-block;
-            width: 56px; 
-            height: 30px; 
-            border-radius: 15px;
+            width: 48px; /* Slightly smaller */
+            height: 26px; /* Slightly smaller */
+            border-radius: 13px; /* Adjusted */
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
             border: 1px solid rgba(255,255,255,0.1); 
             transition: background-color 0.6s ease, border-color 0.6s ease;
@@ -247,16 +447,16 @@
             right: 0;
             bottom: 0;
             background-color: #4b5563; 
-            border-radius: 15px; 
+            border-radius: 13px; /* Adjusted */
             transition: .4s;
         }
         .slider:before {
             position: absolute;
             content: "";
-            height: 22px; 
-            width: 22px; 
-            left: 4px;
-            bottom: 4px;
+            height: 20px; /* Smaller */
+            width: 20px; /* Smaller */
+            left: 3px; /* Adjusted */
+            bottom: 3px; /* Adjusted */
             background-color: white; 
             border-radius: 50%;
             transition: .4s;
@@ -266,42 +466,38 @@
             background-color: var(--accent-color); 
         }
         input:checked + .slider:before {
-            transform: translateX(26px); 
+            transform: translateX(22px); /* Adjusted */
         }
 
-        /* New Chat Button */
-        #newChatBtn {
+        /* NEW: Mobile Sidebar Toggle (Hamburger icon in main header) */
+        #mobileToggleSidebarBtn {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            background-color: var(--accent-color);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-family: var(--font-family-primary);
-            font-weight: 600;
-            cursor: pointer;
+            top: 15px;
+            left: 15px;
+            background-color: var(--tertiary-bg);
+            color: var(--text-color);
+            padding: 10px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: none; /* Hidden by default, shown on mobile */
+            align-items: center;
+            justify-content: center;
             border: none;
+            cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             transition: background-color 0.3s ease, transform 0.2s ease;
-            z-index: 3;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            z-index: 15; /* Ensure it's above other header elements */
         }
-        #newChatBtn:hover {
-            background-color: var(--button-hover-bg);
+        #mobileToggleSidebarBtn:hover {
+            background-color: var(--secondary-bg);
             transform: translateY(-1px);
         }
-        #newChatBtn:active {
+        #mobileToggleSidebarBtn:active {
             transform: translateY(0);
             box-shadow: 0 1px 3px rgba(0,0,0,0.2);
         }
-        #newChatBtn .lucide {
-            width: 1em;
-            height: 1em;
-        }
+
 
         /* Chat History */
         .chat-history {
@@ -335,37 +531,101 @@
         /* Message Bubbles */
         .chat-message {
             max-width: 80%;
-            padding: 12px 18px;
+            line-height: 1.5;
+            word-wrap: break-word;
+            animation: cosmicRiseIn 0.5s ease-out; /* NEW: Cosmic Rise In */
+            position: relative; 
+            font-size: 0.95rem; 
+            display: flex; /* Make messages a flex container for avatar */
+            align-items: flex-start; /* Align items to the top */
+        }
+        .chat-message.editing {
+            border: 2px dashed var(--accent-color);
+            opacity: 0.8;
+            box-shadow: 0 0 10px rgba(192, 112, 255, 0.5);
+        }
+
+        /* NEW: Cosmic Rise In Animation */
+        @keyframes cosmicRiseIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* NEW: Avatar Styling */
+        .chat-avatar {
+            width: 40px; /* Avatar size */
+            height: 40px;
+            border-radius: 50%; /* Circular avatar */
+            object-fit: cover;
+            flex-shrink: 0; /* Prevent avatar from shrinking */
+            margin: 0 10px; /* Space between avatar and bubble */
+            border: 2px solid var(--border-color); /* Subtle border */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            transition: border-color 0.6s ease, box-shadow 0.6s ease;
+        }
+
+        /* NEW: Generic Lucide Avatar Icon Styling */
+        .lucide-avatar-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--user-avatar-bg); /* Themed background */
+            color: var(--accent-color); /* Accent color for the icon */
+            flex-shrink: 0;
+            margin: 0 10px;
+            border: 2px solid var(--border-color);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease;
+        }
+        .lucide-avatar-icon .lucide {
+            width: 1.5em; /* Larger icon inside avatar circle */
+            height: 1.5em;
+            stroke-width: 1.5; /* Make the icon a bit bolder */
+        }
+
+        /* NEW: Message Bubble Content Wrapper */
+        .message-bubble-content {
+            padding: 12px 18px; /* This is where the actual bubble padding goes */
             border-radius: 20px;
             line-height: 1.5;
             word-wrap: break-word;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            animation: slideIn 0.3s ease-out;
-            position: relative; 
-            padding-bottom: 2.5rem; 
-            font-size: 0.95rem; 
+            flex-grow: 1; /* Allow content to take available space */
+            position: relative; /* For actions inside */
+            padding-bottom: 2.5rem; /* Ensure space for actions */
             transition: background-color 0.6s ease, color 0.6s ease, background-image 0.6s ease, box-shadow 0.6s ease;
         }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         .chat-message.user {
+            margin-left: auto; /* Pushes user message to the right */
+            flex-direction: row-reverse; /* Avatar on the right for user */
+        }
+        .chat-message.user .message-bubble-content {
             background-color: var(--user-bubble);
             color: var(--text-color);
-            margin-left: auto; /* Pushes user message to the right */
             border-bottom-right-radius: 5px; 
             background-image: linear-gradient(to bottom right, var(--user-bubble), color-mix(in srgb, var(--user-bubble) 90%, black 10%)); /* Dynamic darker shade */
         }
 
         .chat-message.ai {
+            margin-right: auto; /* Pushes AI message to the left */
+            flex-direction: row; /* Avatar on the left for AI */
+        }
+        .chat-message.ai .message-bubble-content {
             background-color: var(--ai-bubble);
             color: var(--text-color);
-            margin-right: auto; /* Pushes AI message to the left */
             border-bottom-left-radius: 5px; 
             background-image: linear-gradient(to bottom left, var(--ai-bubble), color-mix(in srgb, var(--ai-bubble) 90%, black 10%)); /* Dynamic darker shade */
+        }
+
+        /* Light Mode Adjustments for Avatars */
+        body.light .chat-avatar,
+        body.light .lucide-avatar-icon {
+            border-color: #A0B0C0; /* Lighter border in light mode */
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         /* Markdown Styling within AI messages */
@@ -488,7 +748,7 @@
             color: var(--button-hover-bg); 
         }
 
-        /* Message Action Buttons (Copy/Dictate) */
+        /* Message Action Buttons (Copy/Dictate/Edit/Regenerate) */
         .message-actions {
             position: absolute;
             bottom: 0.5rem;
@@ -503,6 +763,7 @@
             z-index: 10;
             background-color: var(--message-action-bg);
         }
+        /* Make actions visible when the entire message (including avatar) is hovered */
         .chat-message:hover .message-actions {
             opacity: 1; 
         }
@@ -626,8 +887,16 @@
         #sendButton:active {
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
+        /* NEW: Stop button */
+        #stopButton {
+            background-color: var(--accent-error);
+            color: white;
+        }
+        #stopButton:hover {
+            background-color: color-mix(in srgb, var(--accent-error) 80%, black 20%);
+        }
 
-        /* Loading Indicator */
+        /* Loading Indicator - NEW: Cosmic Loader */
         .loader-container {
             display: flex;
             justify-content: center;
@@ -636,27 +905,29 @@
             height: 100%;
         }
         .loader-dot {
-            width: 12px;
-            height: 12px;
-            margin: 0 4px;
+            width: 15px; /* Slightly larger */
+            height: 15px;
+            margin: 0 6px; /* More space */
             background-color: var(--accent-color);
+            box-shadow: 0 0 10px var(--accent-color), 0 0 20px rgba(192, 112, 255, 0.5); /* Glow effect */
             border-radius: 50%;
             display: inline-block;
-            animation: bounce 1.4s infinite ease-in-out both;
-            transition: background-color 0.6s ease;
+            animation: cosmicBounce 1.8s infinite ease-in-out both; /* Slower, more ethereal bounce */
+            transition: background-color 0.6s ease, box-shadow 0.6s ease;
         }
-        .loader-dot:nth-child(1) { animation-delay: -0.32s; }
-        .loader-dot:nth-child(2) { animation-delay: -0.16s; }
+        .loader-dot:nth-child(1) { animation-delay: -0.6s; }
+        .loader-dot:nth-child(2) { animation-delay: -0.3s; }
         .loader-dot:nth-child(3) { animation-delay: 0s; }
         
-        @keyframes bounce {
-            0%, 80%, 100% {
-                transform: scale(0);
-                opacity: 0.5;
+        @keyframes cosmicBounce {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+                opacity: 0.8;
             }
-            40% {
-                transform: scale(1.0);
+            50% {
+                transform: translateY(-10px) scale(1.2); /* Float up and enlarge slightly */
                 opacity: 1;
+                background-color: var(--cosmic-glow-color-1); /* Change color at peak */
             }
         }
         /* Voice input active state */
@@ -785,62 +1056,91 @@
                 margin: 0;
             }
 
-            .chatbot-header {
-                padding: 12px; 
-                border-top-left-radius: 0;
-                border-top-right-radius: 0;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 5px;
+            /* Mobile Sidebar */
+            .chat-sidebar {
+                position: fixed; /* Fixed position for mobile sidebar */
+                top: 0;
+                left: 0;
+                bottom: 0;
+                width: min(80vw, 320px); /* Adjust width for mobile, max 320px or 80vw */
+                transform: translateX(-100%); /* Hidden by default */
+                transition: transform 0.3s ease-in-out;
+                box-shadow: none; /* No shadow by default */
+                padding: 15px;
+                background-color: var(--tertiary-bg); /* Ensure background is set for overlay */
             }
-            .chatbot-header h1 {
-                font-size: 1.6em;
-                margin-top: 10px;
-            }
-            .chatbot-header .logo {
-                height: 1.8em;
-            }
-            .chatbot-header .tagline {
-                font-size: 0.75em;
-                margin-bottom: 5px;
+            .chat-sidebar.active-mobile-sidebar {
+                transform: translateX(0); /* Show on active */
+                box-shadow: 2px 0 10px rgba(0,0,0,0.3); /* Add shadow when open */
             }
 
-            .dark-mode-container {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-                gap: 5px;
+            .chat-main-content {
+                width: 100%; /* Main content always full width on mobile */
+            }
+
+            /* Mobile Header Adjustments */
+            .chatbot-header {
+                padding: 10px; 
+                padding-left: 50px; /* Make space for hamburger */
+                justify-content: center; /* Center content when hamburger is present */
+            }
+            .chatbot-header h1 {
+                font-size: 1.5em;
+                margin-top: 0; /* Remove top margin */
+            }
+            .chatbot-header .logo {
+                height: 1.6em;
+            }
+            .chatbot-header .tagline {
                 font-size: 0.7em;
+                margin-bottom: 0;
+            }
+
+            /* Mobile specific toggle button (hamburger in main header) */
+            #mobileToggleSidebarBtn {
+                display: flex; /* Show on mobile */
+            }
+            /* Toggle button inside sidebar (X icon) */
+            #toggleSidebarBtn {
+                display: flex; /* Always show inside sidebar header on mobile */
+            }
+
+
+            /* Dark mode toggle positioning for mobile */
+            .dark-mode-container {
+                top: 8px;
+                right: 8px;
+                gap: 4px;
+                font-size: 0.6em;
             }
             .switch {
-                width: 40px;
-                height: 22px;
-                border-radius: 11px;
+                width: 36px;
+                height: 20px;
+                border-radius: 10px;
             }
             .switch .slider:before {
-                height: 16px;
-                width: 16px;
+                height: 14px;
+                width: 14px;
                 left: 3px;
                 bottom: 3px;
             }
             input:checked + .slider:before {
-                transform: translateX(18px);
+                transform: translateX(16px);
             }
 
+            /* Sidebar New Chat Button (smaller for mobile sidebar) */
             #newChatBtn {
-                position: absolute;
-                top: 10px;
-                left: 10px;
-                padding: 6px 10px;
-                font-size: 0.7em;
+                padding: 5px 9px;
+                font-size: 0.65em;
                 gap: 3px;
             }
             #newChatBtn .lucide {
-                width: 0.7em;
-                height: 0.7em;
+                width: 0.6em;
+                height: 0.6em;
             }
 
+
+            /* Chat Message Mobile Adjustments */
             .chat-history {
                 padding: 10px;
                 gap: 8px;
@@ -848,9 +1148,20 @@
 
             .chat-message {
                 max-width: 95%; /* Wider bubbles for smaller screens */
+            }
+            .chat-avatar, .lucide-avatar-icon {
+                width: 32px;
+                height: 32px;
+                margin: 0 6px;
+            }
+            .lucide-avatar-icon .lucide {
+                width: 1.2em;
+                height: 1.2em;
+            }
+            .message-bubble-content {
                 padding: 10px 14px;
-                border-radius: 16px;
                 padding-bottom: 2rem;
+                border-radius: 16px;
                 font-size: 0.9rem; /* Slightly larger for readability */
             }
 
@@ -922,68 +1233,115 @@
                 font-size: 0.85em;
             }
         }
+
+        /* Desktop specific styles (min-width: 769px) */
+        @media (min-width: 769px) {
+            #mobileToggleSidebarBtn {
+                display: none; /* Hide hamburger on desktop */
+            }
+            #toggleSidebarBtn {
+                display: none; /* Hide 'X' button on desktop (only needed for mobile sidebar close) */
+            }
+        }
     </style>
 </head>
 <body class="antialiased dark">
     <div class="chatbot-container">
-        <header class="chatbot-header">
-            <button id="newChatBtn" title="Start a New Chat">
-                <span data-lucide="sparkles" class="w-4 h-4"></span>
-                New Chat
-            </button>
-            <div class="dark-mode-container">
-                <span>Light</span>
-                <label class="switch">
-                    <input type="checkbox" id="dark-mode-toggle">
-                    <span class="slider"></span>
+        <!-- Sidebar for previous chats -->
+        <aside class="chat-sidebar" id="chatSidebar">
+            <div class="sidebar-header">
+                <button id="newChatBtn" title="Start a New Chat">
+                    <span data-lucide="sparkles" class="w-4 h-4"></span>
+                    New Chat
+                </button>
+                <h3 class="font-semibold text-lg">My Chats</h3>
+                <!-- Button to toggle sidebar visibility on mobile/smaller screens -->
+                <button id="toggleSidebarBtn" title="Close Sidebar">
+                    <span data-lucide="x" class="w-5 h-5"></span>
+                </button>
+            </div>
+            <ul id="prevChatsList" class="sidebar-chat-list">
+                <!-- Chat items will be injected here by JavaScript -->
+            </ul>
+        </aside>
+
+        <!-- Main Chat Content -->
+        <main class="chat-main-content">
+            <header class="chatbot-header">
+                <!-- Hamburger/Sidebar toggle for mobile. -->
+                <button id="mobileToggleSidebarBtn" title="Open Sidebar">
+                    <span data-lucide="menu" class="w-5 h-5"></span>
+                </button>
+
+                <div class="dark-mode-container">
+                    <span>Light</span>
+                    <label class="switch">
+                        <input type="checkbox" id="dark-mode-toggle">
+                        <span class="slider"></span>
+                    </label>
+                    <span>Dark</span>
+                </div>
+                <div class="header-content">
+                    <h1>
+                        <img src="logo.png" alt="Mystic Vision AI Logo" class="logo">
+                        Mystic Vision AI
+                    </h1>
+                    <p class="tagline">Experience the beyond</p>
+                </div>
+            </header>
+            <div class="chat-history" id="chatHistory">
+                <!-- Initial AI message will be added by JS -->
+            </div>
+            <div class="chat-input" id="chatInputArea">
+                <!-- Autocomplete Suggestions Container -->
+                <div id="suggestions-container" class="hidden">
+                    <ul id="suggestions-list"></ul>
+                </div>
+
+                <!-- Attachment preview -->
+                <div id="chat-attachments-preview-container" class="mb-2 flex flex-wrap items-center gap-2 hidden absolute left-4 right-4" style="bottom: 100%; transform: translateY(-10px);">
+                    <!-- Attachments previews will be dynamically added here -->
+                </div>
+
+                <!-- Voice Input Button -->
+                <button id="voice-input-btn" class="icon-button" aria-label="Voice Input">
+                    <span data-lucide="mic" class="w-5 h-5"></span>
+                </button>
+
+                <!-- Attach File Button (uses a label to link to the hidden file input) -->
+                <label for="chat-image-upload" id="attach-file-btn" class="icon-button cursor-pointer" aria-label="Attach File">
+                    <span data-lucide="paperclip" class="w-5 h-5"></span>
                 </label>
-                <span>Dark</span>
-            </div>
-            <div class="header-content">
-                <h1>
-                    <img src="logo.png" alt="Mystic Vision AI Logo" class="logo">
-                    Mystic Vision AI
-                </h1>
-                <p class="tagline">Experience the beyond</p>
-            </div>
-        </header>
-        <div class="chat-history" id="chatHistory">
-            <!-- Initial AI message will be added by JS -->
-        </div>
-        <div class="chat-input" id="chatInputArea">
-            <!-- Autocomplete Suggestions Container -->
-            <div id="suggestions-container" class="hidden">
-                <ul id="suggestions-list"></ul>
-            </div>
+                <input type="file" id="chat-image-upload" accept="image/*, .txt, .pdf, .csv, .json, .xml, .md" class="hidden" multiple>
 
-            <!-- Attachment preview -->
-            <!-- Adjusted positioning to be absolute relative to chat-input with a calculated bottom -->
-            <div id="chat-attachments-preview-container" class="mb-2 flex flex-wrap items-center gap-2 hidden absolute left-4 right-4" style="bottom: 100%; transform: translateY(-10px);">
-                <!-- Attachments previews will be dynamically added here -->
+                <textarea id="userInput" placeholder="Type your message..." rows="1"></textarea>
+                
+                <!-- Send Button -->
+                <button id="sendButton" class="icon-button">
+                    <span data-lucide="send" class="w-5 h-5"></span>
+                </button>
+
+                <!-- Stop Button (initially hidden) -->
+                <button id="stopButton" class="icon-button hidden" title="Stop generating response">
+                    <span data-lucide="square" class="w-5 h-5"></span>
+                </button>
             </div>
-
-            <!-- Voice Input Button -->
-            <button id="voice-input-btn" class="icon-button" aria-label="Voice Input">
-                <span data-lucide="mic" class="w-5 h-5"></span>
-            </button>
-
-            <!-- Attach File Button (uses a label to link to the hidden file input) -->
-            <label for="chat-image-upload" id="attach-file-btn" class="icon-button cursor-pointer" aria-label="Attach File">
-                <span data-lucide="paperclip" class="w-5 h-5"></span>
-            </label>
-            <input type="file" id="chat-image-upload" accept="image/*, .txt, .pdf, .csv, .json, .xml, .md" class="hidden" multiple>
-
-            <textarea id="userInput" placeholder="Type your message..." rows="1"></textarea>
-            
-            <!-- Send Button -->
-            <button id="sendButton" class="icon-button">
-                <span data-lucide="send" class="w-5 h-5"></span>
-            </button>
-        </div>
+        </main>
     </div>
 
     <!-- Temporary message for clipboard copy -->
     <div id="copy-message">Text copied to clipboard!</div>
+
+    <!-- Prism.js components for common languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <!-- Add more Prism.js language components as needed -->
 
     <script>
         // !! IMPORTANT: REPLACE WITH YOUR ACTUAL GEMINI API KEY !!
@@ -993,11 +1351,17 @@
         const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${GEMINI_API_KEY}`;
 
         // --- Global State Variables and Constants ---
-        let conversationHistory = []; // Will be initialized with the first AI message
+        let conversationHistory = []; // Current chat's history (roles & parts)
+        let currentChatId = null; // ID of the chat currently loaded
+        let allChats = []; // Array to store metadata of all saved chats {id, title, lastUpdated}
+        
         let chatAttachments = []; 
-        const messageTextCache = new Map(); 
+        const messageTextCache = new Map(); // Stores raw text for copy/dictate before Markdown parsing
         let currentUtterance = null;
         let isSpeaking = false;
+        let currentTypingInterval = null; // For simulated typing animation
+        let isGeneratingResponse = false; // To control send/stop buttons
+        
         let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         let recognition = null;
         let isVoiceInputActive = false;
@@ -1009,8 +1373,12 @@
             parts: [{ text: 'Greetings, seeker! I am Mystic Vision, an AI designed to help you glimpse the beyond. What wisdom do you seek?' }],
         };
 
+        // Avatars
+        const USER_AVATAR_ICON = 'user'; 
+        const AI_AVATAR_URL = 'logo.png'; 
+
         const autocompleteSuggestions = [
-            // General/Utility
+            // Your extensive list of autocomplete suggestions
             "What is the capital of France?",
             "Explain quantum physics simply.",
             "How does a combustion engine work?",
@@ -1043,7 +1411,7 @@
             "Write a fairy tale with a modern twist.",
             "Brainstorm names for a new tech startup.",
             "Suggest topics for a blog about travel.",
-            "Write an exciting opening paragraph for an adventure story.",
+            "Write an exciting opening paragraph for an horrific adventure story.",
             "Compose a haiku about autumn.",
             "Develop a plot for a sci-fi film.",
             "Write a humorous obituary.",
@@ -1191,7 +1559,7 @@
             "Tell me about different personality types.",
             "What is positive psychology?",
             "How to practice self-care?",
-            "What are the signs of burnout?",
+            "What are common symptoms of burnout?",
             "How to improve focus and concentration?",
             "What is the Pomodoro Technique?",
             "Explain the Eisenhower Matrix.",
@@ -2731,78 +3099,6 @@
             "How to grow your own food?",
             "Explain urban gardening.",
             "What are permaculture principles?",
-            "How to support local food systems?",
-            "Tips for ethical eating.",
-            "What is plant-based diet?",
-            "How to reduce meat consumption?",
-            "Explain sustainable seafood choices.",
-            "What are benefits of buying local?",
-            "How to support fair trade products?",
-            "Tips for eco-friendly transportation.",
-            "What is active transportation?",
-            "How to use public transit efficiently?",
-            "Explain electric vehicles (EVs).",
-            "What are benefits of biking?",
-            "How to make your home more energy efficient?",
-            "Tips for water conservation at home.",
-            "What is rain harvesting?",
-            "How to reduce water waste?",
-            "Explain responsible waste management.",
-            "What are recycling best practices?",
-            "How to dispose of hazardous waste?",
-            "Tips for preventing pollution.",
-            "What is air quality monitoring?",
-            "How to reduce indoor air pollution?",
-            "Explain noise pollution effects.",
-            "What are light pollution solutions?",
-            "How to protect biodiversity?",
-            "Tips for wildlife conservation.",
-            "What is habitat restoration?",
-            "How to support endangered species?",
-            "Explain the impact of climate change on ecosystems.",
-            "What are climate change mitigation strategies?",
-            "How to adapt to climate change impacts?",
-            "Tips for climate resilience.",
-            "What is carbon sequestration?",
-            "How to promote reforestation?",
-            "Explain sustainable forestry.",
-            "What are ocean conservation efforts?",
-            "How to reduce plastic in oceans?",
-            "Tips for marine life protection.",
-            "What is coral reef conservation?",
-            "How to prevent overfishing?",
-            "Explain sustainable fisheries.",
-            "What are wetlands restoration projects?",
-            "How to protect freshwater sources?",
-            "Tips for water quality improvement.",
-            "What is environmental justice?",
-            "How to address environmental racism?",
-            "Explain indigenous environmental knowledge.",
-            "What are traditional ecological practices?",
-            "How to integrate indigenous perspectives in conservation?",
-            "Tips for citizen advocacy for environmental issues.",
-            "What is environmental policy?",
-            "How to engage with local government on environmental issues?",
-            "Explain international environmental agreements.",
-            "What are green technologies?",
-            "How to invest in renewable energy?",
-            "Tips for sustainable finance.",
-            "What is impact investing?",
-            "How to measure environmental social governance (ESG) performance?",
-            "Explain corporate sustainability reporting.",
-            "What are green jobs?",
-            "How to pursue a career in sustainability?",
-            "Tips for environmental education.",
-            "What is outdoor learning?",
-            "How to connect children with nature?",
-            "Explain nature-based solutions.",
-            "What are urban green spaces?",
-            "How to design sustainable cities?",
-            "Tips for community gardening.",
-            "What is food sovereignty?",
-            "How to promote local food systems?",
-            "Explain resilient food systems.",
-            "What are permaculture design principles?",
             "How to build a food forest?",
             "Tips for zero-waste cooking.",
             "What is food waste reduction?",
@@ -2820,12 +3116,20 @@
         let sendButton;
         let darkModeToggle;
         let copyMessage;
-        let newChatBtn;
+        // let newChatBtn; // Moved to sidebar
         let chatAttachmentsPreviewContainer;
         let chatImageUpload;
         let voiceInputBtn;
         let suggestionsContainer;
         let suggestionsList;
+        let stopButton; 
+        // Sidebar Elements
+        let chatSidebar; 
+        let newChatBtnSidebar; // The new chat button in the sidebar
+        let toggleSidebarBtn; // The 'X' button inside the sidebar
+        let mobileToggleSidebarBtn; // The hamburger button in the main header
+        let chatMainContent;
+        let prevChatsList; 
 
         // --- Lucide Icon Helper ---
         const createIcons = () => {
@@ -2880,7 +3184,8 @@
                 const languageDisplay = lang ? `<span class="text-xs font-semibold uppercase text-gray-400">${lang}</span>` : '';
                 const uniqueId = `code-block-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
                 
-                const escapedCode = actualCodeContent.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                // Prism.js expects the raw (unescaped) code string and will handle escaping and highlighting.
+                const codeForPrism = actualCodeContent; 
 
                 return `
                     <div class="code-block-container">
@@ -2891,7 +3196,7 @@
                                 Copy code
                             </button>
                         </div>
-                        <pre><code id="${uniqueId}">${escapedCode}</code></pre>
+                        <pre><code id="${uniqueId}" class="language-${lang || 'plaintext'}">${codeForPrism}</code></pre>
                     </div>
                 `;
             }
@@ -2899,19 +3204,39 @@
         marked.use({ renderer });
 
         // --- Chat UI & Logic ---
-        function appendChatMessage(role, text, attachments = []) {
+        function appendChatMessage(role, text, attachments = [], messageId = null) {
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('chat-message', role);
             
-            const messageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            messageId = messageId || `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
             messageDiv.dataset.messageId = messageId;
             
-            let contentHTML = '';
             let rawMessageContentForCache = ''; 
+
+            // Create avatar element (img for AI, lucide icon for User)
+            let avatarElement;
+            if (role === 'user') {
+                avatarElement = document.createElement('div');
+                avatarElement.classList.add('lucide-avatar-icon');
+                const userIconSpan = document.createElement('span');
+                userIconSpan.setAttribute('data-lucide', USER_AVATAR_ICON);
+                avatarElement.appendChild(userIconSpan);
+                avatarElement.title = "You"; 
+            } else {
+                avatarElement = document.createElement('img');
+                avatarElement.src = AI_AVATAR_URL;
+                avatarElement.alt = 'AI Avatar';
+                avatarElement.classList.add('chat-avatar');
+                avatarElement.title = "Mystic Vision AI"; 
+            }
+
+            // Create the content bubble wrapper
+            const messageBubbleContent = document.createElement('div');
+            messageBubbleContent.classList.add('message-bubble-content');
 
             if (role === 'user') {
                 rawMessageContentForCache = `You: ${text}`;
-                contentHTML += `<span class="font-bold">You:</span> ${text}`;
+                let contentHTML = `<span>${text}</span>`; // Removed 'font-bold' for cleaner copy, it's implied by role
                 if (attachments.length > 0) {
                     contentHTML += `<div class="mt-2 flex flex-wrap gap-2">`;
                     attachments.forEach(attachment => {
@@ -2929,13 +3254,20 @@
                     contentHTML += `</div>`;
                     rawMessageContentForCache += `\n[Attachments: ${attachments.map(a => a.name).join(', ')}]`;
                 }
+                messageBubbleContent.innerHTML = contentHTML;
+
+                messageDiv.appendChild(messageBubbleContent);
+                messageDiv.appendChild(avatarElement); 
             } else { 
                 rawMessageContentForCache = `AI: ${text}`;
-                contentHTML = `<div class="message-content">${marked.parse(text)}</div>`;
+                // Append initial content, Prism.highlightAllUnder will be called externally later
+                messageBubbleContent.innerHTML = `<div class="message-content">${marked.parse(text)}</div>`;
+                
+                messageDiv.appendChild(avatarElement); 
+                messageDiv.appendChild(messageBubbleContent);
             }
             
-            messageTextCache.set(messageId, rawMessageContentForCache); 
-
+            // Add common actions to the messageBubbleContent
             const actionsHTML = `
                 <div class="message-actions">
                     <button class="copy-message-btn" title="Copy message" data-message-id="${messageId}">
@@ -2944,10 +3276,19 @@
                     <button class="dictate-message-btn" title="Dictate message" data-message-id="${messageId}">
                         <span data-lucide="volume-2" class="w-4 h-4"></span>
                     </button>
+                    ${role === 'user' ? `
+                    <button class="edit-message-btn" title="Edit message" data-message-id="${messageId}">
+                        <span data-lucide="pencil" class="w-4 h-4"></span>
+                    </button>` : `
+                    <button class="regenerate-message-btn" title="Regenerate response" data-message-id="${messageId}">
+                        <span data-lucide="rotate-ccw" class="w-4 h-4"></span>
+                    </button>`
+                    }
                 </div>
             `;
-            
-            messageDiv.innerHTML = contentHTML + actionsHTML;
+            messageBubbleContent.innerHTML += actionsHTML; 
+
+            messageTextCache.set(messageId, rawMessageContentForCache); 
             chatHistoryDiv.appendChild(messageDiv);
             
             setTimeout(() => {
@@ -2955,13 +3296,16 @@
             }, 10);
             
             chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-            
             createIcons(); 
+            // Return the element that contains the Markdown content for Prism to target
+            return messageBubbleContent.querySelector('.message-content'); 
         }
 
+        let isApiCallInProgress = false; 
         function toggleLoading(show) {
             let loadingIndicator = document.getElementById('loadingIndicator');
             if (show) {
+                isApiCallInProgress = true;
                 if (!loadingIndicator) {
                     loadingIndicator = document.createElement('div');
                     loadingIndicator.id = 'loadingIndicator';
@@ -2972,19 +3316,91 @@
                             <div class="loader-dot"></div>
                             <div class="loader-dot"></div>
                         </div>
-                        <span class="mt-2 block">AI is typing...</span>
+                        <span class="mt-2 block">AI is thinking...</span>
                     `;
                     chatHistoryDiv.appendChild(loadingIndicator);
                 }
                 loadingIndicator.style.display = 'flex';
                 loadingIndicator.style.flexDirection = 'column'; 
                 chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
+                sendButton.classList.add('hidden'); 
+                stopButton.classList.remove('hidden'); 
+                userInput.disabled = true; 
             } else {
+                isApiCallInProgress = false;
                 if (loadingIndicator) {
                     loadingIndicator.remove(); 
                 }
+                sendButton.classList.remove('hidden'); 
+                stopButton.classList.add('hidden'); 
+                userInput.disabled = false; 
+                userInput.focus();
             }
         }
+
+        // Simulate typing function (now receives the inner message-content div)
+        function simulateTyping(messageContentDiv, text, delay = 20) {
+            if (!messageContentDiv) return;
+
+            messageContentDiv.innerHTML = ''; 
+            let currentTypedText = '';
+            let i = 0;
+            
+            if (currentTypingInterval) {
+                clearInterval(currentTypingInterval);
+            }
+
+            currentTypingInterval = setInterval(() => {
+                if (!isGeneratingResponse) { 
+                    clearInterval(currentTypingInterval);
+                    currentTypingInterval = null;
+                    // Ensure final state is parsed and highlighted if stopped early
+                    messageContentDiv.innerHTML = marked.parse(currentTypedText); 
+                    if (typeof Prism !== 'undefined') {
+                        Prism.highlightAllUnder(messageContentDiv.closest('.chat-message')); 
+                    }
+                    toggleLoading(false); 
+                    return;
+                }
+
+                if (i < text.length) {
+                    currentTypedText += text.charAt(i);
+                    // Always parse markdown for consistent visual during typing
+                    // marked.parse handles code block rendering, Prism highlights it after DOM update
+                    messageContentDiv.innerHTML = marked.parse(currentTypedText); 
+                    
+                    // Only highlight the new parts for performance, but Prism.highlightAllUnder
+                    // is efficient enough and handles newly added blocks well.
+                    if (typeof Prism !== 'undefined') {
+                        // Highlight the new content as it's added.
+                        // Prism.highlightAllUnder highlights all `code` elements within the given parent.
+                        Prism.highlightAllUnder(messageContentDiv); 
+                    }
+                    
+                    i++;
+                    chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight; 
+                } else {
+                    clearInterval(currentTypingInterval);
+                    currentTypingInterval = null;
+                    // Final parse and highlight after full text is typed
+                    messageContentDiv.innerHTML = marked.parse(text); 
+                    if (typeof Prism !== 'undefined') {
+                        Prism.highlightAllUnder(messageContentDiv.closest('.chat-message')); 
+                    }
+                    chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
+                    toggleLoading(false); 
+                    isGeneratingResponse = false; 
+                    saveCurrentChat(); 
+
+                    // Trigger chat renaming if it's a new chat and has a generic title
+                    const chatMeta = allChats.find(chat => chat.id === currentChatId);
+                    if (chatMeta && (chatMeta.title === 'Untitled Chat' || chatMeta.title === 'Chat with Attachments')) {
+                        summarizeChatAndRename(currentChatId, conversationHistory);
+                    }
+                }
+            }, delay);
+        }
+
 
         function displayChatAttachments() {
             chatAttachmentsPreviewContainer.innerHTML = '';
@@ -3109,6 +3525,18 @@
             if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || !GEMINI_API_KEY || GEMINI_API_KEY === "") { 
                 throw new Error("API Key is not set or is the default placeholder. Please replace 'YOUR_GEMINI_API_KEY_HERE' in the script with your actual Gemini API key.");
             }
+            
+            // FIX: Filter out the 'id' property from messages before sending to Gemini API
+            const cleanContents = payload.contents.map(message => {
+                const newMessage = {
+                    role: message.role,
+                    parts: message.parts
+                };
+                // Ensure no unexpected properties are passed to the API
+                return newMessage;
+            });
+
+            const cleanPayload = { ...payload, contents: cleanContents };
 
             let response;
             let result;
@@ -3122,7 +3550,7 @@
                     response = await fetch(API_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
+                        body: JSON.stringify(cleanPayload) // Send the cleaned payload
                     });
 
                     if (response.status === 429) { 
@@ -3166,7 +3594,7 @@
         function filterSuggestions(query) {
             if (!query) return [];
             const lowerQuery = query.toLowerCase();
-            return autocompleteSuggestions.filter(s => s.toLowerCase().includes(lowerQuery));
+            return autocompleteSuggestions.filter(s => s.toLowerCase().includes(query));
         }
 
         function displaySuggestions(suggestions) {
@@ -3210,7 +3638,7 @@
 
             items[selectedSuggestionIndex].classList.add('selected');
             items[selectedSuggestionIndex].scrollIntoView({ block: 'nearest' });
-            userInput.value = items[selectedSuggestionIndex].textContent; // Auto-fill on arrow key
+            userInput.value = items[selectedSuggestionIndex].textContent; 
             userInput.style.height = 'auto'; 
             userInput.style.height = userInput.scrollHeight + 'px';
         }
@@ -3224,6 +3652,206 @@
             selectedSuggestionIndex = -1;
         }
 
+        // --- Chat History Management (NEW) ---
+        function loadAllChats() {
+            const storedChats = localStorage.getItem('mv-all-chats');
+            if (storedChats) {
+                allChats = JSON.parse(storedChats);
+            } else {
+                allChats = [];
+            }
+            renderPrevChatsList();
+        }
+
+        function saveAllChats() {
+            localStorage.setItem('mv-all-chats', JSON.stringify(allChats));
+        }
+
+        function renderPrevChatsList() {
+            if (!prevChatsList) return; 
+
+            prevChatsList.innerHTML = ''; 
+            if (allChats.length === 0) {
+                prevChatsList.innerHTML = '<li class="text-sm opacity-70">No previous chats.</li>';
+                return;
+            }
+
+            allChats.sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated)); 
+
+            allChats.forEach(chatMeta => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('flex', 'items-center', 'justify-between', 'p-2', 'rounded-md', 'hover:bg-primary-bg', 'cursor-pointer', 'transition-colors', 'text-sm');
+                listItem.dataset.chatId = chatMeta.id;
+                if (chatMeta.id === currentChatId) {
+                    listItem.classList.add('active-chat'); 
+                }
+                listItem.innerHTML = `
+                    <span class="truncate">${chatMeta.title || 'Untitled Chat'}</span>
+                    <button class="delete-chat-btn text-accent-error ml-2" title="Delete Chat">
+                        <span data-lucide="trash-2" class="w-4 h-4"></span>
+                    </button>
+                `;
+                prevChatsList.appendChild(listItem);
+            });
+            createIcons(); 
+        }
+
+        function saveCurrentChat() {
+            if (!currentChatId || conversationHistory.length <= 0) { // Allow saving empty new chats to get a title
+                return;
+            }
+
+            let chatTitle = 'Untitled Chat';
+            const firstUserMessage = conversationHistory.find(msg => msg.role === 'user');
+            if (firstUserMessage && firstUserMessage.parts) { 
+                const textPart = firstUserMessage.parts.find(p => p.text); 
+                if (textPart && textPart.text) {
+                    chatTitle = textPart.text.substring(0, 30);
+                    if (textPart.text.length > 30) {
+                        chatTitle += '...';
+                    }
+                } else if (firstUserMessage.parts.some(p => p.inlineData)) { 
+                    chatTitle = 'Chat with Attachments';
+                }
+            }
+
+            const chatIndex = allChats.findIndex(chat => chat.id === currentChatId);
+            if (chatIndex > -1) {
+                allChats[chatIndex].title = chatTitle;
+                allChats[chatIndex].lastUpdated = new Date().toISOString();
+            } else {
+                allChats.push({
+                    id: currentChatId,
+                    title: chatTitle,
+                    lastUpdated: new Date().toISOString()
+                });
+            }
+            localStorage.setItem(`mv-chat-${currentChatId}`, JSON.stringify(conversationHistory));
+            saveAllChats(); 
+            renderPrevChatsList(); 
+        }
+
+        async function summarizeChatAndRename(chatId, history) {
+            const chatToUpdate = allChats.find(chat => chat.id === chatId);
+            if (!chatToUpdate || (chatToUpdate.title !== 'Untitled Chat' && chatToUpdate.title !== 'Chat with Attachments')) {
+                return; 
+            }
+
+            try {
+                const promptParts = [
+                    { text: "Summarize the following chat conversation in a concise title (5-10 words, no quotes or special characters) that captures its main topic. If it's a short initial exchange, just summarize the user's first query. Example: 'Learning JavaScript basics' or 'Travel planning for Europe'.\n\nConversation:" }
+                ];
+                
+                const relevantHistory = history.slice(0, 4); 
+                for (const msg of relevantHistory) {
+                    // Only include role and parts for the prompt to Gemini
+                    const msgForPrompt = { role: msg.role, parts: msg.parts };
+                    promptParts.push(msgForPrompt);
+                }
+
+                const summaryPayload = {
+                    contents: promptParts,
+                    generationConfig: {
+                        maxOutputTokens: 50, 
+                        temperature: 0.2 
+                    }
+                };
+
+                const summary = await callGeminiAPI(summaryPayload);
+                if (summary && summary.trim() !== '') {
+                    let cleanSummary = summary.trim().replace(/^['"]|['"]$/g, '');
+                    cleanSummary = cleanSummary.split('\n')[0].trim(); 
+                    cleanSummary = cleanSummary.replace(/^[-\*\d\s]*\s*/, ''); 
+
+                    if (cleanSummary.length > 50) { 
+                        cleanSummary = cleanSummary.substring(0, 47) + '...';
+                    }
+
+                    chatToUpdate.title = cleanSummary;
+                    saveAllChats();
+                    renderPrevChatsList();
+                }
+            } catch (error) {
+                console.error('Failed to summarize chat:', error);
+            }
+        }
+
+
+        function loadChat(chatToLoadId) {
+            if (currentChatId && currentChatId !== chatToLoadId) { // Save current chat if switching to a different one
+                saveCurrentChat(); 
+            }
+
+            const storedHistory = localStorage.getItem(`mv-chat-${chatToLoadId}`);
+            if (storedHistory) {
+                conversationHistory = JSON.parse(storedHistory);
+                currentChatId = chatToLoadId; 
+
+                chatHistoryDiv.innerHTML = ''; 
+                conversationHistory.forEach(msg => {
+                    let textContent = '';
+                    let attachments = [];
+                    // Properly extract text and attachments from message parts
+                    msg.parts.forEach(part => {
+                        if (part.text) {
+                            textContent = part.text;
+                        } else if (part.inlineData) {
+                            attachments.push({
+                                mimeType: part.inlineData.mimeType,
+                                data: part.inlineData.data,
+                                name: part.inlineData.name || 'Attachment' // Fallback name
+                            });
+                        }
+                    });
+                    appendChatMessage(msg.role, textContent, attachments, msg.id); 
+                });
+                
+                // IMPORTANT FIX: Re-apply Prism.js highlighting after all messages are loaded
+                if (typeof Prism !== 'undefined') {
+                    Prism.highlightAllUnder(chatHistoryDiv);
+                }
+
+                chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
+                userInput.value = '';
+                userInput.style.height = 'auto'; 
+                chatAttachments = [];
+                chatImageUpload.value = '';
+                displayChatAttachments();
+                suggestionsContainer.classList.add('hidden');
+                selectedSuggestionIndex = -1;
+                userInput.dataset.editingMessageId = ''; 
+                updateButtonIcon(sendButton, 'send', 'w-5 h-5'); 
+                
+                if (window.innerWidth <= 768) {
+                    chatSidebar.classList.remove('active-mobile-sidebar'); 
+                    mobileToggleSidebarBtn.style.display = 'flex'; 
+                }
+
+                userInput.focus();
+                renderPrevChatsList(); 
+            } else {
+                console.error(`Chat with ID ${chatToLoadId} not found.`);
+                startNewChat(); 
+            }
+        }
+
+        function deleteChat(chatIdToDelete) {
+            if (!confirm('Are you sure you want to delete this chat? This cannot be undone.')) {
+                return;
+            }
+            
+            allChats = allChats.filter(chat => chat.id !== chatIdToDelete);
+            saveAllChats();
+
+            localStorage.removeItem(`mv-chat-${chatIdToDelete}`);
+
+            renderPrevChatsList(); 
+
+            if (currentChatId === chatIdToDelete) {
+                startNewChat(); 
+            }
+        }
+
         // --- New Chat Function ---
         function startNewChat() {
             if (window.speechSynthesis.speaking) {
@@ -3232,23 +3860,45 @@
                 currentUtterance = null;
                 document.querySelectorAll('.dictate-message-btn').forEach(btn => updateButtonIcon(btn, 'volume-2'));
             }
+            if (isGeneratingResponse) { 
+                isGeneratingResponse = false;
+                clearInterval(currentTypingInterval);
+                currentTypingInterval = null;
+                toggleLoading(false);
+            }
 
-            chatHistoryDiv.innerHTML = ''; // Clear existing messages
-            conversationHistory = []; // Reset conversation history
-            chatAttachments = []; // Clear attachments
-            chatImageUpload.value = ''; // Clear file input
-            displayChatAttachments(); // Hide attachment preview
+            saveCurrentChat(); 
+
+            chatHistoryDiv.innerHTML = ''; 
+            conversationHistory = []; 
+            chatAttachments = []; 
+            chatImageUpload.value = ''; 
+            displayChatAttachments(); 
             userInput.value = '';
             userInput.style.height = 'auto'; 
-            messageTextCache.clear(); // Clear message text cache
-            suggestionsContainer.classList.add('hidden'); // Hide suggestions
+            messageTextCache.clear(); 
+            suggestionsContainer.classList.add('hidden'); 
             selectedSuggestionIndex = -1;
+            userInput.dataset.editingMessageId = ''; 
+            updateButtonIcon(sendButton, 'send', 'w-5 h-5'); 
 
-            // Add the initial AI message
-            conversationHistory.push(initialAIMessage);
-            appendChatMessage('ai', initialAIMessage.parts[0].text);
+            currentChatId = `chat-${Date.now()}`; 
+
+            const initialAiContentDiv = appendChatMessage('ai', initialAIMessage.parts[0].text);
+            conversationHistory.push({ ...initialAIMessage, id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` }); 
             
+            // IMPORTANT FIX: Apply Prism.js for the initial message
+            if (typeof Prism !== 'undefined') {
+                Prism.highlightAllUnder(chatHistoryDiv);
+            }
+
+            if (window.innerWidth <= 768) {
+                chatSidebar.classList.remove('active-mobile-sidebar');
+                mobileToggleSidebarBtn.style.display = 'flex'; 
+            }
+
             userInput.focus();
+            renderPrevChatsList(); 
         }
 
         // --- Paste Functionality ---
@@ -3285,22 +3935,35 @@
             sendButton = document.getElementById('sendButton');
             darkModeToggle = document.getElementById('dark-mode-toggle');
             copyMessage = document.getElementById('copy-message');
-            newChatBtn = document.getElementById('newChatBtn');
+            // newChatBtn = document.getElementById('newChatBtn'); // This is now newChatBtnSidebar
             chatAttachmentsPreviewContainer = document.getElementById('chat-attachments-preview-container');
             chatImageUpload = document.getElementById('chat-image-upload');
             voiceInputBtn = document.getElementById('voice-input-btn');
             suggestionsContainer = document.getElementById('suggestions-container');
             suggestionsList = document.getElementById('suggestions-list');
+            stopButton = document.getElementById('stopButton');
+            // Sidebar Elements
+            chatSidebar = document.getElementById('chatSidebar'); 
+            newChatBtnSidebar = document.getElementById('newChatBtn'); // Correctly assign the sidebar button
+            toggleSidebarBtn = document.getElementById('toggleSidebarBtn'); 
+            mobileToggleSidebarBtn = document.getElementById('mobileToggleSidebarBtn'); 
+            chatMainContent = document.querySelector('.chat-main-content');
+            prevChatsList = document.getElementById('prevChatsList'); 
 
             createIcons();
             userInput.style.height = userInput.scrollHeight + 'px';
 
-            // Initialize Dark Mode based on localStorage or default
+            loadAllChats(); 
+            if (allChats.length > 0) {
+                loadChat(allChats[0].id); // Load the most recent chat on startup
+            } else {
+                startNewChat(); // Start a new chat if no previous chats exist
+            }
+
             const isDarkMode = localStorage.getItem('dark-mode') === 'true';
-            document.body.classList.toggle('light', !isDarkMode); // Toggle light class based on dark mode status
+            document.body.classList.toggle('light', !isDarkMode); 
             darkModeToggle.checked = isDarkMode;
 
-            // Register Service Worker for PWA
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('/service-worker.js')
                 .then(registration => {
@@ -3311,10 +3974,7 @@
                 });
             }
 
-            // Start a new chat on load to display initial message
-            startNewChat();
-
-            // --- Speech Recognition Setup (Must be inside load to ensure voiceInputBtn exists) ---
+            // --- Speech Recognition Setup ---
             if (SpeechRecognition) {
                 recognition = new SpeechRecognition();
                 recognition.continuous = true; 
@@ -3384,7 +4044,7 @@
                 voiceInputBtn.style.display = 'none'; 
             }
 
-            // --- Event Listeners (Must be attached after elements are assigned) ---
+            // --- Event Listeners ---
             darkModeToggle.addEventListener('change', () => {
                 const isChecked = darkModeToggle.checked;
                 document.body.classList.toggle('light', !isChecked);
@@ -3406,23 +4066,20 @@
 
             userInput.addEventListener('keydown', (e) => {
                 if (suggestionsContainer.classList.contains('hidden')) {
-                    // If suggestions are hidden, handle Enter and Shift+Enter normally
                     if (e.key === 'Enter' && !e.shiftKey) { 
-                        e.preventDefault(); // Prevent default new line
-                        sendButton.click(); // Send message
+                        e.preventDefault(); 
+                        sendButton.click(); 
                     }
-                    // For Shift+Enter, the default behavior (new line) is allowed
                     return;
                 }
 
-                // If suggestions are visible, handle arrow keys and Enter for selection
                 if (e.key === 'ArrowDown') {
                     e.preventDefault(); 
                     navigateSuggestions('down');
                 } else if (e.key === 'ArrowUp') {
                     e.preventDefault(); 
                     navigateSuggestions('up');
-                } else if (e.key === 'Enter') { // Handle Enter for selection when suggestions are active
+                } else if (e.key === 'Enter') { 
                     e.preventDefault(); 
                     selectCurrentSuggestion();
                 } else if (e.key === 'Escape') {
@@ -3461,30 +4118,111 @@
             });
 
             sendButton.addEventListener('click', async () => {
+                if (isApiCallInProgress) return; 
+
                 const userMessage = userInput.value.trim();
-                if (!userMessage && chatAttachments.length === 0) {
-                    return;
-                }
-                
+                const editingMessageId = userInput.dataset.editingMessageId;
+
+                // Stop any ongoing speech or voice input
                 if (isVoiceInputActive && recognition) {
                     recognition.stop();
                 }
-
-                const userParts = [];
-                if (userMessage) {
-                    userParts.push({ text: userMessage });
+                if (window.speechSynthesis.speaking) {
+                    window.speechSynthesis.cancel();
+                    isSpeaking = false;
+                    currentUtterance = null;
+                    document.querySelectorAll('.dictate-message-btn').forEach(btn => updateButtonIcon(btn, 'volume-2'));
                 }
-                for (const attachment of chatAttachments) {
-                    userParts.push({
-                        inlineData: {
-                            mimeType: attachment.mimeType,
-                            data: attachment.data
+
+                if (editingMessageId) {
+                    const editedText = userMessage; 
+                    const messageDivToEdit = document.querySelector(`.chat-message[data-message-id="${editingMessageId}"]`);
+                    
+                    if (messageDivToEdit) {
+                        const originalIndex = Array.from(chatHistoryDiv.children).indexOf(messageDivToEdit);
+                        if (originalIndex !== -1) {
+                            // Update the conversation history with the edited user message
+                            conversationHistory[originalIndex].parts = [];
+                            if (editedText) {
+                                conversationHistory[originalIndex].parts.push({ text: editedText });
+                            }
+                            // Add new attachments if any during edit
+                            if (chatAttachments.length > 0) {
+                                for(const attachment of chatAttachments) {
+                                    conversationHistory[originalIndex].parts.push({
+                                        inlineData: { mimeType: attachment.mimeType, data: attachment.data }
+                                    });
+                                }
+                            }
+
+                            // Remove messages from UI and history after the edited message
+                            while (chatHistoryDiv.children.length > originalIndex + 1) {
+                                chatHistoryDiv.lastChild.remove();
+                                conversationHistory.pop();
+                            }
+                            
+                            // Re-render the edited message content in the UI
+                            const userContentBubble = messageDivToEdit.querySelector('.message-bubble-content');
+                            if (userContentBubble) {
+                                let updatedContentHTML = `<span>${editedText}</span>`;
+                                if (chatAttachments.length > 0) {
+                                    let attachmentHTML = `<div class="mt-2 flex flex-wrap gap-2">`;
+                                    chatAttachments.forEach(attachment => {
+                                        if (attachment.mimeType.startsWith('image/')) {
+                                            attachmentHTML += `<img src="data:${attachment.mimeType};base64,${attachment.data}" alt="${attachment.name || 'User attachment'}" class="chat-image w-24 h-24 object-cover">`;
+                                        } else {
+                                            attachmentHTML += `
+                                                <div class="chat-message-attachment-item">
+                                                    <span data-lucide="${getFileIcon(attachment.mimeType)}" class="w-4 h-4 flex-shrink-0"></span>
+                                                    <span class="truncate max-w-[120px]">${attachment.name || 'File'}</span>
+                                                </div>
+                                            `;
+                                        }
+                                    });
+                                    attachmentHTML += `</div>`;
+                                    updatedContentHTML += attachmentHTML;
+                                }
+                                userContentBubble.innerHTML = updatedContentHTML;
+                                // Re-add action buttons
+                                userContentBubble.innerHTML += `
+                                    <div class="message-actions">
+                                        <button class="copy-message-btn" title="Copy message" data-message-id="${editingMessageId}">
+                                            <span data-lucide="clipboard" class="w-4 h-4"></span>
+                                        </button>
+                                        <button class="dictate-message-btn" title="Dictate message" data-message-id="${editingMessageId}">
+                                            <span data-lucide="volume-2" class="w-4 h-4"></span>
+                                        </button>
+                                        <button class="edit-message-btn" title="Edit message" data-message-id="${editingMessageId}">
+                                            <span data-lucide="pencil" class="w-4 h-4"></span>
+                                        </button>
+                                    </div>
+                                `;
+                                createIcons();
+                            }
+                            messageTextCache.set(editingMessageId, `You: ${editedText}`); 
+                            messageDivToEdit.classList.remove('editing'); 
                         }
-                    });
+                    }
+                } else if (!userMessage && chatAttachments.length === 0) {
+                    return; 
+                } else {
+                    const userParts = [];
+                    if (userMessage) {
+                        userParts.push({ text: userMessage });
+                    }
+                    for (const attachment of chatAttachments) {
+                        userParts.push({
+                            inlineData: {
+                                mimeType: attachment.mimeType,
+                                data: attachment.data
+                            }
+                        });
+                    }
+                    // Assign a new ID to the user message immediately when appending
+                    const newUserMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                    conversationHistory.push({ role: 'user', parts: userParts, id: newUserMessageId });
+                    appendChatMessage('user', userMessage, chatAttachments, newUserMessageId);
                 }
-
-                conversationHistory.push({ role: 'user', parts: userParts });
-                appendChatMessage('user', userMessage, chatAttachments);
                 
                 userInput.value = '';
                 userInput.style.height = 'auto'; 
@@ -3493,31 +4231,58 @@
                 displayChatAttachments(); 
                 suggestionsContainer.classList.add('hidden'); 
                 selectedSuggestionIndex = -1;
-                
-                sendButton.disabled = true;
-                
-                toggleLoading(true);
-                
+                delete userInput.dataset.editingMessageId; 
+                updateButtonIcon(sendButton, 'send', 'w-5 h-5'); 
+
+                isGeneratingResponse = true; 
+                toggleLoading(true); 
+
                 try {
                     const payload = {
-                        contents: conversationHistory,
+                        contents: conversationHistory, // This now contains objects with role, parts, and potentially id
                     };
                     
                     const responseText = await callGeminiAPI(payload);
                     
-                    conversationHistory.push({ role: 'model', parts: [{ text: responseText }] });
-                    appendChatMessage('ai', responseText);
+                    if (isGeneratingResponse) { 
+                        const newAiMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                        conversationHistory.push({ role: 'model', parts: [{ text: responseText }], id: newAiMessageId });
+                        const aiContentDiv = appendChatMessage('ai', '', [], newAiMessageId); 
+                        simulateTyping(aiContentDiv, responseText); 
+                    }
                     
                 } catch (error) {
                     console.error('Chat API call failed:', error);
                     appendChatMessage('ai', `Oops! Something went wrong. Please try again. (${error.message})`);
-                } finally {
-                    sendButton.disabled = false;
-                    toggleLoading(false);
-                    userInput.focus();
-                }
+                    toggleLoading(false); 
+                    isGeneratingResponse = false;
+                } 
             });
             
+            stopButton.addEventListener('click', () => {
+                if (isGeneratingResponse) {
+                    isGeneratingResponse = false; 
+                    clearInterval(currentTypingInterval); 
+                    currentTypingInterval = null; 
+                    if (window.speechSynthesis.speaking || window.speechSynthesis.paused) {
+                        window.speechSynthesis.cancel(); 
+                        isSpeaking = false;
+                        currentUtterance = null;
+                        document.querySelectorAll('.dictate-message-btn').forEach(btn => updateButtonIcon(btn, 'volume-2'));
+                    }
+                    // Ensure the currently typing message is fully rendered and highlighted
+                    const lastAIMessageDiv = chatHistoryDiv.lastElementChild;
+                    if (lastAIMessageDiv && lastAIMessageDiv.classList.contains('ai')) {
+                        const messageContentDiv = lastAIMessageDiv.querySelector('.message-content');
+                        if (messageContentDiv && messageContentDiv.innerHTML.trim() !== '') { // Only highlight if there's actual content
+                             // The simulateTyping interval handler will now also call marked.parse and Prism.highlightAllUnder if stopped
+                        }
+                    }
+                    toggleLoading(false); 
+                    console.log("AI generation stopped by user.");
+                }
+            });
+
             chatImageUpload.addEventListener('change', async (event) => {
                 const files = Array.from(event.target.files);
                 if (files.length > 0) {
@@ -3666,10 +4431,129 @@
                     }
                     return; 
                 }
+
+                const editButton = event.target.closest('.edit-message-btn');
+                if (editButton) {
+                    const messageId = editButton.dataset.messageId;
+                    const messageDiv = editButton.closest('.chat-message');
+                    
+                    const messageContent = messageTextCache.get(messageId); 
+                    if (messageContent) {
+                        userInput.value = messageContent.replace('You: ', '').replace(/\[Attachments:.*?\]/g, '').trim(); 
+                        userInput.focus();
+                        userInput.style.height = 'auto';
+                        userInput.style.height = userInput.scrollHeight + 'px';
+
+                        chatHistoryDiv.querySelectorAll('.chat-message').forEach(msg => msg.classList.remove('editing'));
+                        messageDiv.classList.add('editing'); 
+
+                        userInput.dataset.editingMessageId = messageId; 
+                        updateButtonIcon(sendButton, 'save', 'w-5 h-5');
+                    }
+                    return;
+                }
+
+                const regenerateButton = event.target.closest('.regenerate-message-btn');
+                if (regenerateButton) {
+                    const messageId = regenerateButton.dataset.messageId;
+                    const messageDiv = regenerateButton.closest('.chat-message');
+
+                    const aiMessageIndex = Array.from(chatHistoryDiv.children).indexOf(messageDiv);
+
+                    if (aiMessageIndex !== -1) {
+                        // Find the corresponding AI message in conversationHistory by its ID
+                        const aiMsgInHistoryIndex = conversationHistory.findIndex(msg => msg.id === messageId);
+                        if (aiMsgInHistoryIndex === -1) {
+                            console.error("AI message not found in history for regeneration.");
+                            alert("Could not regenerate: message not found in history.");
+                            return;
+                        }
+
+                        // Slice history *before* this AI message
+                        conversationHistory = conversationHistory.slice(0, aiMsgInHistoryIndex);
+                        
+                        // Remove messages from UI after this AI message (including itself)
+                        while (chatHistoryDiv.children.length > aiMessageIndex) {
+                            chatHistoryDiv.lastChild.remove();
+                        }
+                        
+                        if (conversationHistory.length > 0) {
+                            const lastUserMessage = conversationHistory[conversationHistory.length - 1];
+                            if (lastUserMessage.role === 'user' && lastUserMessage.parts) {
+                                let userTextForRegen = '';
+                                let userAttachmentsForRegen = [];
+                                lastUserMessage.parts.forEach(part => {
+                                    if (part.text) userTextForRegen = part.text;
+                                    // Make sure to re-add attachments from the last user message if regenerating
+                                    if (part.inlineData) userAttachmentsForRegen.push({
+                                        mimeType: part.inlineData.mimeType,
+                                        data: part.inlineData.data,
+                                        name: part.inlineData.name || 'Attachment' // Fallback name for attachments
+                                    });
+                                });
+
+                                // Update input area for user to see the "regenerated" prompt
+                                userInput.value = userTextForRegen;
+                                chatAttachments = userAttachmentsForRegen; 
+                                displayChatAttachments(); // Show attachments in preview for regeneration
+
+                                // Trigger send to re-send the last user message to the API
+                                sendButton.click(); 
+                            } else {
+                                console.error("Cannot regenerate: Last message in history is not a user message or is malformed.");
+                                alert("Could not regenerate. The previous user message was not found or was empty. Starting a new chat.");
+                                startNewChat();
+                            }
+                        } else {
+                            alert("Cannot regenerate. No previous user message to base regeneration on. Starting a new chat.");
+                            startNewChat();
+                        }
+                    }
+                    return;
+                }
             });
 
-            // Event listener for the new chat button
-            newChatBtn.addEventListener('click', startNewChat);
+            newChatBtnSidebar.addEventListener('click', startNewChat);
+
+            mobileToggleSidebarBtn.addEventListener('click', () => {
+                chatSidebar.classList.add('active-mobile-sidebar');
+                mobileToggleSidebarBtn.style.display = 'none'; 
+            });
+
+            toggleSidebarBtn.addEventListener('click', () => {
+                chatSidebar.classList.remove('active-mobile-sidebar');
+                mobileToggleSidebarBtn.style.display = 'flex'; 
+            });
+
+            prevChatsList.addEventListener('click', (event) => {
+                const listItem = event.target.closest('li[data-chat-id]');
+                const deleteButton = event.target.closest('.delete-chat-btn');
+
+                if (deleteButton && listItem) {
+                    event.stopPropagation(); 
+                    deleteChat(listItem.dataset.chatId);
+                } else if (listItem) {
+                    loadChat(listItem.dataset.chatId);
+                }
+            });
+
+            window.addEventListener('resize', () => {
+                const isMobile = window.innerWidth <= 768;
+                if (isMobile) {
+                    chatSidebar.classList.remove('hidden-sidebar');
+                    if (chatSidebar.classList.contains('active-mobile-sidebar')) {
+                        mobileToggleSidebarBtn.style.display = 'none';
+                    } else {
+                        mobileToggleSidebarBtn.style.display = 'flex';
+                    }
+                    toggleSidebarBtn.style.display = 'flex'; 
+                } else {
+                    chatSidebar.classList.remove('active-mobile-sidebar');
+                    mobileToggleSidebarBtn.style.display = 'none'; 
+                    toggleSidebarBtn.style.display = 'none'; 
+                }
+                createIcons(); 
+            });
         });
     </script>
 </body>
