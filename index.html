@@ -407,23 +407,33 @@
             100% { box-shadow: 0 0 25px var(--cosmic-glow-color-2); }
         }
 
-        /* Dark Mode Toggle Switch - Adjusted */
-        .dark-mode-container {
-            position: absolute;
-            top: 15px; /* Adjusted position */
-            right: 15px; /* Adjusted position */
+        /* NEW: Container for both Dark Mode and Simulate Typing toggles */
+        .settings-toggles-container {
+            /*position: absolute;*/
+            /*top: 15px; /* Adjusted from 20px */
+            /*right: 15px; /* Adjusted from 20px */
+            display: flex;
+            flex-direction: column; /* Stack them vertically */
+            gap: 8px; /* Space between toggles */
+            /*z-index: 3;*/
+        }
+        .dark-mode-container, .response-mode-container { /* Apply common styles here */
             display: flex;
             align-items: center;
             gap: 6px; /* Reduced gap */
-            z-index: 3;
             font-family: var(--font-family-primary);
+            font-size: 0.8em; /* Smaller text */
         }
-        .dark-mode-container span {
+        .dark-mode-container span, .response-mode-container span {
             color: var(--text-color); 
             transition: color 0.6s ease;
             font-size: 0.8em; /* Smaller text */
+            /* NEW: Vertical alignment for text next to the toggle */
+            vertical-align: middle;
+            line-height: 1; /* Helps with precise vertical alignment */
         }
 
+        /* Adjust switch size for both toggles */
         .switch { 
             position: relative;
             display: inline-block;
@@ -438,6 +448,8 @@
             opacity: 0;
             width: 0;
             height: 0;
+            /* NEW/REINFORCED: Ensure the native checkbox is hidden */
+            display: none; 
         }
         .slider { 
             position: absolute;
@@ -446,7 +458,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #4b5563; 
+            background-color: #4b5563; /* Grey for unchecked state */
             border-radius: 13px; /* Adjusted */
             transition: .4s;
         }
@@ -463,11 +475,12 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
         input:checked + .slider {
-            background-color: var(--accent-color); 
+            background-color: var(--accent-color); /* Purple for checked state */
         }
         input:checked + .slider:before {
             transform: translateX(22px); /* Adjusted */
         }
+
 
         /* NEW: Mobile Sidebar Toggle (Hamburger icon in main header) */
         #mobileToggleSidebarBtn {
@@ -1021,7 +1034,7 @@
             margin-bottom: 10px; /* Space between input and suggestions */
             background-color: var(--autocomplete-bg);
             border: 1px solid var(--autocomplete-border);
-            border-radius: 10px;
+            border-radius: 10-px;
             box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
             max-height: 200px;
             overflow-y: auto;
@@ -1108,16 +1121,22 @@
             }
 
 
-            /* Dark mode toggle positioning for mobile */
-            .dark-mode-container {
-                top: 8px;
-                right: 8px;
-                gap: 4px;
-                font-size: 0.6em;
+            /* Mobile adjustments for settings container */
+            /*.settings-toggles-container {
+                top: 8px; /* Closer to top */
+                /*right: 8px; /* Closer to right */
+                /*gap: 4px; /* Even less space */
+            /*}*/
+            
+            .dark-mode-container span, .response-mode-container span {
+                font-size: 0.7em;
             }
             .switch {
                 width: 36px;
                 height: 20px;
+                border-radius: 10px;
+            }
+            .switch .slider {
                 border-radius: 10px;
             }
             .switch .slider:before {
@@ -1265,6 +1284,26 @@
             <ul id="prevChatsList" class="sidebar-chat-list">
                 <!-- Chat items will be injected here by JavaScript -->
             </ul>
+            <!-- NEW: Settings Toggles Container -->
+            <div class="settings-toggles-container">
+                <div class="dark-mode-container">
+                    <span>Light</span>
+                    <label class="switch">
+                        <input type="checkbox" id="dark-mode-toggle">
+                        <span class="slider"></span>
+                    </label>
+                    <span>Dark</span>
+                </div>
+                <!-- NEW: Simulate Typing Toggle -->
+                <div class="response-mode-container">
+                    <span>Instant</span>
+                    <label class="switch">
+                        <input type="checkbox" id="simulate-typing-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span>Simulate Typing</span>
+                </div>
+            </div>
         </aside>
 
         <!-- Main Chat Content -->
@@ -1275,14 +1314,6 @@
                     <span data-lucide="menu" class="w-5 h-5"></span>
                 </button>
 
-                <div class="dark-mode-container">
-                    <span>Light</span>
-                    <label class="switch">
-                        <input type="checkbox" id="dark-mode-toggle">
-                        <span class="slider"></span>
-                    </label>
-                    <span>Dark</span>
-                </div>
                 <div class="header-content">
                     <h1>
                         <img src="logo.png" alt="Mystic Vision AI Logo" class="logo">
@@ -1369,6 +1400,9 @@
         let isVoiceInputActive = false;
         let finalTranscript = ''; 
         let selectedSuggestionIndex = -1;
+
+        // NEW: Simulate Typing Mode state
+        let isSimulateTypingEnabled = true; // Default to simulate typing
 
         const initialAIMessage = {
             role: 'model',
@@ -1696,7 +1730,7 @@
             "What are good preschool activities?",
             "How to teach preschoolers letters and numbers?",
             "Tips for improving fine motor skills in preschoolers.",
-            "What are gross motor skills?",
+            "What is gross motor skills?",
             "How to encourage independent play in preschoolers?",
             "Explain cooperative play.",
             "What is dramatic play?",
@@ -3118,7 +3152,7 @@
         let sendButton;
         let darkModeToggle;
         let copyMessage;
-        // let newChatBtn; // Moved to sidebar
+        let simulateTypingToggle; // NEW: Simulate typing toggle
         let chatAttachmentsPreviewContainer;
         let chatImageUpload;
         let voiceInputBtn;
@@ -3127,9 +3161,9 @@
         let stopButton; 
         // Sidebar Elements
         let chatSidebar; 
-        let newChatBtnSidebar; // The new chat button in the sidebar
-        let toggleSidebarBtn; // The 'X' button inside the sidebar
-        let mobileToggleSidebarBtn; // The hamburger button in the main header
+        let newChatBtnSidebar; 
+        let toggleSidebarBtn; 
+        let mobileToggleSidebarBtn; 
         let chatMainContent;
         let prevChatsList; 
 
@@ -3211,6 +3245,15 @@
         marked.use({ renderer });
 
         // --- Chat UI & Logic ---
+        /**
+         * Appends a chat message to the UI. For AI messages, it appends an initially empty content area,
+         * which is later filled by simulateTyping or direct rendering.
+         * @param {string} role - 'user' or 'model'
+         * @param {string} text - The raw text content of the message.
+         * @param {Array} attachments - Array of attachment objects (for user messages).
+         * @param {string} messageId - Optional ID for the message div.
+         * @returns {object} An object containing references to the messageContentDiv and the full messageDiv.
+         */
         function appendChatMessage(role, text, attachments = [], messageId = null) {
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('chat-message', role);
@@ -3271,11 +3314,12 @@
                 messageBubbleContent.appendChild(messageContentDiv); // Append user content to bubble
                 messageDiv.appendChild(messageBubbleContent);
                 messageDiv.appendChild(avatarElement); 
-            } else { // AI message
-                rawMessageContentForCache = `AI: ${text}`;
-                messageContentDiv.innerHTML = marked.parse(text); // Parse markdown into this specific content div
-                
-                messageBubbleContent.appendChild(messageContentDiv); // Append AI content to bubble
+            } else { // AI message: initialize empty, content filled later by simulateTyping or instant render
+                messageTextCache.set(messageId, `AI: ${text}`); // Cache full text here
+
+                // For AI, the messageContentDiv is initially empty.
+                // It will be filled by simulateTyping or direct marked.parse later.
+                messageBubbleContent.appendChild(messageContentDiv); // Append initially empty content div
                 messageDiv.appendChild(avatarElement); 
                 messageDiv.appendChild(messageBubbleContent);
             }
@@ -3301,7 +3345,6 @@
             `;
             messageBubbleContent.appendChild(actionsDiv); // Append actions as a *new child* of the bubble
 
-            messageTextCache.set(messageId, rawMessageContentForCache); 
             chatHistoryDiv.appendChild(messageDiv);
             
             setTimeout(() => {
@@ -3311,8 +3354,9 @@
             chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
             createIcons(); 
 
-            // Return the specific message content div for Prism to target if needed immediately
-            return messageContentDiv; 
+            // Return the specific message content div where text will eventually go
+            // and the full messageDiv for Prism.highlightAllUnder(element.closest(...))
+            return { messageContentDiv, messageDiv }; 
         }
 
         let isApiCallInProgress = false; 
@@ -3353,75 +3397,62 @@
         }
 
         // Simulate typing function (now receives the inner message-content div)
-        // Keep this outside the function, or pass it if it's dynamic
-        // let currentTypingInterval = null; // Already declared globally in your code
-
-        function simulateTyping(messageContentDiv, text, delay = 1) { // Changed default delay to 1ms
+        function simulateTyping(messageContentDiv, text, delay = 1) { 
             if (!messageContentDiv) return;
 
-            messageContentDiv.innerHTML = ''; // Clear content once at the start
+            messageContentDiv.innerHTML = ''; 
             let currentTypedText = '';
             let i = 0;
-            const renderBatchSize = 10; // Number of characters to type before re-rendering Markdown/Prism
+            const renderBatchSize = 10; 
 
-            // Clear any previous typing interval to prevent multiple animations
             if (currentTypingInterval) {
                 clearInterval(currentTypingInterval);
                 currentTypingInterval = null;
             }
 
             currentTypingInterval = setInterval(() => {
-                // Stop condition for AI generation (e.g., if stop button is clicked)
                 if (!isGeneratingResponse) {
                     clearInterval(currentTypingInterval);
                     currentTypingInterval = null;
-                    // Ensure the final, complete text is rendered and highlighted
                     messageContentDiv.innerHTML = marked.parse(text);
                     if (typeof Prism !== 'undefined') {
                         Prism.highlightAllUnder(messageContentDiv.closest('.chat-message'));
                     }
-                    toggleLoading(false); // Hide loading indicator
+                    toggleLoading(false); 
                     return;
                 }
 
                 if (i < text.length) {
                     currentTypedText += text.charAt(i);
 
-                    // Only re-render Markdown and highlight in batches or at the very end
-                    // This is the key optimization for speed.
                     if ((i + 1) % renderBatchSize === 0 || i === text.length - 1) {
                         messageContentDiv.innerHTML = marked.parse(currentTypedText);
                         if (typeof Prism !== 'undefined') {
-                            // Only highlight the current message content div
                             Prism.highlightAllUnder(messageContentDiv);
                         }
                     }
                     
                     i++;
-                    // Scroll to bottom only when content is visually updated or at the end
                     chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
                 } else {
-                    // Typing finished
                     clearInterval(currentTypingInterval);
                     currentTypingInterval = null;
                     
-                    // Final, full render and highlight to ensure everything is perfect
                     messageContentDiv.innerHTML = marked.parse(text);
                     if (typeof Prism !== 'undefined') {
                         Prism.highlightAllUnder(messageContentDiv.closest('.chat-message'));
                     }
                     chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-                    toggleLoading(false); // Hide loading indicator
-                    isGeneratingResponse = false; // Reset generation flag
-                    saveCurrentChat(); // Save the completed chat
+                    toggleLoading(false); 
+                    isGeneratingResponse = false; 
+                    saveCurrentChat(); 
 
-                    // Trigger chat renaming if needed
                     const chatMeta = allChats.find(chat => chat.id === currentChatId);
                     if (chatMeta && (chatMeta.title === 'Untitled Chat' || chatMeta.title === 'Chat with Attachments')) {
                         summarizeChatAndRename(currentChatId, conversationHistory);
                     }
                 }
-            }, delay); // Use the specified delay (default 1ms)
+            }, delay); 
         }
 
 
@@ -3767,7 +3798,6 @@
                 
                 const relevantHistory = history.slice(0, 4); 
                 for (const msg of relevantHistory) {
-                    // Only include role and parts for the prompt to Gemini
                     const msgForPrompt = { role: msg.role, parts: msg.parts };
                     promptParts.push(msgForPrompt);
                 }
@@ -3810,7 +3840,8 @@
                 conversationHistory = JSON.parse(storedHistory);
                 currentChatId = chatToLoadId;
 
-                chatHistoryDiv.innerHTML = ''; // Clear existing messages
+                chatHistoryDiv.innerHTML = ''; 
+                const aiMessageDivsToHighlight = []; // Collect full message divs for highlighting
                 conversationHistory.forEach(msg => {
                     let textContent = '';
                     let attachments = [];
@@ -3825,20 +3856,22 @@
                             });
                         }
                     });
-                    // appendChatMessage now correctly creates and appends the message
-                    appendChatMessage(msg.role, textContent, attachments, msg.id);
+                    const { messageContentDiv, messageDiv } = appendChatMessage(msg.role, textContent, attachments, msg.id);
+
+                    // For loaded AI messages, immediately populate content and add to highlight queue
+                    if (msg.role === 'model') {
+                        messageContentDiv.innerHTML = marked.parse(textContent);
+                        aiMessageDivsToHighlight.push(messageDiv); // Add the full message div
+                    }
                 });
 
-                // IMPORTANT: Apply Prism.js highlighting AFTER all messages are in the DOM.
-                // A slightly longer delay (e.g., 100-200ms) or requestAnimationFrame is often more reliable
+                // Apply Prism.js highlighting to all loaded AI messages after they are all in the DOM
                 if (typeof Prism !== 'undefined') {
-                    requestAnimationFrame(() => { // Executes after the browser has finished painting
-                        Prism.highlightAllUnder(chatHistoryDiv); // Highlights all code blocks within chatHistoryDiv
+                    requestAnimationFrame(() => {
+                        aiMessageDivsToHighlight.forEach(div => {
+                            Prism.highlightAllUnder(div);
+                        });
                     });
-                    // Or use setTimeout, if requestAnimationFrame causes issues on older browsers:
-                    // setTimeout(() => {
-                    //     Prism.highlightAllUnder(chatHistoryDiv);
-                    // }, 150); // Increased delay
                 }
 
                 chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
@@ -3884,6 +3917,7 @@
 
         // --- New Chat Function ---
         function startNewChat() {
+            // Stop any ongoing speech or AI generation
             if (window.speechSynthesis.speaking) {
                 window.speechSynthesis.cancel();
                 isSpeaking = false;
@@ -3897,47 +3931,44 @@
                 toggleLoading(false);
             }
 
-                saveCurrentChat(); // Save the previously active chat
+            saveCurrentChat(); // Save the previously active chat
 
-                chatHistoryDiv.innerHTML = '';
-                conversationHistory = [];
-                chatAttachments = [];
-                chatImageUpload.value = '';
-                displayChatAttachments();
-                userInput.value = '';
-                userInput.style.height = 'auto';
-                messageTextCache.clear();
-                suggestionsContainer.classList.add('hidden');
-                selectedSuggestionIndex = -1;
-                userInput.dataset.editingMessageId = '';
-                updateButtonIcon(sendButton, 'send', 'w-5 h-5');
+            chatHistoryDiv.innerHTML = '';
+            conversationHistory = [];
+            chatAttachments = [];
+            chatImageUpload.value = '';
+            displayChatAttachments();
+            userInput.value = '';
+            userInput.style.height = 'auto';
+            messageTextCache.clear();
+            suggestionsContainer.classList.add('hidden');
+            selectedSuggestionIndex = -1;
+            userInput.dataset.editingMessageId = '';
+            updateButtonIcon(sendButton, 'send', 'w-5 h-5');
 
-                currentChatId = `chat-${Date.now()}`;
+            currentChatId = `chat-${Date.now()}`;
 
-                // Append the initial AI message using the modified appendChatMessage
-                // The returned initialAiContentDiv is the specific content part, but Prism.highlightAllUnder(chatHistoryDiv) is more robust for single messages too.
-                appendChatMessage('ai', initialAIMessage.parts[0].text);
-                conversationHistory.push({ ...initialAIMessage, id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` });
+            // Append the initial AI message. It will create the shell.
+            const initialAiMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            const { messageContentDiv: initialAiContentDiv, messageDiv: initialAiMessageDiv } = appendChatMessage('ai', initialAIMessage.parts[0].text, [], initialAiMessageId);
+            conversationHistory.push({ ...initialAIMessage, id: initialAiMessageId });
 
-                // IMPORTANT: Apply Prism.js for the initial message after it's added.
-                if (typeof Prism !== 'undefined') {
-                    requestAnimationFrame(() => {
-                        Prism.highlightAllUnder(chatHistoryDiv);
-                    });
-                    // Or using setTimeout:
-                    // setTimeout(() => {
-                    //     Prism.highlightAllUnder(chatHistoryDiv);
-                    // }, 150);
-                }
-
-                if (window.innerWidth <= 768) {
-                    chatSidebar.classList.remove('active-mobile-sidebar');
-                    mobileToggleSidebarBtn.style.display = 'flex';
-                }
-
-                userInput.focus();
-                renderPrevChatsList();
+            // For the initial message, it always renders instantly
+            initialAiContentDiv.innerHTML = marked.parse(initialAIMessage.parts[0].text);
+            if (typeof Prism !== 'undefined') {
+                requestAnimationFrame(() => { // Use requestAnimationFrame for smooth render after DOM update
+                    Prism.highlightAllUnder(initialAiMessageDiv); // Highlight the full initial message div
+                });
             }
+
+            if (window.innerWidth <= 768) {
+                chatSidebar.classList.remove('active-mobile-sidebar');
+                mobileToggleSidebarBtn.style.display = 'flex';
+            }
+
+            userInput.focus();
+            renderPrevChatsList();
+        }
 
         // --- Paste Functionality ---
         async function processPastedFile(file) {
@@ -3972,8 +4003,8 @@
             userInput = document.getElementById('userInput');
             sendButton = document.getElementById('sendButton');
             darkModeToggle = document.getElementById('dark-mode-toggle');
+            simulateTypingToggle = document.getElementById('simulate-typing-toggle'); // NEW
             copyMessage = document.getElementById('copy-message');
-            // newChatBtn = document.getElementById('newChatBtn'); // This is now newChatBtnSidebar
             chatAttachmentsPreviewContainer = document.getElementById('chat-attachments-preview-container');
             chatImageUpload = document.getElementById('chat-image-upload');
             voiceInputBtn = document.getElementById('voice-input-btn');
@@ -3982,7 +4013,7 @@
             stopButton = document.getElementById('stopButton');
             // Sidebar Elements
             chatSidebar = document.getElementById('chatSidebar'); 
-            newChatBtnSidebar = document.getElementById('newChatBtn'); // Correctly assign the sidebar button
+            newChatBtnSidebar = document.getElementById('newChatBtn'); 
             toggleSidebarBtn = document.getElementById('toggleSidebarBtn'); 
             mobileToggleSidebarBtn = document.getElementById('mobileToggleSidebarBtn'); 
             chatMainContent = document.querySelector('.chat-main-content');
@@ -3991,16 +4022,27 @@
             createIcons();
             userInput.style.height = userInput.scrollHeight + 'px';
 
+            // Initialize Dark Mode based on localStorage or default
+            const isDarkMode = localStorage.getItem('dark-mode') === 'true';
+            document.body.classList.toggle('light', !isDarkMode); 
+            darkModeToggle.checked = isDarkMode;
+
+            // NEW: Initialize Simulate Typing Mode based on localStorage or default
+            const savedSimulateTyping = localStorage.getItem('simulate-typing');
+            if (savedSimulateTyping !== null) {
+                isSimulateTypingEnabled = savedSimulateTyping === 'true';
+            } else {
+                isSimulateTypingEnabled = true; // Default to true if no saved preference
+            }
+            simulateTypingToggle.checked = isSimulateTypingEnabled;
+
+            // Load previous chats or start a new one
             loadAllChats(); 
             if (allChats.length > 0) {
                 loadChat(allChats[0].id); // Load the most recent chat on startup
             } else {
                 startNewChat(); // Start a new chat if no previous chats exist
             }
-
-            const isDarkMode = localStorage.getItem('dark-mode') === 'true';
-            document.body.classList.toggle('light', !isDarkMode); 
-            darkModeToggle.checked = isDarkMode;
 
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('/service-worker.js')
@@ -4087,6 +4129,38 @@
                 const isChecked = darkModeToggle.checked;
                 document.body.classList.toggle('light', !isChecked);
                 localStorage.setItem('dark-mode', isChecked);
+            });
+
+            // NEW: Event listener for Simulate Typing Toggle
+            simulateTypingToggle.addEventListener('change', () => {
+                isSimulateTypingEnabled = simulateTypingToggle.checked;
+                localStorage.setItem('simulate-typing', isSimulateTypingEnabled);
+                
+                // If turning off simulation while AI is typing, immediately complete the response
+                if (!isSimulateTypingEnabled && isGeneratingResponse) {
+                    isGeneratingResponse = false; // Stop the animation loop
+                    if (currentTypingInterval) {
+                        clearInterval(currentTypingInterval);
+                        currentTypingInterval = null;
+                    }
+                    // Force complete rendering of the last AI message
+                    const lastAIMessageDiv = chatHistoryDiv.lastElementChild;
+                    if (lastAIMessageDiv && lastAIMessageDiv.classList.contains('ai')) {
+                        const messageContentDiv = lastAIMessageDiv.querySelector('.message-content');
+                        const messageId = lastAIMessageDiv.dataset.messageId;
+                        const fullTextFromCache = messageTextCache.get(messageId);
+                        const fullText = fullTextFromCache ? fullTextFromCache.substring(3) : ''; // Remove "AI: " prefix
+                        
+                        if (messageContentDiv) {
+                            messageContentDiv.innerHTML = marked.parse(fullText);
+                            if (typeof Prism !== 'undefined') {
+                                Prism.highlightAllUnder(lastAIMessageDiv); // Highlight the full message div
+                            }
+                        }
+                    }
+                    toggleLoading(false); // Hide loading indicator
+                    saveCurrentChat(); // Save the chat now that it's complete
+                }
             });
 
             userInput.addEventListener('input', () => {
@@ -4199,15 +4273,16 @@
                             }
                             
                             // 3. Re-render the edited message content in the UI
-                            // Find the message bubble content div
                             const messageBubbleContent = messageDivToEdit.querySelector('.message-bubble-content');
                             if (messageBubbleContent) {
-                                messageBubbleContent.innerHTML = ''; // Clear its children completely
+                                // Clear its children completely except avatar and actions
+                                const messageContentDiv = messageBubbleContent.querySelector('.message-content');
+                                if (messageContentDiv) messageContentDiv.remove();
 
-                                // Create and append the new message content div
-                                const messageContentDiv = document.createElement('div');
-                                messageContentDiv.classList.add('message-content');
-                                messageContentDiv.innerHTML = `<span>${editedText}</span>`;
+                                // Re-create and append the new message content div
+                                const newMessageContentDiv = document.createElement('div');
+                                newMessageContentDiv.classList.add('message-content');
+                                newMessageContentDiv.innerHTML = `<span>${editedText}</span>`;
 
                                 if (chatAttachments.length > 0) {
                                     const attachmentsContainer = document.createElement('div');
@@ -4224,27 +4299,11 @@
                                             `;
                                         }
                                     });
-                                    messageContentDiv.appendChild(attachmentsContainer);
+                                    newMessageContentDiv.appendChild(attachmentsContainer);
                                 }
-                                messageBubbleContent.appendChild(messageContentDiv); // Add updated content
+                                messageBubbleContent.prepend(newMessageContentDiv); // Add updated content to the beginning of bubble
                                 
-                                // Re-add action buttons (create new element for them)
-                                const actionsDiv = document.createElement('div');
-                                actionsDiv.classList.add('message-actions');
-                                actionsDiv.innerHTML = `
-                                    <button class="copy-message-btn" title="Copy message" data-message-id="${editingMessageId}">
-                                        <span data-lucide="clipboard" class="w-4 h-4"></span>
-                                    </button>
-                                    <button class="dictate-message-btn" title="Dictate message" data-message-id="${editingMessageId}">
-                                        <span data-lucide="volume-2" class="w-4 h-4"></span>
-                                    </button>
-                                    <button class="edit-message-btn" title="Edit message" data-message-id="${editingMessageId}">
-                                        <span data-lucide="pencil" class="w-4 h-4"></span>
-                                    </button>
-                                `;
-                                messageBubbleContent.appendChild(actionsDiv); // Append actions as a new child
-
-                                createIcons(); // Re-create Lucide icons for the newly added elements
+                                createIcons(); 
                             }
                             messageTextCache.set(editingMessageId, `You: ${editedText}`); 
                             messageDivToEdit.classList.remove('editing'); 
@@ -4265,10 +4324,9 @@
                             }
                         });
                     }
-                    // Assign a new ID to the user message immediately when appending
                     const newUserMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                    appendChatMessage('user', userMessage, chatAttachments, newUserMessageId); 
                     conversationHistory.push({ role: 'user', parts: userParts, id: newUserMessageId });
-                    appendChatMessage('user', userMessage, chatAttachments, newUserMessageId);
                 }
                 
                 userInput.value = '';
@@ -4286,16 +4344,38 @@
 
                 try {
                     const payload = {
-                        contents: conversationHistory, // This now contains objects with role, parts, and potentially id
+                        contents: conversationHistory, 
                     };
                     
                     const responseText = await callGeminiAPI(payload);
                     
-                    if (isGeneratingResponse) { 
+                    if (isGeneratingResponse) { // Still check if the user hasn't stopped it during API call
                         const newAiMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                        // Append an empty AI message initially. Its actual content will be filled later.
+                        const { messageContentDiv: aiContentDiv, messageDiv: aiMessageDiv } = appendChatMessage('ai', responseText, [], newAiMessageId); 
+                        
+                        // Add the full AI message to history AFTER appending the empty shell
                         conversationHistory.push({ role: 'model', parts: [{ text: responseText }], id: newAiMessageId });
-                        const aiContentDiv = appendChatMessage('ai', '', [], newAiMessageId); 
-                        simulateTyping(aiContentDiv, responseText); 
+
+                        if (isSimulateTypingEnabled) {
+                            simulateTyping(aiContentDiv, responseText); // Fill content character by character
+                        } else {
+                            // Instant display mode: fill content immediately and highlight
+                            aiContentDiv.innerHTML = marked.parse(responseText);
+                            if (typeof Prism !== 'undefined') {
+                                Prism.highlightAllUnder(aiMessageDiv); // Highlight the full message div
+                            }
+                            chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
+                            toggleLoading(false); // Hide loading indicator for instant mode
+                            isGeneratingResponse = false; // Mark generation as complete
+                            saveCurrentChat(); // Save the chat now that the response is complete
+
+                            // Also trigger chat renaming if necessary
+                            const chatMeta = allChats.find(chat => chat.id === currentChatId);
+                            if (chatMeta && (chatMeta.title === 'Untitled Chat' || chatMeta.title === 'Chat with Attachments')) {
+                                summarizeChatAndRename(currentChatId, conversationHistory);
+                            }
+                        }
                     }
                     
                 } catch (error) {
@@ -4321,12 +4401,22 @@
                     const lastAIMessageDiv = chatHistoryDiv.lastElementChild;
                     if (lastAIMessageDiv && lastAIMessageDiv.classList.contains('ai')) {
                         const messageContentDiv = lastAIMessageDiv.querySelector('.message-content');
-                        if (messageContentDiv && messageContentDiv.innerHTML.trim() !== '') { // Only highlight if there's actual content
-                             // The simulateTyping interval handler will now also call marked.parse and Prism.highlightAllUnder if stopped
+                        const messageId = lastAIMessageDiv.dataset.messageId;
+                        const fullTextFromCache = messageTextCache.get(messageId);
+                        const fullText = fullTextFromCache ? fullTextFromCache.substring(3) : ''; // Remove "AI: " prefix
+
+                        if (messageContentDiv && messageContentDiv.innerHTML.trim() !== '') { 
+                            // The simulateTyping interval handler will now also call marked.parse and Prism.highlightAllUnder if stopped
+                            // But if it's already stopped, we need to ensure it's fully rendered manually:
+                            messageContentDiv.innerHTML = marked.parse(fullText);
+                            if (typeof Prism !== 'undefined') {
+                                Prism.highlightAllUnder(lastAIMessageDiv);
+                            }
                         }
                     }
                     toggleLoading(false); 
                     console.log("AI generation stopped by user.");
+                    saveCurrentChat(); // Save the chat as it is, even if incomplete
                 }
             });
 
@@ -4479,7 +4569,6 @@
                     return; 
                 }
 
-                // Inside chatHistoryDiv.addEventListener('click', ...)
                 const editButton = event.target.closest('.edit-message-btn');
                 if (editButton) {
                     const messageId = editButton.dataset.messageId;
@@ -4488,30 +4577,26 @@
                     if (messageDivToEdit) {
                         const originalIndex = Array.from(chatHistoryDiv.children).indexOf(messageDivToEdit);
                         if (originalIndex !== -1) {
-                            // Get the original message from history to reconstruct attachments if any
                             const originalMessage = conversationHistory[originalIndex];
                             
-                            // Extract original text (without "You: " or attachment notes)
                             let originalText = '';
                             let originalAttachments = [];
                             originalMessage.parts.forEach(part => {
                                 if (part.text) {
                                     originalText = part.text;
                                 } else if (part.inlineData) {
-                                    // Reconstruct the file object-like structure for the attachment array
                                     originalAttachments.push({
-                                        file: null, // We don't have the original File object, but mimeType and data are enough
+                                        file: null, 
                                         mimeType: part.inlineData.mimeType,
                                         data: part.inlineData.data,
-                                        name: part.inlineData.name || 'Attachment' // Use stored name or fallback
+                                        name: part.inlineData.name || 'Attachment' 
                                     });
                                 }
                             });
 
-                            // Populate the input with the original text and attachments
                             userInput.value = originalText;
-                            chatAttachments = originalAttachments; // Load attachments for display
-                            displayChatAttachments(); // Render attachments in the input preview
+                            chatAttachments = originalAttachments; 
+                            displayChatAttachments(); 
 
                             userInput.focus();
                             userInput.style.height = 'auto';
@@ -4535,7 +4620,6 @@
                     const aiMessageIndex = Array.from(chatHistoryDiv.children).indexOf(messageDiv);
 
                     if (aiMessageIndex !== -1) {
-                        // Find the corresponding AI message in conversationHistory by its ID
                         const aiMsgInHistoryIndex = conversationHistory.findIndex(msg => msg.id === messageId);
                         if (aiMsgInHistoryIndex === -1) {
                             console.error("AI message not found in history for regeneration.");
@@ -4558,18 +4642,16 @@
                                 let userAttachmentsForRegen = [];
                                 lastUserMessage.parts.forEach(part => {
                                     if (part.text) userTextForRegen = part.text;
-                                    // Make sure to re-add attachments from the last user message if regenerating
                                     if (part.inlineData) userAttachmentsForRegen.push({
                                         mimeType: part.inlineData.mimeType,
                                         data: part.inlineData.data,
-                                        name: part.inlineData.name || 'Attachment' // Fallback name for attachments
+                                        name: part.inlineData.name || 'Attachment' 
                                     });
                                 });
 
-                                // Update input area for user to see the "regenerated" prompt
                                 userInput.value = userTextForRegen;
                                 chatAttachments = userAttachmentsForRegen; 
-                                displayChatAttachments(); // Show attachments in preview for regeneration
+                                displayChatAttachments(); 
 
                                 // Trigger send to re-send the last user message to the API
                                 sendButton.click(); 
@@ -4614,7 +4696,7 @@
             window.addEventListener('resize', () => {
                 const isMobile = window.innerWidth <= 768;
                 if (isMobile) {
-                    chatSidebar.classList.remove('hidden-sidebar');
+                    chatSidebar.classList.remove('hidden-sidebar'); // Ensure sidebar isn't hidden by default CSS when on mobile
                     if (chatSidebar.classList.contains('active-mobile-sidebar')) {
                         mobileToggleSidebarBtn.style.display = 'none';
                     } else {
@@ -4622,7 +4704,7 @@
                     }
                     toggleSidebarBtn.style.display = 'flex'; 
                 } else {
-                    chatSidebar.classList.remove('active-mobile-sidebar');
+                    chatSidebar.classList.remove('active-mobile-sidebar'); // Hide mobile sidebar if resizing to desktop
                     mobileToggleSidebarBtn.style.display = 'none'; 
                     toggleSidebarBtn.style.display = 'none'; 
                 }
