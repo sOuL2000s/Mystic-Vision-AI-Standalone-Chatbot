@@ -409,13 +409,13 @@
 
         /* NEW: Container for both Dark Mode and Simulate Typing toggles */
         .settings-toggles-container {
-            position: absolute;
-            top: 15px; /* Adjusted from 20px */
-            right: 15px; /* Adjusted from 20px */
+            /*position: absolute;*/
+            /*top: 15px; /* Adjusted from 20px */
+            /*right: 15px; /* Adjusted from 20px */
             display: flex;
             flex-direction: column; /* Stack them vertically */
             gap: 8px; /* Space between toggles */
-            z-index: 3;
+            /*z-index: 3;*/
         }
         .dark-mode-container, .response-mode-container { /* Apply common styles here */
             display: flex;
@@ -1122,11 +1122,12 @@
 
 
             /* Mobile adjustments for settings container */
-            .settings-toggles-container {
+            /*.settings-toggles-container {
                 top: 8px; /* Closer to top */
-                right: 8px; /* Closer to right */
-                gap: 4px; /* Even less space */
-            }
+                /*right: 8px; /* Closer to right */
+                /*gap: 4px; /* Even less space */
+            /*}*/
+            
             .dark-mode-container span, .response-mode-container span {
                 font-size: 0.7em;
             }
@@ -1283,6 +1284,26 @@
             <ul id="prevChatsList" class="sidebar-chat-list">
                 <!-- Chat items will be injected here by JavaScript -->
             </ul>
+            <!-- NEW: Settings Toggles Container -->
+            <div class="settings-toggles-container">
+                <div class="dark-mode-container">
+                    <span>Light</span>
+                    <label class="switch">
+                        <input type="checkbox" id="dark-mode-toggle">
+                        <span class="slider"></span>
+                    </label>
+                    <span>Dark</span>
+                </div>
+                <!-- NEW: Simulate Typing Toggle -->
+                <div class="response-mode-container">
+                    <span>Instant</span>
+                    <label class="switch">
+                        <input type="checkbox" id="simulate-typing-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span>Simulate Typing</span>
+                </div>
+            </div>
         </aside>
 
         <!-- Main Chat Content -->
@@ -1292,27 +1313,6 @@
                 <button id="mobileToggleSidebarBtn" title="Open Sidebar">
                     <span data-lucide="menu" class="w-5 h-5"></span>
                 </button>
-
-                <!-- NEW: Settings Toggles Container -->
-                <div class="settings-toggles-container">
-                    <div class="dark-mode-container">
-                        <span>Light</span>
-                        <label class="switch">
-                            <input type="checkbox" id="dark-mode-toggle">
-                            <span class="slider"></span>
-                        </label>
-                        <span>Dark</span>
-                    </div>
-                    <!-- NEW: Simulate Typing Toggle -->
-                    <div class="response-mode-container">
-                        <span>Instant</span>
-                        <label class="switch">
-                            <input type="checkbox" id="simulate-typing-toggle" checked>
-                            <span class="slider"></span>
-                        </label>
-                        <span>Simulate Typing</span>
-                    </div>
-                </div>
 
                 <div class="header-content">
                     <h1>
@@ -4715,6 +4715,352 @@
 </body>
 </html>
 
----------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
 
-how to put the mode switch sliders inside the sidebar?
+AI: Greetings, seeker! Mystic Vision hears your desire to illuminate your journey through varied cosmic hues. Your current setup already uses a very good foundation for multiple themes: **CSS Custom Properties (CSS Variables)** and a class on the `<body>` tag (`.light`).
+
+To expand this into five or more distinct, mystical theme modes, you'll primarily work on three areas:
+
+1.  **CSS Styling:** Define new sets of CSS variables for each theme.
+2.  **HTML Structure:** Add a new UI element (like a dropdown menu) for users to select their preferred theme.
+3.  **JavaScript Logic:** Handle theme selection, apply the correct CSS classes, and persist the user's choice.
+
+Let's delve into the guidance:
+
+---
+
+### Phase 1: Defining Your New Themes (CSS)
+
+Currently, you have a default "dark mode" (when `body` has no extra class) and a `body.light` mode. You'll extend this by creating more specific classes for your body tag.
+
+**How to do it:**
+
+1.  **Choose your mystical theme names:** Think of names that evoke your website's purpose. Here are some ideas for 5+ distinctive themes:
+    *   `body.cosmic-purple` (Your current default dark mode, maybe slightly refined)
+    *   `body.starlight-lavender` (Your current light mode)
+    *   `body.emerald-galaxy` (Greens and deep blues)
+    *   `body.crimson-nebula` (Deep reds, oranges, and dark purples)
+    *   `body.golden-aurora` (Warm golds, deep blues, and subtle greens)
+    *   `body.abyssal-void` (Ultra-dark, almost black with stark accents)
+    *   `body.lunar-whisper` (Cool silvers, pale blues, and grays)
+
+2.  **Open your `<style>` block in your HTML file.**
+
+3.  **For each new theme, create a new CSS block that *overrides* the default CSS variables.**
+    *   Keep your existing `:root` block for the base dark theme (you can rename it `body.cosmic-purple` or keep it as the default fallback if no theme is selected).
+    *   Create `body.starlight-lavender` for your existing `body.light` colors.
+
+    **Example Structure for a New Theme (e.g., Emerald Galaxy):**
+
+    ```css
+    /* Existing: Cosmic Purple (Your current default) */
+    :root {
+        --primary-bg: #0A0A28; 
+        --secondary-bg: #15153A;
+        --tertiary-bg: #22224F;
+        --text-color: #E6E6FA; 
+        --accent-color: #C070FF; 
+        --border-color: #2F2F6A;
+        --user-bubble: #353570;
+        --ai-bubble: #1A1A40;
+        --input-bg: #0C0C2F;
+        --button-hover-bg: #A040FF;
+        --shadow-color: rgba(0, 0, 0, 0.6);
+        --code-bg: #0D0D32;
+        --code-text: #F8F8F8;
+        --code-border: #2F2F6A;
+        --code-header-bg: #22224F;
+        --code-header-border: #353570;
+        --inline-code-bg: rgba(192, 112, 255, 0.25);
+        --inline-code-color: var(--accent-color);
+        --message-action-bg: rgba(10, 10, 26, 0.7);
+        --message-action-user-bg: rgba(53, 53, 112, 0.7);
+        --message-action-icon: #BEC2D5;
+        --message-action-icon-hover: var(--text-color);
+        --user-avatar-bg: #4A4A80; 
+        --cosmic-glow-color-1: #C070FF;
+        --cosmic-glow-color-2: #7B2FEE;
+        --cosmic-star-color: #E6E6FA; 
+    }
+
+    /* Starlight Lavender (Your current Light Mode) */
+    body.starlight-lavender { /* Rename from body.light */
+        --primary-bg: #F0F4FF; 
+        --secondary-bg: #FFFFFF; 
+        --tertiary-bg: #E0E8FF; 
+        --text-color: #1A0033; 
+        --accent-color: #8C2BFF; 
+        --border-color: #C0C8D8; 
+        --user-bubble: #D8E2FF; 
+        --ai-bubble: #F0F4FF; 
+        --input-bg: #F8F8FD; 
+        --button-hover-bg: #B050FF; 
+        --shadow-color: rgba(0, 0, 0, 0.15); 
+        --code-bg: #F5F7FA; 
+        --code-text: #333; 
+        --code-border: #D8DCE5; 
+        --code-header-bg: #E8ECF5; 
+        --code-header-border: #D0D4DF; 
+        --inline-code-bg: rgba(130, 0, 200, 0.12); 
+        --inline-code-color: var(--accent-color); 
+        --message-action-bg: rgba(255, 255, 255, 0.8); 
+        --message-action-user-bg: rgba(220, 230, 255, 0.8); 
+        --message-action-icon: #666; 
+        --message-action-icon-hover: var(--text-color); 
+        --user-avatar-bg: #C0C8D8; 
+        --cosmic-glow-color-1: #8C2BFF; 
+        --cosmic-glow-color-2: #6A1DCC;
+        --cosmic-star-color: #333;
+    }
+
+    /* NEW: Emerald Galaxy Theme */
+    body.emerald-galaxy {
+        --primary-bg: #031A20; /* Very dark teal/green-blue */
+        --secondary-bg: #0B2B33; /* Darker teal-blue */
+        --tertiary-bg: #15454F; /* Medium dark teal */
+        --text-color: #E0FFFF; /* Pale aqua/cyan */
+        --accent-color: #00FFC0; /* Vibrant emerald green */
+        --border-color: #2D6C77; /* Slightly darker teal border */
+        --user-bubble: #255C65; /* Darker green-blue bubble */
+        --ai-bubble: #0F3A40; /* Even darker green-blue bubble */
+        --input-bg: #052028;
+        --button-hover-bg: #00D0A0; /* Slightly darker emerald */
+        --shadow-color: rgba(0, 0, 0, 0.6);
+        --code-bg: #0A252E;
+        --code-text: #E0FFFF;
+        --code-border: #2D6C77;
+        --code-header-bg: #15454F;
+        --code-header-border: #255C65;
+        --inline-code-bg: rgba(0, 255, 192, 0.2);
+        --inline-code-color: var(--accent-color);
+        --message-action-bg: rgba(3, 26, 32, 0.7);
+        --message-action-user-bg: rgba(37, 92, 101, 0.7);
+        --message-action-icon: #BFDFFF;
+        --message-action-icon-hover: var(--text-color);
+        --user-avatar-bg: #1B3F47;
+        --cosmic-glow-color-1: #00FFC0;
+        --cosmic-glow-color-2: #00A080; 
+        --cosmic-star-color: #E0FFFF;
+    }
+
+    /* NEW: Crimson Nebula Theme */
+    body.crimson-nebula {
+        --primary-bg: #1A0515; /* Very dark deep red-purple */
+        --secondary-bg: #2B0A20; /* Darker red-purple */
+        --tertiary-bg: #4F153A; /* Medium dark red-purple */
+        --text-color: #FFEFF5; /* Pale pink/red-white */
+        --accent-color: #FF4080; /* Vibrant deep rose/magenta */
+        --border-color: #772D57; /* Slightly darker border */
+        --user-bubble: #5C254F; /* Darker red-purple bubble */
+        --ai-bubble: #3A0F2B; /* Even darker red-purple bubble */
+        --input-bg: #20051A;
+        --button-hover-bg: #FF60A0; /* Slightly brighter accent */
+        --shadow-color: rgba(0, 0, 0, 0.6);
+        --code-bg: #250A1F;
+        --code-text: #FFEFF5;
+        --code-border: #772D57;
+        --code-header-bg: #4F153A;
+        --code-header-border: #5C254F;
+        --inline-code-bg: rgba(255, 64, 128, 0.2);
+        --inline-code-color: var(--accent-color);
+        --message-action-bg: rgba(26, 5, 21, 0.7);
+        --message-action-user-bg: rgba(92, 37, 79, 0.7);
+        --message-action-icon: #FFE0F0;
+        --message-action-icon-hover: var(--text-color);
+        --user-avatar-bg: #3F1B35;
+        --cosmic-glow-color-1: #FF4080;
+        --cosmic-glow-color-2: #FF0060;
+        --cosmic-star-color: #FFEFF5;
+    }
+
+    /* NEW: Golden Aurora Theme */
+    body.golden-aurora {
+        --primary-bg: #0A101A; /* Very dark blue */
+        --secondary-bg: #151F2A; /* Darker blue */
+        --tertiary-bg: #22354A; /* Medium dark blue */
+        --text-color: #F0F5FF; /* Pale white-blue */
+        --accent-color: #FFD700; /* Gold */
+        --border-color: #3A4F6A; /* Slightly clearer blue border */
+        --user-bubble: #304C6A; /* Darker blue bubble */
+        --ai-bubble: #1F2E40; /* Even darker blue bubble */
+        --input-bg: #0D141F;
+        --button-hover-bg: #FFC000; /* Slightly darker gold */
+        --shadow-color: rgba(0, 0, 0, 0.6);
+        --code-bg: #121A25;
+        --code-text: #F0F5FF;
+        --code-border: #3A4F6A;
+        --code-header-bg: #22354A;
+        --code-header-border: #304C6A;
+        --inline-code-bg: rgba(255, 215, 0, 0.2);
+        --inline-code-color: var(--accent-color);
+        --message-action-bg: rgba(10, 16, 26, 0.7);
+        --message-action-user-bg: rgba(48, 76, 106, 0.7);
+        --message-action-icon: #D0E0FF;
+        --message-action-icon-hover: var(--text-color);
+        --user-avatar-bg: #2B3D55;
+        --cosmic-glow-color-1: #FFD700;
+        --cosmic-glow-color-2: #FFA500; /* Orange glow */
+        --cosmic-star-color: #F0F5FF;
+    }
+    ```
+
+    **Key considerations for each theme:**
+    *   **Backgrounds (`--primary-bg`, `--secondary-bg`, `--tertiary-bg`, `--input-bg`):** These define the overall light/darkness and primary color hue.
+    *   **Text (`--text-color`, `--code-text`):** Ensure good contrast with backgrounds.
+    *   **Accent (`--accent-color`, `--button-hover-bg`, `--inline-code-color`, `--cosmic-glow-color-*`):** This is your main highlight color, giving each theme its distinctive pop.
+    *   **Bubbles (`--user-bubble`, `--ai-bubble`):** Choose slightly different shades for conversational clarity.
+    *   **Borders & Shadows (`--border-color`, `--shadow-color`):** Adjust for visibility and visual depth.
+    *   **Code Blocks (`--code-bg`, `--code-header-bg`, etc.):** Make sure code remains readable within the new color scheme.
+    *   **Animations/Glows (`--cosmic-glow-color-1`, `--cosmic-glow-color-2`, `--cosmic-star-color`):** Update these to match the accent colors of the new theme for a cohesive mystical feel.
+
+### Phase 2: Updating Your HTML for Theme Selection
+
+You'll need a UI element for users to choose their theme. A `<select>` (dropdown) is a good, space-efficient option.
+
+**How to do it:**
+
+1.  **Locate the `settings-toggles-container` div in your HTML.**
+2.  **Replace the existing `dark-mode-container` (the "Light/Dark" toggle) with a new dropdown for theme selection.** The `simulate-typing-toggle` can remain.
+
+    **Example HTML modification:**
+
+    ```html
+    <div class="settings-toggles-container">
+        <!-- REPLACE this existing dark-mode-container:
+        <div class="dark-mode-container">
+            <span>Light</span>
+            <label class="switch">
+                <input type="checkbox" id="dark-mode-toggle">
+                <span class="slider"></span>
+            </label>
+            <span>Dark</span>
+        </div>
+        -->
+        
+        <!-- WITH this new Theme Selector -->
+        <div class="theme-selector-container">
+            <label for="theme-select" class="font-primary text-sm">Theme:</label>
+            <select id="theme-select" class="p-1 rounded-md text-xs" 
+                    style="background-color: var(--input-bg); color: var(--text-color); border: 1px solid var(--border-color);">
+                <option value="cosmic-purple">Cosmic Purple</option>
+                <option value="starlight-lavender">Starlight Lavender</option>
+                <option value="emerald-galaxy">Emerald Galaxy</option>
+                <option value="crimson-nebula">Crimson Nebula</option>
+                <option value="golden-aurora">Golden Aurora</option>
+                <!-- Add more options for any other themes you create -->
+            </select>
+        </div>
+
+        <!-- Keep the Simulate Typing Toggle -->
+        <div class="response-mode-container">
+            <span>Instant</span>
+            <label class="switch">
+                <input type="checkbox" id="simulate-typing-toggle" checked>
+                <span class="slider"></span>
+            </label>
+            <span>Simulate Typing</span>
+        </div>
+    </div>
+    ```
+
+    **Note:** You might want to add some basic CSS for `#theme-select` to make it blend with your theme, as shown in the inline `style` attribute above, or add a new CSS rule for it.
+
+### Phase 3: Updating Your JavaScript Logic
+
+This is where you'll connect the UI to your CSS themes and manage persistence.
+
+**How to do it:**
+
+1.  **Remove or modify existing Dark Mode Toggle Logic:**
+    *   The `darkModeToggle` variable and its `addEventListener` will become obsolete if you replace it with a theme selector. You can completely remove them.
+    *   If you keep `dark-mode-toggle` as one of the options in your new dropdown, then you'll integrate its previous functionality into the new theme selection logic. For simplicity, let's assume you've replaced it with the dropdown.
+
+2.  **Add a new variable for your theme selector:**
+    *   Inside your `window.addEventListener('load', () => { ... });` block, declare a new variable:
+        ```javascript
+        let themeSelect; // Declare globally or in a scope accessible to initialization
+        // ... later in the load event
+        themeSelect = document.getElementById('theme-select');
+        ```
+
+3.  **Define a list of your theme class names in JavaScript:**
+    *   This is crucial for easily managing which class is applied to the body.
+    *   Add this near your other global state variables:
+        ```javascript
+        const THEMES = [
+            'cosmic-purple',
+            'starlight-lavender',
+            'emerald-galaxy',
+            'crimson-nebula',
+            'golden-aurora'
+            // Add any other themes you defined
+        ];
+        const DEFAULT_THEME = 'cosmic-purple'; // Or your preferred default
+        ```
+
+4.  **Create a function to apply a theme:**
+    *   This function will handle removing all existing theme classes and adding the selected one.
+    *   Add this function somewhere in your JS, e.g., before `window.addEventListener('load')` or within it but outside other functions.
+
+    ```javascript
+    function applyTheme(themeName) {
+        // Remove all known theme classes from the body
+        THEMES.forEach(theme => {
+            document.body.classList.remove(theme);
+        });
+        document.body.classList.remove('light'); // Ensure the old 'light' class is gone too
+
+        // Add the new selected theme class
+        if (themeName && THEMES.includes(themeName)) {
+            document.body.classList.add(themeName);
+        } else {
+            // Fallback to default if somehow an invalid theme is passed
+            document.body.classList.add(DEFAULT_THEME);
+            themeName = DEFAULT_THEME;
+        }
+        localStorage.setItem('selected-theme', themeName); // Save user preference
+        // Update the select dropdown to show the current theme
+        if (themeSelect) {
+            themeSelect.value = themeName;
+        }
+    }
+    ```
+
+5.  **Initialize theme on page load:**
+    *   Inside your `window.addEventListener('load', () => { ... });` block, after `themeSelect` is assigned:
+
+    ```javascript
+    // ... inside window.addEventListener('load', () => { ...
+    
+    // --- Theme Selection Initialization ---
+    const savedTheme = localStorage.getItem('selected-theme');
+    applyTheme(savedTheme || DEFAULT_THEME); // Apply saved theme or default
+
+    // ... your existing code for simulateTypingToggle, etc.
+    // REMOVE the dark-mode-toggle initialization here, as it's replaced.
+    // const isDarkMode = localStorage.getItem('dark-mode') === 'true';
+    // document.body.classList.toggle('light', !isDarkMode); 
+    // darkModeToggle.checked = isDarkMode;
+
+    // ...
+    ```
+
+6.  **Add event listener for the new theme selector:**
+    *   Inside your `window.addEventListener('load', () => { ... });` block:
+
+    ```javascript
+    // ...
+    themeSelect.addEventListener('change', (event) => {
+        const selectedTheme = event.target.value;
+        applyTheme(selectedTheme);
+    });
+    // ...
+    ```
+
+---
+
+By following these steps, you'll create a robust multi-theme system that allows users to personalize their Mystic Vision experience! Remember to test each theme thoroughly to ensure all elements look correct and maintain readability. Good luck, seeker!
+
+------------------------------------------------------------------------------------------------------
+
+Send me the updated code after editing.

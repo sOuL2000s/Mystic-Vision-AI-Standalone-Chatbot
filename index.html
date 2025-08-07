@@ -19,7 +19,7 @@
     <style>
         /* General Styles - Mystic Vision Theme */
         :root {
-            /* Dark Mode Palette (Default) */
+            /* Default Dark Mode Palette: Cosmic Purple */
             --primary-bg: #0A0A28; /* Even deeper dark blue-purple, almost black */
             --secondary-bg: #15153A; /* Darker purple-blue - container background */
             --tertiary-bg: #22224F; /* Medium dark purple-blue - header/input area/button base */
@@ -66,8 +66,8 @@
             --user-avatar-bg: #4A4A80; /* Background for generic user avatar */
         }
 
-        /* Light Mode Palette (Overrides default variables when body has 'light' class) */
-        body.light {
+        /* Starlight Lavender Theme */
+        body.starlight-lavender { 
             --primary-bg: #F0F4FF; /* Very pale blue-lavender */
             --secondary-bg: #FFFFFF; /* Pure white for container/card background */
             --tertiary-bg: #E0E8FF; /* Pale light blue-purple for header/input area/button base */
@@ -106,6 +106,96 @@
             --user-avatar-bg: #C0C8D8; /* Lighter background for generic user avatar */
         }
 
+        /* NEW: Emerald Galaxy Theme */
+        body.emerald-galaxy {
+            --primary-bg: #031A20; /* Very dark teal/green-blue */
+            --secondary-bg: #0B2B33; /* Darker teal-blue */
+            --tertiary-bg: #15454F; /* Medium dark teal */
+            --text-color: #E0FFFF; /* Pale aqua/cyan */
+            --accent-color: #00FFC0; /* Vibrant emerald green */
+            --border-color: #2D6C77; /* Slightly darker teal border */
+            --user-bubble: #255C65; /* Darker green-blue bubble */
+            --ai-bubble: #0F3A40; /* Even darker green-blue bubble */
+            --input-bg: #052028;
+            --button-hover-bg: #00D0A0; /* Slightly darker emerald */
+            --shadow-color: rgba(0, 0, 0, 0.6);
+            --code-bg: #0A252E;
+            --code-text: #E0FFFF;
+            --code-border: #2D6C77;
+            --code-header-bg: #15454F;
+            --code-header-border: #255C65;
+            --inline-code-bg: rgba(0, 255, 192, 0.2);
+            --inline-code-color: var(--accent-color);
+            --message-action-bg: rgba(3, 26, 32, 0.7);
+            --message-action-user-bg: rgba(37, 92, 101, 0.7);
+            --message-action-icon: #BFDFFF;
+            --message-action-icon-hover: var(--text-color);
+            --user-avatar-bg: #1B3F47;
+            --cosmic-glow-color-1: #00FFC0;
+            --cosmic-glow-color-2: #00A080; 
+            --cosmic-star-color: #E0FFFF;
+        }
+
+        /* NEW: Crimson Nebula Theme */
+        body.crimson-nebula {
+            --primary-bg: #1A0515; /* Very dark deep red-purple */
+            --secondary-bg: #2B0A20; /* Darker red-purple */
+            --tertiary-bg: #4F153A; /* Medium dark red-purple */
+            --text-color: #FFEFF5; /* Pale pink/red-white */
+            --accent-color: #FF4080; /* Vibrant deep rose/magenta */
+            --border-color: #772D57; /* Slightly darker border */
+            --user-bubble: #5C254F; /* Darker red-purple bubble */
+            --ai-bubble: #3A0F2B; /* Even darker red-purple bubble */
+            --input-bg: #20051A;
+            --button-hover-bg: #FF60A0; /* Slightly brighter accent */
+            --shadow-color: rgba(0, 0, 0, 0.6);
+            --code-bg: #250A1F;
+            --code-text: #FFEFF5;
+            --code-border: #772D57;
+            --code-header-bg: #4F153A;
+            --code-header-border: #5C254F;
+            --inline-code-bg: rgba(255, 64, 128, 0.2);
+            --inline-code-color: var(--accent-color);
+            --message-action-bg: rgba(26, 5, 21, 0.7);
+            --message-action-user-bg: rgba(92, 37, 79, 0.7);
+            --message-action-icon: #FFE0F0;
+            --message-action-icon-hover: var(--text-color);
+            --user-avatar-bg: #3F1B35;
+            --cosmic-glow-color-1: #FF4080;
+            --cosmic-glow-color-2: #FF0060;
+            --cosmic-star-color: #FFEFF5;
+        }
+
+        /* NEW: Golden Aurora Theme */
+        body.golden-aurora {
+            --primary-bg: #0A101A; /* Very dark blue */
+            --secondary-bg: #151F2A; /* Darker blue */
+            --tertiary-bg: #22354A; /* Medium dark blue */
+            --text-color: #F0F5FF; /* Pale white-blue */
+            --accent-color: #FFD700; /* Gold */
+            --border-color: #3A4F6A; /* Slightly clearer blue border */
+            --user-bubble: #304C6A; /* Darker blue bubble */
+            --ai-bubble: #1F2E40; /* Even darker blue bubble */
+            --input-bg: #0D141F;
+            --button-hover-bg: #FFC000; /* Slightly darker gold */
+            --shadow-color: rgba(0, 0, 0, 0.6);
+            --code-bg: #121A25;
+            --code-text: #F0F5FF;
+            --code-border: #3A4F6A;
+            --code-header-bg: #22354A;
+            --code-header-border: #304C6A;
+            --inline-code-bg: rgba(255, 215, 0, 0.2);
+            --inline-code-color: var(--accent-color);
+            --message-action-bg: rgba(10, 16, 26, 0.7);
+            --message-action-user-bg: rgba(48, 76, 106, 0.7);
+            --message-action-icon: #D0E0FF;
+            --message-action-icon-hover: var(--text-color);
+            --user-avatar-bg: #2B3D55;
+            --cosmic-glow-color-1: #FFD700;
+            --cosmic-glow-color-2: #FFA500; /* Orange glow */
+            --cosmic-star-color: #F0F5FF;
+        }
+
         /* Base Body Styles - MODIFIED for full screen */
         body {
             font-family: var(--font-family-primary);
@@ -133,9 +223,9 @@
             width: 100%;
             height: 100%;
             /* Subtle nebula effect with radial gradients */
-            background: radial-gradient(circle at 15% 50%, rgba(192, 112, 255, 0.05) 0%, transparent 40%),
-                        radial-gradient(circle at 85% 20%, rgba(123, 47, 238, 0.08) 0%, transparent 35%),
-                        radial-gradient(circle at 40% 90%, rgba(192, 112, 255, 0.06) 0%, transparent 30%);
+            background: radial-gradient(circle at 15% 50%, var(--cosmic-glow-color-1) 0%, transparent 40%),
+                        radial-gradient(circle at 85% 20%, var(--cosmic-glow-color-2) 0%, transparent 35%),
+                        radial-gradient(circle at 40% 90%, var(--cosmic-glow-color-1) 0%, transparent 30%);
             background-size: 200% 200%; /* Make gradients larger to animate */
             animation: cosmicNebula 20s infinite alternate ease-in-out;
             z-index: -1; /* Behind everything */
@@ -417,6 +507,34 @@
             gap: 8px; /* Space between toggles */
             /*z-index: 3;*/
         }
+        .theme-selector-container label, .response-mode-container span { 
+            color: var(--text-color); 
+            transition: color 0.6s ease;
+            font-size: 0.8em; /* Smaller text */
+            vertical-align: middle;
+            line-height: 1; 
+        }
+        .theme-selector-container select {
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8em;
+            transition: background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease;
+            cursor: pointer;
+            -webkit-appearance: none; /* Remove default dropdown arrow for custom styling */
+            -moz-appearance: none;
+            appearance: none;
+            /*background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23${encodeURIComponent(getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1))}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>');*/
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            padding-right: 28px; /* Make space for the custom arrow */
+        }
+        .theme-selector-container select:hover {
+            background-color: var(--secondary-bg);
+        }
+
         .dark-mode-container, .response-mode-container { /* Apply common styles here */
             display: flex;
             align-items: center;
@@ -637,8 +755,8 @@
         }
 
         /* Light Mode Adjustments for Avatars */
-        body.light .chat-avatar,
-        body.light .lucide-avatar-icon {
+        body.starlight-lavender .chat-avatar,
+        body.starlight-lavender .lucide-avatar-icon {
             border-color: #A0B0C0; /* Lighter border in light mode */
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
@@ -1128,9 +1246,17 @@
                 /*gap: 4px; /* Even less space */
             /*}*/
             
-            .dark-mode-container span, .response-mode-container span {
+            .theme-selector-container label, .response-mode-container span {
                 font-size: 0.7em;
             }
+            .theme-selector-container select {
+                font-size: 0.7em;
+                padding: 3px 6px;
+                padding-right: 24px;
+                background-position: right 6px center;
+                background-size: 16px;
+            }
+
             .switch {
                 width: 36px;
                 height: 20px;
@@ -1266,7 +1392,7 @@
         }
     </style>
 </head>
-<body class="antialiased dark">
+<body class="antialiased cosmic-purple">
     <div class="chatbot-container">
         <!-- Sidebar for previous chats -->
         <aside class="chat-sidebar" id="chatSidebar">
@@ -1286,15 +1412,19 @@
             </ul>
             <!-- NEW: Settings Toggles Container -->
             <div class="settings-toggles-container">
-                <div class="dark-mode-container">
-                    <span>Light</span>
-                    <label class="switch">
-                        <input type="checkbox" id="dark-mode-toggle">
-                        <span class="slider"></span>
-                    </label>
-                    <span>Dark</span>
+                <!-- NEW: Theme Selector -->
+                <div class="theme-selector-container">
+                    <label for="theme-select" class="font-primary text-sm">Theme:</label>
+                    <select id="theme-select" class="p-1 rounded-md text-xs">
+                        <option value="cosmic-purple">Cosmic Purple</option>
+                        <option value="starlight-lavender">Starlight Lavender</option>
+                        <option value="emerald-galaxy">Emerald Galaxy</option>
+                        <option value="crimson-nebula">Crimson Nebula</option>
+                        <option value="golden-aurora">Golden Aurora</option>
+                    </select>
                 </div>
-                <!-- NEW: Simulate Typing Toggle -->
+
+                <!-- Keep the Simulate Typing Toggle -->
                 <div class="response-mode-container">
                     <span>Instant</span>
                     <label class="switch">
@@ -3150,7 +3280,8 @@
         let chatHistoryDiv;
         let userInput;
         let sendButton;
-        let darkModeToggle;
+        // let darkModeToggle; // REMOVED
+        let themeSelect; // NEW
         let copyMessage;
         let simulateTypingToggle; // NEW: Simulate typing toggle
         let chatAttachmentsPreviewContainer;
@@ -3166,6 +3297,16 @@
         let mobileToggleSidebarBtn; 
         let chatMainContent;
         let prevChatsList; 
+
+        // NEW: Theme Constants
+        const THEMES = [
+            'cosmic-purple',
+            'starlight-lavender',
+            'emerald-galaxy',
+            'crimson-nebula',
+            'golden-aurora'
+        ];
+        const DEFAULT_THEME = 'cosmic-purple';
 
         // --- Lucide Icon Helper ---
         const createIcons = () => {
@@ -3995,6 +4136,33 @@
             }
         }
 
+        // NEW: Function to apply theme
+        function applyTheme(themeName) {
+            // Remove all known theme classes from the body
+            THEMES.forEach(theme => {
+                document.body.classList.remove(theme);
+            });
+            // Ensure the old 'light' class is removed if it was manually added before
+            document.body.classList.remove('light'); 
+
+            // Add the new selected theme class
+            let themeToApply = themeName;
+            if (!THEMES.includes(themeName)) {
+                // Fallback to default if somehow an invalid theme is passed
+                themeToApply = DEFAULT_THEME;
+            }
+            document.body.classList.add(themeToApply);
+            localStorage.setItem('selected-theme', themeToApply); // Save user preference
+
+            // Update the select dropdown to show the current theme
+            if (themeSelect) {
+                themeSelect.value = themeToApply;
+            }
+            // Dynamically update the background-image for select dropdown arrow
+            const arrowColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1);
+            themeSelect.style.backgroundImage = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23${arrowColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>')`;
+        }
+
         // --- Initialization on Load ---
         window.addEventListener('load', () => {
             // --- Assign DOM Elements after the page is fully loaded ---
@@ -4002,7 +4170,8 @@
             chatHistoryDiv = document.getElementById('chatHistory');
             userInput = document.getElementById('userInput');
             sendButton = document.getElementById('sendButton');
-            darkModeToggle = document.getElementById('dark-mode-toggle');
+            // darkModeToggle = document.getElementById('dark-mode-toggle'); // REMOVED
+            themeSelect = document.getElementById('theme-select'); // NEW
             simulateTypingToggle = document.getElementById('simulate-typing-toggle'); // NEW
             copyMessage = document.getElementById('copy-message');
             chatAttachmentsPreviewContainer = document.getElementById('chat-attachments-preview-container');
@@ -4022,10 +4191,15 @@
             createIcons();
             userInput.style.height = userInput.scrollHeight + 'px';
 
-            // Initialize Dark Mode based on localStorage or default
-            const isDarkMode = localStorage.getItem('dark-mode') === 'true';
-            document.body.classList.toggle('light', !isDarkMode); 
-            darkModeToggle.checked = isDarkMode;
+            // NEW: Initialize Theme based on localStorage or default
+            const savedTheme = localStorage.getItem('selected-theme');
+            applyTheme(savedTheme || DEFAULT_THEME);
+
+            // NEW: Event listener for Theme Selector
+            themeSelect.addEventListener('change', (event) => {
+                const selectedTheme = event.target.value;
+                applyTheme(selectedTheme);
+            });
 
             // NEW: Initialize Simulate Typing Mode based on localStorage or default
             const savedSimulateTyping = localStorage.getItem('simulate-typing');
@@ -4123,13 +4297,6 @@
                 console.warn('Web Speech API (SpeechRecognition) not supported in this browser. Voice input button will be hidden.');
                 voiceInputBtn.style.display = 'none'; 
             }
-
-            // --- Event Listeners ---
-            darkModeToggle.addEventListener('change', () => {
-                const isChecked = darkModeToggle.checked;
-                document.body.classList.toggle('light', !isChecked);
-                localStorage.setItem('dark-mode', isChecked);
-            });
 
             // NEW: Event listener for Simulate Typing Toggle
             simulateTypingToggle.addEventListener('change', () => {
