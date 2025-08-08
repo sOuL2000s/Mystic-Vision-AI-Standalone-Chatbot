@@ -1156,7 +1156,7 @@
         #sendButton {
             background-color: var(--accent-color); 
             box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3); 
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease, opacity 0.3s ease, cursor 0.3s ease;
         }
         #sendButton:hover {
             background-color: var(--button-hover-bg);
@@ -1165,13 +1165,16 @@
         #sendButton:active {
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
-        /* NEW: Stop button */
-        #stopButton {
-            background-color: var(--accent-error);
-            color: white;
+        /* NEW: Disabled state for the sendButton */
+        #sendButton:disabled {
+            background-color: var(--tertiary-bg); /* Match other icon buttons or a neutral color */
+            cursor: not-allowed;
+            opacity: 0.6; /* Indicate disabled state */
+            box-shadow: none;
+            transform: none;
         }
-        #stopButton:hover {
-            background-color: color-mix(in srgb, var(--accent-error) 80%, black 20%);
+        #sendButton:disabled .lucide {
+            color: var(--border-color); /* Faded icon color */
         }
 
         /* Loading Indicator - NEW: Cosmic Loader */
@@ -1706,14 +1709,9 @@
 
                 <textarea id="userInput" placeholder="Type your message..." rows="1"></textarea>
                 
-                <!-- Send Button -->
+                <!-- Send/Stop Button (Combined) -->
                 <button id="sendButton" class="icon-button">
                     <span data-lucide="send" class="w-5 h-5"></span>
-                </button>
-
-                <!-- Stop Button (initially hidden) -->
-                <button id="stopButton" class="icon-button hidden" title="Stop generating response">
-                    <span data-lucide="square" class="w-5 h-5"></span>
                 </button>
             </div>
         </main>
@@ -3135,7 +3133,8 @@
         let voiceInputBtn;
         let suggestionsContainer;
         let suggestionsList;
-        let stopButton; 
+        // Removed: let stopButton; 
+        
         // Sidebar Elements
         let chatSidebar; 
         let newChatBtnSidebar; 
@@ -3187,6 +3186,29 @@
             buttonElement.appendChild(newIconSpan);
            
             createIcons(); 
+        }
+
+        // NEW: Function to manage the send/stop button's appearance and enabled/disabled state
+        function updateSendButtonState() {
+            const hasInput = userInput.value.trim().length > 0 || chatAttachments.length > 0;
+
+            if (isGeneratingResponse) {
+                // AI is generating, button should be 'stop'
+                updateButtonIcon(sendButton, 'square', 'w-5 h-5');
+                sendButton.disabled = false; // Always enabled to stop
+                sendButton.style.backgroundColor = 'var(--accent-error)'; // Red for stop
+                sendButton.style.color = 'white'; // White icon for stop
+            } else {
+                // AI is idle, button should be 'send'
+                updateButtonIcon(sendButton, 'send', 'w-5 h-5');
+                sendButton.style.backgroundColor = 'var(--accent-color)'; // Default accent color for send
+                sendButton.style.color = 'white'; // White icon for send
+                if (hasInput) {
+                    sendButton.disabled = false; // Enable if there's text or attachments
+                } else {
+                    sendButton.disabled = true; // Disable if no text and no attachments
+                }
+            }
         }
 
         // --- File Handling Helpers ---
@@ -3378,16 +3400,16 @@
                 loadingIndicator.style.display = 'flex';
                 loadingIndicator.style.flexDirection = 'column'; 
                 chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-                sendButton.classList.add('hidden'); 
-                stopButton.classList.remove('hidden'); 
+                isGeneratingResponse = true; // Set state for button update
+                updateSendButtonState(); // Update button to 'stop' icon and enabled
                 userInput.disabled = true; 
             } else {
                 isApiCallInProgress = false;
                 if (loadingIndicator) {
                     loadingIndicator.remove(); 
                 }
-                sendButton.classList.remove('hidden'); 
-                stopButton.classList.add('hidden'); 
+                isGeneratingResponse = false; // Set state for button update
+                updateSendButtonState(); // Update button to 'send' icon and disabled/enabled based on input
                 userInput.disabled = false; 
                 userInput.focus();
             }
@@ -3673,6 +3695,7 @@
                     suggestionsContainer.classList.add('hidden');
                     userInput.style.height = 'auto'; 
                     userInput.style.height = userInput.scrollHeight + 'px';
+                    updateSendButtonState(); // Update button state after suggestion is applied
                 });
                 suggestionsList.appendChild(li);
             });
@@ -3698,6 +3721,7 @@
             userInput.value = items[selectedSuggestionIndex].textContent; 
             userInput.style.height = 'auto'; 
             userInput.style.height = userInput.scrollHeight + 'px';
+            updateSendButtonState(); // Update button state after suggestion is navigated
         }
 
         function selectCurrentSuggestion() {
@@ -3707,6 +3731,7 @@
             }
             suggestionsContainer.classList.add('hidden');
             selectedSuggestionIndex = -1;
+            updateSendButtonState(); // Update button state after suggestion is selected
         }
 
         // --- Chat History Management ---
@@ -3751,7 +3776,7 @@
             suggestionsContainer.classList.add('hidden');
             selectedSuggestionIndex = -1;
             userInput.dataset.editingMessageId = '';
-            updateButtonIcon(sendButton, 'send', 'w-5 h-5');
+            updateSendButtonState(); // Update button state for new chat
 
             // Step 3: Append the initial AI message for the new chat
             const initialAiMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -3946,7 +3971,7 @@
             // This part is a bit tricky with dynamic CSS variables and needs to be called after theme application
             // A simple way to get current text-color for the SVG arrow:
             // const arrowColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1);
-            // themeSelect.style.backgroundImage = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23${arrowColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>')`;
+            // themeSelect.style.backgroundImage = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23${arrowColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>');`;
         }
 
         // --- Initialization on Load ---
@@ -3964,7 +3989,8 @@
             voiceInputBtn = document.getElementById('voice-input-btn');
             suggestionsContainer = document.getElementById('suggestions-container');
             suggestionsList = document.getElementById('suggestions-list');
-            stopButton = document.getElementById('stopButton');
+            // Removed: stopButton from variable declaration
+            
             // Sidebar Elements
             chatSidebar = document.getElementById('chatSidebar'); 
             newChatBtnSidebar = document.getElementById('newChatBtn'); 
@@ -4068,6 +4094,8 @@
                 startNewChat();
             }
 
+            updateSendButtonState(); // Initial state update for the send button
+
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('/service-worker.js')
                 .then(registration => {
@@ -4092,6 +4120,7 @@
                     userInput.placeholder = 'Listening... Speak now.';
                     finalTranscript = ''; 
                     userInput.value = ''; 
+                    updateSendButtonState(); // Update send button state
                 };
 
                 recognition.onresult = (event) => {
@@ -4107,6 +4136,7 @@
                     userInput.scrollLeft = userInput.scrollWidth; 
                     userInput.style.height = 'auto'; 
                     userInput.style.height = userInput.scrollHeight + 'px';
+                    updateSendButtonState(); // Update send button state as user types
                 };
 
                 recognition.onend = () => {
@@ -4122,6 +4152,7 @@
                     }
                     userInput.style.height = 'auto'; 
                     userInput.style.height = userInput.scrollHeight + 'px';
+                    updateSendButtonState(); // Final update after recognition ends
                 };
 
                 recognition.onerror = (event) => {
@@ -4137,11 +4168,13 @@
                     } else if (event.error === 'no-speech') {
                         console.log('No speech detected, recognition ended.');
                         if (finalTranscript.trim() === '') { userInput.value = ''; }
+                        updateSendButtonState(); // Update button state even on no-speech
                         return; 
                     } else if (event.error === 'network') {
                         errorMessage = 'Speech recognition network error. This often means a firewall, proxy, or browser extension is blocking access to Google\'s speech services. Please try disabling extensions or testing in incognito mode.';
                     }
                     alert(errorMessage); 
+                    updateSendButtonState(); // Update button state on error
                 };
             } else {
                 console.warn('Web Speech API (SpeechRecognition) not supported in this browser. Voice input button will be hidden.');
@@ -4174,7 +4207,7 @@
                             }
                         }
                     }
-                    toggleLoading(false); // Hide loading indicator
+                    toggleLoading(false); // Hide loading indicator, which also updates the send button
                     saveCurrentChat(); // Save the chat now that it's complete
                 }
             });
@@ -4190,6 +4223,7 @@
                 } else {
                     suggestionsContainer.classList.add('hidden');
                 }
+                updateSendButtonState(); // Update button state based on input
             });
 
             userInput.addEventListener('keydown', (e) => {
@@ -4242,16 +4276,59 @@
                 if (filePasted) {
                     displayChatAttachments();
                     userInput.focus();
+                    updateSendButtonState(); // Update button state after paste
                 }
             });
 
             sendButton.addEventListener('click', async () => {
-                if (isApiCallInProgress) return; 
+                // If AI is currently generating, this click means STOP
+                if (isGeneratingResponse) {
+                    isGeneratingResponse = false;
+                    clearInterval(currentTypingInterval);
+                    currentTypingInterval = null;
+                    if (window.speechSynthesis.speaking || window.speechSynthesis.paused) {
+                        window.speechSynthesis.cancel();
+                        isSpeaking = false;
+                        currentUtterance = null;
+                        document.querySelectorAll('.dictate-message-btn').forEach(btn => updateButtonIcon(btn, 'volume-2'));
+                    }
+                    // Ensure the currently typing message is fully rendered and highlighted
+                    const lastAIMessageDiv = chatHistoryDiv.lastElementChild;
+                    if (lastAIMessageDiv && lastAIMessageDiv.classList.contains('ai')) {
+                        const messageContentDiv = lastAIMessageDiv.querySelector('.message-content');
+                        const messageId = lastAIMessageDiv.dataset.messageId;
+                        const fullTextFromCache = messageTextCache.get(messageId);
 
+                        if (messageContentDiv && messageContentDiv.innerHTML.trim() !== '') {
+                            messageContentDiv.innerHTML = marked.parse(fullTextFromCache);
+                            if (typeof Prism !== 'undefined') {
+                                Prism.highlightAllUnder(lastAIMessageDiv);
+                            }
+                        }
+                    }
+                    toggleLoading(false); // This will update the button state to 'send'
+                    console.log("AI generation stopped by user.");
+                    saveCurrentChat();
+                    return; // Exit the function after handling stop
+                }
+
+                // If not generating, proceed with sending (original send logic)
                 const userMessage = userInput.value.trim();
                 const editingMessageId = userInput.dataset.editingMessageId;
+                const hasInput = userMessage.length > 0 || chatAttachments.length > 0;
 
-                // Stop any ongoing speech or voice input
+                if (!hasInput) {
+                    // Optionally, provide visual feedback like a shake or a temporary message
+                    console.warn("No input or attachments to send.");
+                    // Example: Add a temporary pulse animation or border color change to the input
+                    userInput.classList.add('border-accent-error', 'animate-pulse');
+                    setTimeout(() => {
+                        userInput.classList.remove('border-accent-error', 'animate-pulse');
+                    }, 500);
+                    return; // Prevent sending an empty message
+                }
+
+                // Stop any ongoing speech or voice input (redundant if voice input auto-stops on final, but safe)
                 if (isVoiceInputActive && recognition) {
                     recognition.stop();
                 }
@@ -4263,13 +4340,11 @@
                 }
 
                 if (editingMessageId) {
-                    const editedText = userMessage; 
+                    const editedText = userMessage;
                     const messageDivToEdit = document.querySelector(`.chat-message[data-message-id="${editingMessageId}"]`);
-                    
                     if (messageDivToEdit) {
                         const originalIndex = Array.from(chatHistoryDiv.children).indexOf(messageDivToEdit);
                         if (originalIndex !== -1) {
-                            // 1. Update the conversation history with the edited user message and new/retained attachments
                             conversationHistory[originalIndex].parts = [];
                             if (editedText) {
                                 conversationHistory[originalIndex].parts.push({ text: editedText });
@@ -4282,20 +4357,16 @@
                                 }
                             }
 
-                            // 2. Remove all messages from UI and history *after* the edited message
                             while (chatHistoryDiv.children.length > originalIndex + 1) {
                                 chatHistoryDiv.lastChild.remove();
                                 conversationHistory.pop();
                             }
-                            
-                            // 3. Re-render the edited message content in the UI
+
                             const messageBubbleContent = messageDivToEdit.querySelector('.message-bubble-content');
                             if (messageBubbleContent) {
-                                // Clear its children completely except avatar and actions
                                 const messageContentDiv = messageBubbleContent.querySelector('.message-content');
                                 if (messageContentDiv) messageContentDiv.remove();
 
-                                // Re-create and append the new message content div
                                 const newMessageContentDiv = document.createElement('div');
                                 newMessageContentDiv.classList.add('message-content');
                                 newMessageContentDiv.innerHTML = `<span>${editedText}</span>`;
@@ -4317,17 +4388,13 @@
                                     });
                                     newMessageContentDiv.appendChild(attachmentsContainer);
                                 }
-                                messageBubbleContent.prepend(newMessageContentDiv); // Add updated content to the beginning of bubble
-                                
-                                createIcons(); 
+                                messageBubbleContent.prepend(newMessageContentDiv);
+                                createIcons();
                             }
-                            // Store the raw text for copy/dictate
-                            messageTextCache.set(editingMessageId, editedText); 
-                            messageDivToEdit.classList.remove('editing'); 
+                            messageTextCache.set(editingMessageId, editedText);
+                            messageDivToEdit.classList.remove('editing');
                         }
                     }
-                } else if (!userMessage && chatAttachments.length === 0) {
-                    return; 
                 } else {
                     const userParts = [];
                     if (userMessage) {
@@ -4342,93 +4409,56 @@
                         });
                     }
                     const newUserMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-                    appendChatMessage('user', userMessage, chatAttachments, newUserMessageId); 
+                    appendChatMessage('user', userMessage, chatAttachments, newUserMessageId);
                     conversationHistory.push({ role: 'user', parts: userParts, id: newUserMessageId });
                 }
-                
-                userInput.value = '';
-                userInput.style.height = 'auto'; 
-                chatAttachments = [];
-                chatImageUpload.value = ''; 
-                displayChatAttachments(); 
-                suggestionsContainer.classList.add('hidden'); 
-                selectedSuggestionIndex = -1;
-                delete userInput.dataset.editingMessageId; 
-                updateButtonIcon(sendButton, 'send', 'w-5 h-5'); 
 
-                isGeneratingResponse = true; 
-                toggleLoading(true); 
+                userInput.value = '';
+                userInput.style.height = 'auto';
+                chatAttachments = [];
+                chatImageUpload.value = '';
+                displayChatAttachments();
+                suggestionsContainer.classList.add('hidden');
+                selectedSuggestionIndex = -1;
+                delete userInput.dataset.editingMessageId;
+                
+                toggleLoading(true); // This will set isGeneratingResponse and update button state
 
                 try {
                     const payload = {
-                        contents: conversationHistory, 
+                        contents: conversationHistory,
                     };
-                    
+
                     const responseText = await callGeminiAPI(payload);
-                    
+
                     if (isGeneratingResponse) { // Still check if the user hasn't stopped it during API call
                         const newAiMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-                        // Append an empty AI message initially. Its actual content will be filled later.
-                        const { messageContentDiv: aiContentDiv, messageDiv: aiMessageDiv } = appendChatMessage('ai', responseText, [], newAiMessageId); 
-                        
-                        // Add the full AI message to history AFTER appending the empty shell
+                        const { messageContentDiv: aiContentDiv, messageDiv: aiMessageDiv } = appendChatMessage('ai', responseText, [], newAiMessageId);
+
                         conversationHistory.push({ role: 'model', parts: [{ text: responseText }], id: newAiMessageId });
 
                         if (isSimulateTypingEnabled) {
-                            simulateTyping(aiContentDiv, responseText); // Fill content character by character
+                            simulateTyping(aiContentDiv, responseText);
                         } else {
-                            // Instant display mode: fill content immediately and highlight
                             aiContentDiv.innerHTML = marked.parse(responseText);
                             if (typeof Prism !== 'undefined') {
-                                Prism.highlightAllUnder(aiMessageDiv); // Highlight the full message div
+                                Prism.highlightAllUnder(aiMessageDiv);
                             }
                             chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-                            toggleLoading(false); // Hide loading indicator for instant mode
-                            isGeneratingResponse = false; // Mark generation as complete
-                            saveCurrentChat(); // Save the chat now that the response is complete
+                            toggleLoading(false);
+                            isGeneratingResponse = false;
+                            saveCurrentChat();
                         }
                     }
-                    
                 } catch (error) {
                     console.error('Chat API call failed:', error);
                     appendChatMessage('ai', `Oops! Something went wrong. Please try again. (${error.message})`);
-                    toggleLoading(false); 
+                    toggleLoading(false); // This will update the button state to 'send'
                     isGeneratingResponse = false;
                 } 
             });
             
-            stopButton.addEventListener('click', () => {
-                if (isGeneratingResponse) {
-                    isGeneratingResponse = false; 
-                    clearInterval(currentTypingInterval); 
-                    currentTypingInterval = null; 
-                    if (window.speechSynthesis.speaking || window.speechSynthesis.paused) {
-                        window.speechSynthesis.cancel(); 
-                        isSpeaking = false;
-                        currentUtterance = null;
-                        document.querySelectorAll('.dictate-message-btn').forEach(btn => updateButtonIcon(btn, 'volume-2'));
-                    }
-                    // Ensure the currently typing message is fully rendered and highlighted
-                    const lastAIMessageDiv = chatHistoryDiv.lastElementChild;
-                    if (lastAIMessageDiv && lastAIMessageDiv.classList.contains('ai')) {
-                        const messageContentDiv = lastAIMessageDiv.querySelector('.message-content');
-                        const messageId = lastAIMessageDiv.dataset.messageId;
-                        const fullTextFromCache = messageTextCache.get(messageId);
-
-                        if (messageContentDiv && messageContentDiv.innerHTML.trim() !== '') { 
-                            // The simulateTyping interval handler will now also call marked.parse and Prism.highlightAllUnder if stopped
-                            // But if it's already stopped, we need to ensure it's fully rendered manually:
-                            messageContentDiv.innerHTML = marked.parse(fullTextFromCache);
-                            if (typeof Prism !== 'undefined') {
-                                Prism.highlightAllUnder(lastAIMessageDiv);
-                            }
-                        }
-                    }
-                    toggleLoading(false); 
-                    console.log("AI generation stopped by user.");
-                    saveCurrentChat(); // Save the chat as it is, even if incomplete
-                }
-            });
+            // Removed: stopButton.addEventListener block
 
             chatImageUpload.addEventListener('change', async (event) => {
                 const files = Array.from(event.target.files);
@@ -4458,6 +4488,7 @@
                     }
                     displayChatAttachments();
                     userInput.focus();
+                    updateSendButtonState(); // Update button state after file attachment
                 }
                 chatImageUpload.value = ''; 
             });
@@ -4471,6 +4502,7 @@
                         chatAttachments.splice(index, 1); 
                         displayChatAttachments(); 
                         userInput.focus();
+                        updateSendButtonState(); // Update button state after attachment removal
                     }
                 }
             });
@@ -4532,10 +4564,11 @@
                     }
                     displayChatAttachments();
                     userInput.focus();
+                    updateSendButtonState(); // Update button state after drag/drop
                 }
             });
             
-            chatHistoryDiv.addEventListener('click', (event) => {
+            chatHistoryDiv.addEventListener('click', async (event) => { // Made async for API call in regenerate
                 const codeCopyButton = event.target.closest('.code-block-copy-button');
                 if (codeCopyButton) {
                     const targetId = codeCopyButton.dataset.copyTarget;
@@ -4616,7 +4649,8 @@
                             messageDivToEdit.classList.add('editing');
 
                             userInput.dataset.editingMessageId = messageId;
-                            updateButtonIcon(sendButton, 'save', 'w-5 h-5');
+                            updateButtonIcon(sendButton, 'save', 'w-5 h-5'); // Change icon to 'save' when editing
+                            updateSendButtonState(); // Re-enable send button if there's input for saving
                         }
                     }
                     return;
@@ -4663,8 +4697,53 @@
                                 chatAttachments = userAttachmentsForRegen; 
                                 displayChatAttachments(); 
 
-                                // Trigger send to re-send the last user message to the API
-                                sendButton.click(); 
+                                // Directly trigger the API call logic without simulating a click,
+                                // and ensure the button state is correctly updated.
+                                toggleLoading(true); // Set to loading state immediately
+                                // No need to push user message again, it's already in conversationHistory
+                                // and we sliced back to it.
+
+                                try {
+                                    const payload = {
+                                        contents: conversationHistory,
+                                    };
+                                    const responseText = await callGeminiAPI(payload);
+
+                                    if (isGeneratingResponse) { // Check if not stopped during API call
+                                        const newAiMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                                        const { messageContentDiv: aiContentDiv, messageDiv: aiMessageDiv } = appendChatMessage('ai', responseText, [], newAiMessageId);
+                                        conversationHistory.push({ role: 'model', parts: [{ text: responseText }], id: newAiMessageId });
+
+                                        if (isSimulateTypingEnabled) {
+                                            simulateTyping(aiContentDiv, responseText);
+                                        } else {
+                                            aiContentDiv.innerHTML = marked.parse(responseText);
+                                            if (typeof Prism !== 'undefined') {
+                                                Prism.highlightAllUnder(aiMessageDiv);
+                                            }
+                                            chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
+                                            toggleLoading(false);
+                                            isGeneratingResponse = false;
+                                            saveCurrentChat();
+                                        }
+                                    }
+                                } catch (error) {
+                                    console.error('Chat API call failed during regeneration:', error);
+                                    appendChatMessage('ai', `Oops! Something went wrong during regeneration. Please try again. (${error.message})`);
+                                    toggleLoading(false);
+                                    isGeneratingResponse = false;
+                                }
+
+                                // Clear input area after successful "resend" from regeneration
+                                userInput.value = '';
+                                userInput.style.height = 'auto';
+                                chatAttachments = [];
+                                chatImageUpload.value = '';
+                                displayChatAttachments();
+                                suggestionsContainer.classList.add('hidden');
+                                selectedSuggestionIndex = -1;
+                                delete userInput.dataset.editingMessageId;
+                                updateSendButtonState(); // Ensure button is 'send' and disabled if no new input
                             } else {
                                 console.error("Cannot regenerate: Last message in history is not a user message or is malformed.");
                                 alert("Could not regenerate. The previous user message was not found or was empty. Starting a new chat.");

@@ -245,6 +245,68 @@
             --cosmic-glow-color-2: #D08000; /* Slightly more burnt orange for the secondary glow */
             --cosmic-star-color: var(--text-color);
         }
+
+        /* NEW Theme: Neon Glitch */
+        body.neon-glitch {
+            --primary-bg: #02010A; /* Very dark blue-black */
+            --secondary-bg: #0F0A20; /* Dark blue-purple */
+            --tertiary-bg: #1A1030; /* Deeper purple */
+            --text-color: #E0FFFF; /* Electric light blue */
+            --accent-color: #00E0FF; /* Bright cyan/aqua neon */
+            --border-color: #2A1F45; /* Darker purple-blue */
+            --user-bubble: #301A50; /* Deep purple for user */
+            --ai-bubble: #15082A; /* Even darker purple for AI */
+            --input-bg: #0A0515;
+            --button-hover-bg: #00B0CC; /* Slightly darker neon */
+            --shadow-color: rgba(0, 0, 0, 0.7);
+            --code-bg: #080415;
+            --code-text: #B0FFFF;
+            --code-border: #2A1F45;
+            --code-header-bg: #1A1030;
+            --code-header-border: #301A50;
+            --inline-code-bg: rgba(0, 224, 255, 0.25);
+            --inline-code-color: var(--accent-color);
+            --message-action-bg: rgba(2, 1, 10, 0.7);
+            --message-action-user-bg: rgba(48, 26, 80, 0.7);
+            --message-action-icon: #B0FFFF;
+            --message-action-icon-hover: #E0FFFF;
+            --user-avatar-bg: #20103A;
+            --cosmic-glow-color-1: #00E0FF; /* Neon blue glow */
+            --cosmic-glow-color-2: #FF00FF; /* Neon pink glow */
+            --cosmic-star-color: #E0FFFF;
+        }
+
+        /* NEW Theme: Ancient Papyrus */
+        body.ancient-papyrus {
+            --primary-bg: #FDF6E3; /* Light cream/parchment background */
+            --secondary-bg: #FFF8EB; /* Whiter cream for containers */
+            --tertiary-bg: #E8E0C9; /* Slightly darker cream for headers/inputs */
+            --text-color: #4A3A2B; /* Dark brown/sepia text */
+            --accent-color: #A0522D; /* Earthy terracotta/sienna */
+            --border-color: #D3C7B0; /* Muted brown border */
+            --user-bubble: #F0E8D7; /* Light tan user bubble */
+            --ai-bubble: #FCF5E0; /* Very pale cream AI bubble */
+            --input-bg: #FBF4E0;
+            --button-hover-bg: #8B4513; /* Darker earthy brown */
+            --shadow-color: rgba(0, 0, 0, 0.1); /* Very light shadow */
+            --code-bg: #E8E0C9;
+            --code-text: #4A3A2B;
+            --code-border: #D3C7B0;
+            --code-header-bg: #DCCFA7;
+            --code-header-border: #C8B99D;
+            --inline-code-bg: rgba(160, 82, 45, 0.1);
+            --inline-code-color: var(--accent-color);
+            --message-action-bg: rgba(255, 255, 255, 0.7);
+            --message-action-user-bg: rgba(240, 232, 215, 0.7);
+            --message-action-icon: #666;
+            --message-action-icon-hover: var(--text-color);
+            --user-avatar-bg: #B0A080;
+            --cosmic-glow-color-1: #D2B48C; /* Tan/parchment glow */
+            --cosmic-glow-color-2: #B8860B; /* Golden brown glow */
+            --cosmic-star-color: #4A3A2B; /* Dark specks as 'stars' */
+        }
+
+
         /* Base Body Styles - MODIFIED for full screen */
         body {
             font-family: var(--font-family-primary);
@@ -811,6 +873,8 @@
             transition: background-color 0.6s ease, color 0.6s ease, background-image 0.6s ease, box-shadow 0.6s ease;
             min-width: 0;
             overflow: auto;
+            /* FIX: Ensure minimum height for action buttons */
+            min-height: 4.5rem; /* Sufficient height for text + action buttons at the bottom */
         }
 
         .chat-message.user {
@@ -964,7 +1028,7 @@
 
         /* Message Action Buttons (Copy/Dictate/Edit/Regenerate) */
         .message-actions {
-            position: absolute;
+            position: fixed;
             bottom: 0.5rem;
             right: 1rem;
             display: flex;
@@ -1391,6 +1455,7 @@
                 padding-bottom: 2rem;
                 border-radius: 16px;
                 font-size: 0.9rem; /* Slightly larger for readability */
+                min-height: 4rem; /* Adjusted for mobile */
             }
 
             .message-actions {
@@ -1511,7 +1576,35 @@
             <!-- System Prompt / Persona Customization -->
             <div class="sidebar-section">
                 <h4 class="font-semibold text-accent-color mb-2">AI Persona (System Prompt)</h4>
-                <textarea id="systemPromptInput" placeholder="Define AI's role or behavior (e.g., 'You are a helpful coding assistant who explains concepts in detail.', 'You are a sarcastic but insightful philosopher.', 'You are a whimsical storyteller for children.', 'You are a strict grammar checker.', 'You are a supportive life coach.', 'You are a knowledgeable historian.', 'You are a curious explorer of the cosmos.', 'You are an ancient oracle speaking in riddles.', 'You are a cheerful wellness guide.'). This is only for the current session." rows="4" class="w-full"></textarea>
+                <select id="systemPromptSelect" class="w-full">
+                    <option value="">None (Default)</option>
+                    <option value="You are a helpful coding assistant who explains concepts in detail.">Coding Assistant</option>
+                    <option value="You are a sarcastic but insightful philosopher.">Sarcastic Philosopher</option>
+                    <option value="You are a whimsical storyteller for children.">Whimsical Storyteller</option>
+                    <option value="You are a strict grammar checker.">Strict Grammar Checker</option>
+                    <option value="You are a supportive life coach.">Supportive Life Coach</option>
+                    <option value="You are a knowledgeable historian.">Knowledgeable Historian</option>
+                    <option value="You are a curious explorer of the cosmos.">Cosmic Explorer</option>
+                    <option value="You are an ancient oracle speaking in riddles.">Ancient Oracle</option>
+                    <option value="You are a cheerful wellness guide.">Cheerful Wellness Guide</option>
+                    <option value="You are a fantasy role-playing game dungeon master.">RPG Dungeon Master</option>
+                    <option value="You are a creative chef providing unique recipes and cooking tips.">Creative Chef</option>
+                    <option value="You are a personal fitness trainer offering workout plans and motivation.">Personal Fitness Trainer</option>
+                    <option value="You are an expert travel guide providing detailed itineraries and cultural insights.">Expert Travel Guide</option>
+                    <option value="You are a botanical expert, identifying plants and offering gardening advice.">Botanical Expert</option>
+                    <option value="You are a cybersecurity analyst explaining online threats and safety.">Cybersecurity Analyst</option>
+                    <option value="You are a witty stand-up comedian.">Witty Comedian</option>
+                    <option value="You are a precise technical writer, explaining complex topics clearly.">Precise Technical Writer</option>
+                    <option value="You are a compassionate therapist, providing understanding and coping strategies.">Compassionate Therapist</option>
+                    <option value="You are a financial advisor, offering practical advice on money management.">Financial Advisor</option>
+                    <option value="You are a literary critic, analyzing texts and discussing themes.">Literary Critic</option>
+                    <option value="You are a legal aid assistant providing general information (but not legal advice).">Legal Aid Assistant</option>
+                    <option value="You are a dream interpreter.">Dream Interpreter</option>
+                    <option value="You are a professional negotiator.">Professional Negotiator</option>
+                    <option value="You are a minimalist living coach.">Minimalist Coach</option>
+                    <option value="You are an ethical hacker explaining common vulnerabilities.">Ethical Hacker</option>
+                    <option value="You are a dedicated researcher citing sources where possible.">Dedicated Researcher</option>
+                </select>
                 <button id="clearSystemPromptBtn" class="text-red-400 mt-2">Clear Persona</button>
             </div>
 
@@ -1525,8 +1618,9 @@
                     <button id="exportPdfBtn">
                         <span data-lucide="file-text" class="w-4 h-4"></span> Export as PDF
                     </button>
-                    <button id="exportDocBtn">
-                        <span data-lucide="file-text" class="w-4 h-4"></span> Export as DOC
+                    <!-- Changed from exportDocBtn to exportMdBtn -->
+                    <button id="exportMdBtn">
+                        <span data-lucide="file-code" class="w-4 h-4"></span> Export as MD
                     </button>
                 </div>
             </div>
@@ -1552,6 +1646,8 @@
                         <option value="crimson-nebula">Crimson Nebula</option>
                         <option value="golden-aurora">Golden Aurora</option>
                         <option value="cosmic-gold">Cosmic Gold</option>
+                        <option value="neon-glitch">Neon Glitch</option>
+                        <option value="ancient-papyrus">Ancient Papyrus</option>
                     </select>
                 </div>
 
@@ -1665,7 +1761,8 @@
 
         // NEW: AI Model and System Prompt State
         let currentModel = localStorage.getItem('selected-gemini-model') || 'gemini-2.5-flash-preview-05-20'; // Default model
-        let systemPrompt = localStorage.getItem('system-prompt') || ''; // Stores user-defined system prompt
+        // Changed from systemPrompt to systemInstruction for clarity and direct API mapping
+        let systemInstruction = localStorage.getItem('system-instruction') || ''; // Stores user-defined system instruction
 
         const initialAIMessage = {
             role: 'model',
@@ -1858,7 +1955,7 @@
             "Tell me about different personality types.",
             "What is positive psychology?",
             "How to practice self-care?",
-            "What are common symptoms of burnout?",
+            "What are common symptoms of flu?",
             "How to improve focus and concentration?",
             "What is the Pomodoro Technique?",
             "Explain the Eisenhower Matrix.",
@@ -3047,12 +3144,15 @@
         let chatMainContent;
         // NEW Sidebar Elements
         let modelSelect;
-        let systemPromptInput;
-        let clearSystemPromptBtn;
+        // Renamed from systemPromptInput to systemPromptSelect
+        let systemPromptSelect; 
+        // Renamed from clearSystemPromptBtn
+        let clearSystemPromptBtn; 
         let clearChatBtn;
         let exportTxtBtn;
         let exportPdfBtn;
-        let exportDocBtn;
+        // Renamed from exportDocBtn to exportMdBtn
+        let exportMdBtn; 
 
         // NEW: Theme Constants
         const THEMES = [
@@ -3061,7 +3161,9 @@
             'emerald-galaxy',
             'crimson-nebula',
             'golden-aurora',
-            'cosmic-gold'
+            'cosmic-gold',
+            'neon-glitch', // Added new theme
+            'ancient-papyrus' // Added new theme
         ];
         const DEFAULT_THEME = 'cosmic-purple';
 
@@ -3159,7 +3261,8 @@
             messageId = messageId || `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
             messageDiv.dataset.messageId = messageId;
             
-            let rawMessageContentForCache = ''; 
+            // Store the raw text for copy/dictate before any display formatting
+            messageTextCache.set(messageId, text); 
 
             // Create avatar element (img for AI, lucide icon for User)
             let avatarElement;
@@ -3187,7 +3290,6 @@
             messageContentDiv.classList.add('message-content');
 
             if (role === 'user') {
-                rawMessageContentForCache = `You: ${text}`;
                 messageContentDiv.innerHTML = `<span>${text}</span>`; // User text is plain HTML
 
                 if (attachments.length > 0) {
@@ -3206,15 +3308,12 @@
                         }
                     });
                     messageContentDiv.appendChild(attachmentsContainer);
-                    rawMessageContentForCache += `\n[Attachments: ${attachments.map(a => a.name).join(', ')}]`;
                 }
                 
                 messageBubbleContent.appendChild(messageContentDiv); // Append user content to bubble
                 messageDiv.appendChild(messageBubbleContent);
                 messageDiv.appendChild(avatarElement); 
             } else { // AI message: initialize empty, content filled later by simulateTyping or instant render
-                messageTextCache.set(messageId, `AI: ${text}`); // Cache full text here
-
                 // For AI, the messageContentDiv is initially empty.
                 // It will be filled by simulateTyping or direct marked.parse later.
                 messageBubbleContent.appendChild(messageContentDiv); // Append initially empty content div
@@ -3475,19 +3574,6 @@
             
             const dynamicApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${GEMINI_API_KEY}`;
 
-            // Prepend system prompt if it exists and it's the beginning of a new request
-            const finalContents = [];
-            if (systemPrompt && conversationHistory.length === payload.contents.length && payload.contents[0].role === 'user') {
-                finalContents.push({
-                    role: 'user', // System instructions are usually modeled as user input to guide AI
-                    parts: [{ text: systemPrompt }]
-                });
-                finalContents.push({
-                    role: 'model', // Then a blank model response to make the next user turn the *actual* user turn for the conversation history
-                    parts: [{ text: "Acknowledged." }] // A small acknowledgement
-                });
-            }
-
             // Filter out the 'id' property from messages before sending to Gemini API
             const cleanContents = payload.contents.map(message => {
                 const newMessage = {
@@ -3497,9 +3583,17 @@
                 // Ensure no unexpected properties are passed to the API
                 return newMessage;
             });
-            finalContents.push(...cleanContents);
+            
+            const requestBody = {
+                contents: cleanContents,
+            };
 
-            const finalPayload = { ...payload, contents: finalContents };
+            // NEW: Add system_instruction if it exists
+            if (systemInstruction) {
+                requestBody.system_instruction = {
+                    parts: [{ text: systemInstruction }]
+                };
+            }
 
             let response;
             let result;
@@ -3513,7 +3607,7 @@
                     response = await fetch(dynamicApiUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(finalPayload) // Send the final payload
+                        body: JSON.stringify(requestBody) // Send the final request body with system_instruction
                     });
 
                     if (response.status === 429) { 
@@ -3699,6 +3793,45 @@
             return text;
         }
 
+        // NEW: Export as Markdown (.md)
+        function exportAsMd() {
+            if (conversationHistory.length === 0) {
+                alert("No chat history to export.");
+                return;
+            }
+            let markdownContent = `# Mystic Vision AI Chat History\n\n`;
+            markdownContent += `*Export Date: ${new Date().toLocaleString()}*\n\n---\n\n`;
+
+            conversationHistory.forEach(msg => {
+                markdownContent += `## ${msg.role === 'user' ? 'You' : 'Mystic Vision'}\n\n`;
+                msg.parts.forEach(part => {
+                    if (part.text) {
+                        markdownContent += `${part.text}\n\n`;
+                    }
+                    if (part.inlineData) {
+                        // For image attachments, provide a placeholder markdown syntax
+                        if (part.inlineData.mimeType.startsWith('image/')) {
+                            markdownContent += `![Attachment: ${part.inlineData.name || 'Image'}](${part.inlineData.mimeType};base64,${part.inlineData.data})\n\n`;
+                        } else {
+                            // For other file types, just list them
+                            markdownContent += `[File Attachment: ${part.inlineData.name || part.inlineData.mimeType}]\n\n`;
+                        }
+                    }
+                });
+                markdownContent += `---\n\n`; // Separator between messages
+            });
+
+            const blob = new Blob([markdownContent], { type: 'text/markdown;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `MysticVision_Chat_${new Date().toISOString().slice(0, 10)}.md`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+            alert('Chat exported as Markdown (.md)!');
+        }
+
         function exportAsTxt() {
             if (conversationHistory.length === 0) {
                 alert("No chat history to export.");
@@ -3761,67 +3894,6 @@
             alert('Chat exported as PDF!');
         }
 
-        function exportAsDoc() {
-            if (conversationHistory.length === 0) {
-                alert("No chat history to export.");
-                return;
-            }
-            // This creates a simple HTML file with .doc extension. Most word processors
-            // will open it, but it's not a true .docx format.
-            const htmlContent = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <meta charset="UTF-8">
-                    <title>Mystic Vision AI Chat History</title>
-                    <style>
-                        body { font-family: sans-serif; line-height: 1.6; margin: 20px; color: #333; }
-                        h1 { color: #555; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 20px;}
-                        p { margin-bottom: 10px; }
-                        .user-role { font-weight: bold; color: #007bff; } /* A blueish color for user */
-                        .ai-role { font-weight: bold; color: #28a745; }   /* A greenish color for AI */
-                        .message-content { margin-left: 15px; }
-                    </style>
-                </head>
-                <body>
-                    <h1>Mystic Vision AI Chat History</h1>
-                    <p>Export Date: ${new Date().toLocaleString()}</p>
-                    <hr/>
-                    ${conversationHistory.map(msg => {
-                        let msgText = '';
-                        msg.parts.forEach(part => {
-                            if (part.text) {
-                                msgText += part.text;
-                            }
-                            if (part.inlineData) {
-                                msgText += ` [Attachment: ${part.inlineData.name || part.inlineData.mimeType}]`;
-                            }
-                        });
-                        // Replace newlines with <br> for HTML formatting
-                        const formattedMsgText = msgText.replace(/\n/g, '<br>');
-                        const roleClass = msg.role === 'user' ? 'user-role' : 'ai-role';
-                        return `
-                            <p>
-                                <span class="${roleClass}">${msg.role.toUpperCase()}:</span>
-                                <span class="message-content">${formattedMsgText}</span>
-                            </p>
-                        `;
-                    }).join('')}
-                </body>
-                </html>
-            `;
-
-            const blob = new Blob([htmlContent], { type: 'application/msword;charset=utf-8' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `MysticVision_Chat_${new Date().toISOString().slice(0, 10)}.doc`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(link.href);
-            alert('Chat exported as DOC!');
-        }
-
 
         // --- Paste Functionality ---
         async function processPastedFile(file) {
@@ -3871,8 +3943,10 @@
                 themeSelect.value = themeToApply;
             }
             // Dynamically update the background-image for select dropdown arrow
-            const arrowColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1);
-            themeSelect.style.backgroundImage = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23${arrowColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>')`;
+            // This part is a bit tricky with dynamic CSS variables and needs to be called after theme application
+            // A simple way to get current text-color for the SVG arrow:
+            // const arrowColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1);
+            // themeSelect.style.backgroundImage = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23${arrowColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>')`;
         }
 
         // --- Initialization on Load ---
@@ -3899,12 +3973,12 @@
             chatMainContent = document.querySelector('.chat-main-content');
             // NEW Sidebar Elements
             modelSelect = document.getElementById('model-select');
-            systemPromptInput = document.getElementById('systemPromptInput');
-            clearSystemPromptBtn = document.getElementById('clearSystemPromptBtn');
+            systemPromptSelect = document.getElementById('systemPromptSelect'); // Renamed
+            clearSystemPromptBtn = document.getElementById('clearSystemPromptBtn'); // Renamed
             clearChatBtn = document.getElementById('clearChatBtn');
             exportTxtBtn = document.getElementById('exportTxtBtn');
             exportPdfBtn = document.getElementById('exportPdfBtn');
-            exportDocBtn = document.getElementById('exportDocBtn');
+            exportMdBtn = document.getElementById('exportMdBtn'); // Renamed
 
             createIcons();
             userInput.style.height = userInput.scrollHeight + 'px';
@@ -3936,17 +4010,17 @@
                 console.log(`AI Model set to: ${currentModel}`);
             });
 
-            // Initialize System Prompt Input
-            systemPromptInput.value = systemPrompt;
-            systemPromptInput.addEventListener('input', () => {
-                systemPrompt = systemPromptInput.value.trim();
-                localStorage.setItem('system-prompt', systemPrompt);
+            // Initialize System Prompt (Persona) Select
+            systemPromptSelect.value = systemInstruction;
+            systemPromptSelect.addEventListener('change', () => {
+                systemInstruction = systemPromptSelect.value.trim();
+                localStorage.setItem('system-instruction', systemInstruction);
             });
             clearSystemPromptBtn.addEventListener('click', () => {
-                systemPromptInput.value = '';
-                systemPrompt = '';
-                localStorage.removeItem('system-prompt');
-                alert('System prompt cleared for future messages.');
+                systemPromptSelect.value = '';
+                systemInstruction = '';
+                localStorage.removeItem('system-instruction');
+                alert('AI persona cleared for future messages.');
             });
 
             // Load the current session's chat history on startup
@@ -4092,10 +4166,9 @@
                         const messageContentDiv = lastAIMessageDiv.querySelector('.message-content');
                         const messageId = lastAIMessageDiv.dataset.messageId;
                         const fullTextFromCache = messageTextCache.get(messageId);
-                        const fullText = fullTextFromCache ? fullTextFromCache.substring(3) : ''; // Remove "AI: " prefix
                         
                         if (messageContentDiv) {
-                            messageContentDiv.innerHTML = marked.parse(fullText);
+                            messageContentDiv.innerHTML = marked.parse(fullTextFromCache);
                             if (typeof Prism !== 'undefined') {
                                 Prism.highlightAllUnder(lastAIMessageDiv); // Highlight the full message div
                             }
@@ -4248,7 +4321,8 @@
                                 
                                 createIcons(); 
                             }
-                            messageTextCache.set(editingMessageId, `You: ${editedText}`); 
+                            // Store the raw text for copy/dictate
+                            messageTextCache.set(editingMessageId, editedText); 
                             messageDivToEdit.classList.remove('editing'); 
                         }
                     }
@@ -4340,12 +4414,11 @@
                         const messageContentDiv = lastAIMessageDiv.querySelector('.message-content');
                         const messageId = lastAIMessageDiv.dataset.messageId;
                         const fullTextFromCache = messageTextCache.get(messageId);
-                        const fullText = fullTextFromCache ? fullTextFromCache.substring(3) : ''; // Remove "AI: " prefix
 
                         if (messageContentDiv && messageContentDiv.innerHTML.trim() !== '') { 
                             // The simulateTyping interval handler will now also call marked.parse and Prism.highlightAllUnder if stopped
                             // But if it's already stopped, we need to ensure it's fully rendered manually:
-                            messageContentDiv.innerHTML = marked.parse(fullText);
+                            messageContentDiv.innerHTML = marked.parse(fullTextFromCache);
                             if (typeof Prism !== 'undefined') {
                                 Prism.highlightAllUnder(lastAIMessageDiv);
                             }
@@ -4481,7 +4554,7 @@
                 const chatCopyButton = event.target.closest('.copy-message-btn');
                 if (chatCopyButton) {
                     const messageId = chatCopyButton.dataset.messageId;
-                    const messageContent = messageTextCache.get(messageId);
+                    const messageContent = messageTextCache.get(messageId); // Get raw text
                     if (messageContent) {
                         updateButtonIcon(chatCopyButton, 'check');
                         copyToClipboard(messageContent); 
@@ -4497,7 +4570,7 @@
                 const dictateButton = event.target.closest('.dictate-message-btn');
                 if (dictateButton) {
                     const messageId = dictateButton.dataset.messageId;
-                    const messageContent = messageTextCache.get(messageId);
+                    const messageContent = messageTextCache.get(messageId); // Get raw text
                     if (messageContent) {
                         toggleSpeech(messageContent, dictateButton);
                     } else {
@@ -4618,7 +4691,7 @@
             // Add event listeners for the export buttons
             exportTxtBtn.addEventListener('click', exportAsTxt);
             exportPdfBtn.addEventListener('click', exportAsPdf);
-            exportDocBtn.addEventListener('click', exportAsDoc);
+            exportMdBtn.addEventListener('click', exportAsMd); // Updated listener
 
             mobileToggleSidebarBtn.addEventListener('click', () => {
                 chatSidebar.classList.add('active-mobile-sidebar');
@@ -4652,12 +4725,740 @@
 </body>
 </html>
 
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+Okay, this is a great UX improvement! Merging the send and stop buttons into one, dynamically changing its icon and state, is a very common and effective pattern.
+
+Here's how we'll achieve this, with the exact lines to modify:
+
+**1. HTML Changes:**
+
+*   **Remove the `stopButton` element.**
+
+    ```html
+    <!-- BEFORE -->
+    <!-- Send Button -->
+    <button id="sendButton" class="icon-button">
+        <span data-lucide="send" class="w-5 h-5"></span>
+    </button>
+
+    <!-- Stop Button (initially hidden) -->
+    <button id="stopButton" class="icon-button hidden" title="Stop generating response">
+        <span data-lucide="square" class="w-5 h-5"></span>
+    </button>
+
+    <!-- AFTER -->
+    <!-- Send/Stop Button (Combined) -->
+    <button id="sendButton" class="icon-button">
+        <span data-lucide="send" class="w-5 h-5"></span>
+    </button>
+    ```
+    **Line to Edit:** Remove lines **508-511** (the `stopButton` definition).
+
+**2. CSS Changes:**
+
+*   **Add disabled styles to the `sendButton` and remove `stopButton` styles.**
+
+    ```css
+    /* BEFORE */
+    /* Action buttons in input area (Send, Mic, Paperclip) */
+    .chat-input .icon-button {
+        /* ... existing styles ... */
+    }
+
+    /* ... other .icon-button styles ... */
+
+    #sendButton {
+        background-color: var(--accent-color);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    }
+    #sendButton:hover {
+        background-color: var(--button-hover-bg);
+        transform: translateY(-2px);
+    }
+    #sendButton:active {
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+    /* NEW: Stop button */
+    #stopButton { /* <-- REMOVE THIS ENTIRE BLOCK */
+        background-color: var(--accent-error);
+        color: white;
+    }
+    #stopButton:hover { /* <-- REMOVE THIS ENTIRE BLOCK */
+        background-color: color-mix(in srgb, var(--accent-error) 80%, black 20%);
+    }
+
+    /* AFTER */
+    /* Action buttons in input area (Send, Mic, Paperclip) */
+    .chat-input .icon-button {
+        /* ... existing styles ... */
+    }
+
+    /* ... other .icon-button styles ... */
+
+    #sendButton {
+        background-color: var(--accent-color);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease, opacity 0.3s ease, cursor 0.3s ease; /* Add opacity and cursor for disabled state */
+    }
+    #sendButton:hover {
+        background-color: var(--button-hover-bg);
+        transform: translateY(-2px);
+    }
+    #sendButton:active {
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+    /* NEW: Disabled state for the sendButton */
+    #sendButton:disabled {
+        background-color: var(--tertiary-bg); /* Match other icon buttons or a neutral color */
+        cursor: not-allowed;
+        opacity: 0.6; /* Indicate disabled state */
+        box-shadow: none;
+        transform: none;
+    }
+    #sendButton:disabled .lucide {
+        color: var(--border-color); /* Faded icon color */
+    }
+    ```
+    **Lines to Edit:**
+    *   Remove lines **444-451** (the entire `#stopButton` and `#stopButton:hover` rules).
+    *   Add lines **460-468** (the `#sendButton:disabled` and `#sendButton:disabled .lucide` rules) right after `#sendButton:active`.
+    *   Modify line **454** to add `opacity 0.3s ease, cursor 0.3s ease;` to `transition`.
+
+**3. JavaScript Changes:**
+
+This will be the most significant part.
+
+*   **Remove `stopButton` from DOM elements.**
+    ```javascript
+    // BEFORE
+    let sendButton;
+    let themeSelect;
+    // ... other variables ...
+    let stopButton; // <-- REMOVE THIS LINE
+    // ... other variables ...
+
+    // AFTER
+    let sendButton;
+    let themeSelect;
+    // ... other variables ...
+    // let stopButton; // Removed
+    // ... other variables ...
+    ```
+    **Line to Edit:** Remove line **605**.
+
+*   **Create a new function `updateSendButtonState()` to manage the button's appearance and enabled/disabled state.**
+
+    ```javascript
+    // Add this function somewhere before `window.addEventListener('load')`
+    // For example, right after `updateButtonIcon` function.
+    function updateSendButtonState() {
+        const hasInput = userInput.value.trim().length > 0 || chatAttachments.length > 0;
+
+        if (isGeneratingResponse) {
+            // AI is generating, button should be 'stop'
+            updateButtonIcon(sendButton, 'square', 'w-5 h-5');
+            sendButton.disabled = false; // Always enabled to stop
+            sendButton.style.backgroundColor = 'var(--accent-error)'; // Red for stop
+            sendButton.style.color = 'white';
+        } else {
+            // AI is idle, button should be 'send'
+            updateButtonIcon(sendButton, 'send', 'w-5 h-5');
+            sendButton.style.backgroundColor = 'var(--accent-color)'; // Default accent color for send
+            sendButton.style.color = 'white'; // White icon for send
+            if (hasInput) {
+                sendButton.disabled = false; // Enable if there's text or attachments
+            } else {
+                sendButton.disabled = true; // Disable if no text and no attachments
+            }
+        }
+    }
+    ```
+    **Line to Add:** Add this new `updateSendButtonState` function around lines **643-662**.
+
+*   **Modify `toggleLoading()` to use the new `updateSendButtonState()` and remove `stopButton` references.**
+
+    ```javascript
+    // BEFORE
+    function toggleLoading(show) {
+        let loadingIndicator = document.getElementById('loadingIndicator');
+        if (show) {
+            isApiCallInProgress = true;
+            if (!loadingIndicator) {
+                // ... create loadingIndicator ...
+            }
+            loadingIndicator.style.display = 'flex';
+            loadingIndicator.style.flexDirection = 'column';
+            chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
+            sendButton.classList.add('hidden'); // <-- MODIFY THIS LINE
+            stopButton.classList.remove('hidden'); // <-- MODIFY THIS LINE
+            userInput.disabled = true;
+        } else {
+            isApiCallInProgress = false;
+            if (loadingIndicator) {
+                loadingIndicator.remove();
+            }
+            sendButton.classList.remove('hidden'); // <-- MODIFY THIS LINE
+            stopButton.classList.add('hidden'); // <-- MODIFY THIS LINE
+            userInput.disabled = false;
+            userInput.focus();
+        }
+    }
+
+    // AFTER
+    function toggleLoading(show) {
+        let loadingIndicator = document.getElementById('loadingIndicator');
+        if (show) {
+            isApiCallInProgress = true;
+            if (!loadingIndicator) {
+                // ... create loadingIndicator ...
+            }
+            loadingIndicator.style.display = 'flex';
+            loadingIndicator.style.flexDirection = 'column';
+            chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
+            // sendButton.classList.add('hidden'); // NO LONGER HIDING
+            // stopButton.classList.remove('hidden'); // NO LONGER HIDING
+            isGeneratingResponse = true; // Set state for button update
+            updateSendButtonState(); // Update button to 'stop' icon and enabled
+            userInput.disabled = true;
+        } else {
+            isApiCallInProgress = false;
+            if (loadingIndicator) {
+                loadingIndicator.remove();
+            }
+            // sendButton.classList.remove('hidden'); // NO LONGER HIDING
+            // stopButton.classList.add('hidden'); // NO LONGER HIDING
+            isGeneratingResponse = false; // Set state for button update
+            updateSendButtonState(); // Update button to 'send' icon and disabled/enabled based on input
+            userInput.disabled = false;
+            userInput.focus();
+        }
+    }
+    ```
+    **Lines to Edit:**
+    *   Line **708**: Change `sendButton.classList.add('hidden');` to `isGeneratingResponse = true;` (and remove `sendButton.classList.add('hidden');`).
+    *   Line **709**: Change `stopButton.classList.remove('hidden');` to `updateSendButtonState();` (and remove `stopButton.classList.remove('hidden');`).
+    *   Line **716**: Change `sendButton.classList.remove('hidden');` to `isGeneratingResponse = false;` (and remove `sendButton.classList.remove('hidden');`).
+    *   Line **717**: Change `stopButton.classList.add('hidden');` to `updateSendButtonState();` (and remove `stopButton.classList.add('hidden');`).
+
+*   **Modify `sendButton.addEventListener('click')` to handle both send and stop actions.**
+
+    ```javascript
+    // BEFORE
+    sendButton.addEventListener('click', async () => {
+        if (isApiCallInProgress) return;
+
+        const userMessage = userInput.value.trim();
+        const editingMessageId = userInput.dataset.editingMessageId;
+
+        // ... (rest of existing send logic) ...
+
+        isGeneratingResponse = true;
+        toggleLoading(true);
+
+        try {
+            // ... (API call and response handling) ...
+        } catch (error) {
+            // ... (error handling) ...
+            isGeneratingResponse = false; // Set this in error case
+        }
+    });
+
+    // BEFORE (stopButton listener)
+    stopButton.addEventListener('click', () => { // <-- REMOVE THIS ENTIRE BLOCK
+        if (isGeneratingResponse) {
+            isGeneratingResponse = false;
+            clearInterval(currentTypingInterval);
+            currentTypingInterval = null;
+            // ... (rest of stop logic) ...
+            toggleLoading(false);
+            console.log("AI generation stopped by user.");
+            saveCurrentChat();
+        }
+    });
+
+    // AFTER (MODIFIED sendButton listener)
+    sendButton.addEventListener('click', async () => {
+        // If AI is currently generating, this click means STOP
+        if (isGeneratingResponse) {
+            isGeneratingResponse = false;
+            clearInterval(currentTypingInterval);
+            currentTypingInterval = null;
+            if (window.speechSynthesis.speaking || window.speechSynthesis.paused) {
+                window.speechSynthesis.cancel();
+                isSpeaking = false;
+                currentUtterance = null;
+                document.querySelectorAll('.dictate-message-btn').forEach(btn => updateButtonIcon(btn, 'volume-2'));
+            }
+            // Ensure the currently typing message is fully rendered and highlighted
+            const lastAIMessageDiv = chatHistoryDiv.lastElementChild;
+            if (lastAIMessageDiv && lastAIMessageDiv.classList.contains('ai')) {
+                const messageContentDiv = lastAIMessageDiv.querySelector('.message-content');
+                const messageId = lastAIMessageDiv.dataset.messageId;
+                const fullTextFromCache = messageTextCache.get(messageId);
+
+                if (messageContentDiv && messageContentDiv.innerHTML.trim() !== '') {
+                    messageContentDiv.innerHTML = marked.parse(fullTextFromCache);
+                    if (typeof Prism !== 'undefined') {
+                        Prism.highlightAllUnder(lastAIMessageDiv);
+                    }
+                }
+            }
+            toggleLoading(false); // This will update the button state to 'send'
+            console.log("AI generation stopped by user.");
+            saveCurrentChat();
+            return; // Exit the function after handling stop
+        }
+
+        // If not generating, proceed with sending (original send logic)
+        // Add this check at the very beginning of the "send" part
+        const userMessage = userInput.value.trim();
+        const editingMessageId = userInput.dataset.editingMessageId;
+        const hasInput = userMessage.length > 0 || chatAttachments.length > 0;
+
+        if (!hasInput) {
+            // Optionally, provide visual feedback like a shake or a temporary message
+            console.warn("No input or attachments to send.");
+            // Example: Add a temporary pulse animation or border color change to the input
+            userInput.classList.add('border-accent-error', 'animate-pulse');
+            setTimeout(() => {
+                userInput.classList.remove('border-accent-error', 'animate-pulse');
+            }, 500);
+            return; // Prevent sending an empty message
+        }
+
+        // Stop any ongoing speech or voice input (redundant if voice input auto-stops on final, but safe)
+        if (isVoiceInputActive && recognition) {
+            recognition.stop();
+        }
+        if (window.speechSynthesis.speaking) {
+            window.speechSynthesis.cancel();
+            isSpeaking = false;
+            currentUtterance = null;
+            document.querySelectorAll('.dictate-message-btn').forEach(btn => updateButtonIcon(btn, 'volume-2'));
+        }
+
+        if (editingMessageId) {
+            // ... (original editing logic) ...
+            const editedText = userMessage;
+            const messageDivToEdit = document.querySelector(`.chat-message[data-message-id="${editingMessageId}"]`);
+            if (messageDivToEdit) {
+                const originalIndex = Array.from(chatHistoryDiv.children).indexOf(messageDivToEdit);
+                if (originalIndex !== -1) {
+                    conversationHistory[originalIndex].parts = [];
+                    if (editedText) {
+                        conversationHistory[originalIndex].parts.push({ text: editedText });
+                    }
+                    if (chatAttachments.length > 0) {
+                        for(const attachment of chatAttachments) {
+                            conversationHistory[originalIndex].parts.push({
+                                inlineData: { mimeType: attachment.mimeType, data: attachment.data }
+                            });
+                        }
+                    }
+
+                    while (chatHistoryDiv.children.length > originalIndex + 1) {
+                        chatHistoryDiv.lastChild.remove();
+                        conversationHistory.pop();
+                    }
+
+                    const messageBubbleContent = messageDivToEdit.querySelector('.message-bubble-content');
+                    if (messageBubbleContent) {
+                        const messageContentDiv = messageBubbleContent.querySelector('.message-content');
+                        if (messageContentDiv) messageContentDiv.remove();
+
+                        const newMessageContentDiv = document.createElement('div');
+                        newMessageContentDiv.classList.add('message-content');
+                        newMessageContentDiv.innerHTML = `<span>${editedText}</span>`;
+
+                        if (chatAttachments.length > 0) {
+                            const attachmentsContainer = document.createElement('div');
+                            attachmentsContainer.classList.add('mt-2', 'flex', 'flex-wrap', 'gap-2');
+                            chatAttachments.forEach(attachment => {
+                                if (attachment.mimeType.startsWith('image/')) {
+                                    attachmentsContainer.innerHTML += `<img src="data:${attachment.mimeType};base64,${attachment.data}" alt="${attachment.name || 'User attachment'}" class="chat-image w-24 h-24 object-cover">`;
+                                } else {
+                                    attachmentsContainer.innerHTML += `
+                                        <div class="chat-message-attachment-item">
+                                            <span data-lucide="${getFileIcon(attachment.mimeType)}" class="w-4 h-4 flex-shrink-0"></span>
+                                            <span class="truncate max-w-[120px]">${attachment.name || 'File'}</span>
+                                        </div>
+                                    `;
+                                }
+                            });
+                            newMessageContentDiv.appendChild(attachmentsContainer);
+                        }
+                        messageBubbleContent.prepend(newMessageContentDiv);
+                        createIcons();
+                    }
+                    messageTextCache.set(editingMessageId, editedText);
+                    messageDivToEdit.classList.remove('editing');
+                }
+            }
+        } else {
+            // ... (original new message logic) ...
+            const userParts = [];
+            if (userMessage) {
+                userParts.push({ text: userMessage });
+            }
+            for (const attachment of chatAttachments) {
+                userParts.push({
+                    inlineData: {
+                        mimeType: attachment.mimeType,
+                        data: attachment.data
+                    }
+                });
+            }
+            const newUserMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            appendChatMessage('user', userMessage, chatAttachments, newUserMessageId);
+            conversationHistory.push({ role: 'user', parts: userParts, id: newUserMessageId });
+        }
+
+        userInput.value = '';
+        userInput.style.height = 'auto';
+        chatAttachments = [];
+        chatImageUpload.value = '';
+        displayChatAttachments();
+        suggestionsContainer.classList.add('hidden');
+        selectedSuggestionIndex = -1;
+        delete userInput.dataset.editingMessageId;
+        // updateButtonIcon(sendButton, 'send', 'w-5 h-5'); // No longer needed here, toggleLoading handles this
+
+        // isGeneratingResponse = true; // No longer needed directly here, toggleLoading handles it
+        toggleLoading(true); // This will set isGeneratingResponse and update button state
+
+        try {
+            const payload = {
+                contents: conversationHistory,
+            };
+
+            const responseText = await callGeminiAPI(payload);
+
+            if (isGeneratingResponse) { // Still check if the user hasn't stopped it during API call
+                const newAiMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                const { messageContentDiv: aiContentDiv, messageDiv: aiMessageDiv } = appendChatMessage('ai', responseText, [], newAiMessageId);
+
+                conversationHistory.push({ role: 'model', parts: [{ text: responseText }], id: newAiMessageId });
+
+                if (isSimulateTypingEnabled) {
+                    simulateTyping(aiContentDiv, responseText);
+                } else {
+                    aiContentDiv.innerHTML = marked.parse(responseText);
+                    if (typeof Prism !== 'undefined') {
+                        Prism.highlightAllUnder(aiMessageDiv);
+                    }
+                    chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
+                    toggleLoading(false);
+                    isGeneratingResponse = false;
+                    saveCurrentChat();
+                }
+            }
+        } catch (error) {
+            console.error('Chat API call failed:', error);
+            appendChatMessage('ai', `Oops! Something went wrong. Please try again. (${error.message})`);
+            toggleLoading(false); // This will update the button state to 'send'
+            isGeneratingResponse = false;
+        }
+    });
+    ```
+    **Lines to Edit:**
+    *   Remove lines **972-990** (the entire `stopButton.addEventListener` block).
+    *   **Crucially**: Modify the `sendButton.addEventListener('click', async () => { ... });` block by:
+        *   **Adding lines 972-999** (the `if (isGeneratingResponse) { ... } else { ... }` structure) to the very top of its body, including the `return;` statement. This will turn the existing listener into a combined send/stop handler.
+        *   Add the `hasInput` validation around line **1004**.
+        *   Around line **1048**: Remove `updateButtonIcon(sendButton, 'send', 'w-5 h-5');` (as `toggleLoading` will handle it).
+        *   Around line **1051**: Remove `isGeneratingResponse = true;` (as `toggleLoading` will handle it).
+
+*   **Update `userInput` and `chatAttachments` event listeners to call `updateSendButtonState()`:**
+
+    ```javascript
+    // BEFORE (in window.onload)
+    userInput.addEventListener('input', () => {
+        userInput.style.height = 'auto';
+        userInput.style.height = userInput.scrollHeight + 'px';
+
+        // ... (autocomplete logic) ...
+    });
+
+    chatImageUpload.addEventListener('change', async (event) => {
+        // ... (file processing) ...
+        displayChatAttachments();
+        userInput.focus();
+    });
+
+    chatAttachmentsPreviewContainer.addEventListener('click', (event) => {
+        const removeBtn = event.target.closest('.remove-attachment-btn');
+        if (removeBtn) {
+            const attachmentDiv = removeBtn.closest('[data-index]');
+            if (attachmentDiv) {
+                // ... (attachment removal) ...
+                displayChatAttachments();
+                userInput.focus();
+            }
+        }
+    });
+
+    // AFTER (in window.onload)
+    userInput.addEventListener('input', () => {
+        userInput.style.height = 'auto';
+        userInput.style.height = userInput.scrollHeight + 'px';
+
+        const query = userInput.value;
+        if (query.length > 0) {
+            const suggestions = filterSuggestions(query);
+            displaySuggestions(suggestions);
+        } else {
+            suggestionsContainer.classList.add('hidden');
+        }
+        updateSendButtonState(); // <-- ADD THIS LINE
+    });
+
+    chatImageUpload.addEventListener('change', async (event) => {
+        const files = Array.from(event.target.files);
+        if (files.length > 0) {
+            for (const file of files) {
+                const allowedTypes = [
+                    'image/', 'text/', 'application/pdf',
+                    'application/json', 'text/csv', 'application/xml', 'text/markdown'
+                ];
+                const isAllowed = allowedTypes.some(type => file.type.startsWith(type)) || file.name.endsWith('.md');
+
+                if (isAllowed) {
+                    if (file.size > 10 * 1024 * 1024) {
+                        alert(`File "${file.name}" is too large (>${10}MB). Max 10MB per file.`);
+                        continue;
+                    }
+                    try {
+                        const { mimeType, data } = await fileToBase64(file);
+                        chatAttachments.push({ file, mimeType, data, name: file.name });
+                    } catch (error) {
+                        alert(`Failed to read chat file ${file.name}.`);
+                        console.error('Chat file read error:', error);
+                    }
+                } else {
+                    alert(`File type not supported for chat: "${file.name}" (${file.type}).`);
+                }
+            }
+            displayChatAttachments();
+            userInput.focus();
+            updateSendButtonState(); // <-- ADD THIS LINE
+        }
+        chatImageUpload.value = '';
+    });
+
+    chatAttachmentsPreviewContainer.addEventListener('click', (event) => {
+        const removeBtn = event.target.closest('.remove-attachment-btn');
+        if (removeBtn) {
+            const attachmentDiv = removeBtn.closest('[data-index]');
+            if (attachmentDiv) {
+                const index = parseInt(attachmentDiv.dataset.index);
+                chatAttachments.splice(index, 1);
+                displayChatAttachments();
+                userInput.focus();
+                updateSendButtonState(); // <-- ADD THIS LINE
+            }
+        }
+    });
+
+    // Also call updateSendButtonState() after paste (if files were pasted)
+    chatbotContainer.addEventListener('drop', async (e) => {
+        // ... existing drag/drop logic ...
+        if (files.length > 0) {
+            // ... (file processing) ...
+            displayChatAttachments();
+            userInput.focus();
+            updateSendButtonState(); // <-- ADD THIS LINE
+        }
+    });
+    ```
+    **Lines to Add:**
+    *   Line **908**: Add `updateSendButtonState();`
+    *   Line **1096**: Add `updateSendButtonState();`
+    *   Line **1122**: Add `updateSendButtonState();`
+    *   Line **1163**: Add `updateSendButtonState();` (inside the `if (files.length > 0)` block for drag/drop).
+
+*   **Update `startNewChat()` to set the button state correctly.**
+
+    ```javascript
+    // BEFORE
+    function startNewChat() {
+        // ... (existing logic) ...
+        userInput.dataset.editingMessageId = '';
+        updateButtonIcon(sendButton, 'send', 'w-5 h-5'); // <-- REMOVE THIS LINE
+
+        // ... (rest of function) ...
+    }
+
+    // AFTER
+    function startNewChat() {
+        // ... (existing logic) ...
+        userInput.dataset.editingMessageId = '';
+        // updateButtonIcon(sendButton, 'send', 'w-5 h-5'); // Removed
+        updateSendButtonState(); // <-- ADD THIS LINE (replaces the removed line)
+
+        // ... (rest of function) ...
+    }
+    ```
+    **Line to Edit:** Replace line **819** with `updateSendButtonState();`.
+
+*   **Update Regenerate Button Click Handler to set the button state correctly.**
+
+    ```javascript
+    // BEFORE (inside chatHistoryDiv.addEventListener('click'))
+    const regenerateButton = event.target.closest('.regenerate-message-btn');
+    if (regenerateButton) {
+        // ... existing regenerate logic ...
+        sendButton.click(); // This will trigger the send logic
+    }
+
+    // AFTER
+    const regenerateButton = event.target.closest('.regenerate-message-btn');
+    if (regenerateButton) {
+        // ... existing regenerate logic ...
+        // No longer call sendButton.click(), directly run the send logic.
+        // This ensures the button state is managed by toggleLoading.
+        // Copy relevant parts of the sendButton.addEventListener logic here for regeneration.
+        const messageId = regenerateButton.dataset.messageId;
+        const messageDiv = regenerateButton.closest('.chat-message');
+
+        const aiMessageIndex = Array.from(chatHistoryDiv.children).indexOf(messageDiv);
+
+        if (aiMessageIndex !== -1) {
+            const aiMsgInHistoryIndex = conversationHistory.findIndex(msg => msg.id === messageId);
+            if (aiMsgInHistoryIndex === -1) {
+                console.error("AI message not found in history for regeneration.");
+                alert("Could not regenerate: message not found in history.");
+                return;
+            }
+
+            conversationHistory = conversationHistory.slice(0, aiMsgInHistoryIndex);
+
+            while (chatHistoryDiv.children.length > aiMessageIndex) {
+                chatHistoryDiv.lastChild.remove();
+            }
+
+            if (conversationHistory.length > 0) {
+                const lastUserMessage = conversationHistory[conversationHistory.length - 1];
+                if (lastUserMessage.role === 'user' && lastUserMessage.parts) {
+                    let userTextForRegen = '';
+                    let userAttachmentsForRegen = [];
+                    lastUserMessage.parts.forEach(part => {
+                        if (part.text) userTextForRegen = part.text;
+                        if (part.inlineData) userAttachmentsForRegen.push({
+                            mimeType: part.inlineData.mimeType,
+                            data: part.inlineData.data,
+                            name: part.inlineData.name || 'Attachment'
+                        });
+                    });
+
+                    userInput.value = userTextForRegen;
+                    chatAttachments = userAttachmentsForRegen;
+                    displayChatAttachments();
+
+                    // Directly trigger the API call logic without simulating a click,
+                    // and ensure the button state is correctly updated.
+                    toggleLoading(true); // Set to loading state immediately
+                    const userParts = [];
+                    if (userTextForRegen) {
+                        userParts.push({ text: userTextForRegen });
+                    }
+                    for (const attachment of chatAttachments) {
+                        userParts.push({
+                            inlineData: {
+                                mimeType: attachment.mimeType,
+                                data: attachment.data
+                            }
+                        });
+                    }
+                    const newUserMessageId = lastUserMessage.id; // Retain the original user message ID for regeneration context
+                    // Append user message if not already present, or re-use existing
+                    // This is handled by the slicing and the fact that we're effectively re-triggering the AI response for the last user message.
+
+                    try {
+                        const payload = {
+                            contents: conversationHistory,
+                        };
+                        const responseText = await callGeminiAPI(payload);
+
+                        if (isGeneratingResponse) { // Check if not stopped during API call
+                            const newAiMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                            const { messageContentDiv: aiContentDiv, messageDiv: aiMessageDiv } = appendChatMessage('ai', responseText, [], newAiMessageId);
+                            conversationHistory.push({ role: 'model', parts: [{ text: responseText }], id: newAiMessageId });
+
+                            if (isSimulateTypingEnabled) {
+                                simulateTyping(aiContentDiv, responseText);
+                            } else {
+                                aiContentDiv.innerHTML = marked.parse(responseText);
+                                if (typeof Prism !== 'undefined') {
+                                    Prism.highlightAllUnder(aiMessageDiv);
+                                }
+                                chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
+                                toggleLoading(false);
+                                isGeneratingResponse = false;
+                                saveCurrentChat();
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Chat API call failed during regeneration:', error);
+                        appendChatMessage('ai', `Oops! Something went wrong during regeneration. Please try again. (${error.message})`);
+                        toggleLoading(false);
+                        isGeneratingResponse = false;
+                    }
+
+                    // Clear input area after successful "resend" from regeneration
+                    userInput.value = '';
+                    userInput.style.height = 'auto';
+                    chatAttachments = [];
+                    chatImageUpload.value = '';
+                    displayChatAttachments();
+                    suggestionsContainer.classList.add('hidden');
+                    selectedSuggestionIndex = -1;
+                    delete userInput.dataset.editingMessageId;
+                    updateSendButtonState(); // Ensure button is 'send' and disabled if no new input
+                } else {
+                    console.error("Cannot regenerate: Last message in history is not a user message or is malformed.");
+                    alert("Could not regenerate. The previous user message was not found or was empty. Starting a new chat.");
+                    startNewChat();
+                }
+            } else {
+                alert("Cannot regenerate. No previous user message to base regeneration on. Starting a new chat.");
+                startNewChat();
+            }
+            return;
+        }
+    ```
+    **Lines to Edit:** Replace lines **1285-1288** (the `regenerateButton` block) with the new, expanded logic above (lines **1285-1393** in the new code). This changes it from `sendButton.click()` to directly handling the regeneration process and calling `toggleLoading`.
+
+*   **Initial call to `updateSendButtonState` on load.**
+
+    ```javascript
+    // BEFORE (in window.onload)
+    createIcons();
+    userInput.style.height = userInput.scrollHeight + 'px';
+
+    // ... (theme and model init) ...
+
+    // Load the current session's chat history on startup
+    const storedHistory = localStorage.getItem(CURRENT_CHAT_STORAGE_KEY);
+    // ... (rest of history loading) ...
+
+    // AFTER (in window.onload)
+    createIcons();
+    userInput.style.height = userInput.scrollHeight + 'px';
+
+    // ... (theme and model init) ...
+
+    // Load the current session's chat history on startup
+    const storedHistory = localStorage.getItem(CURRENT_CHAT_STORAGE_KEY);
+    // ... (rest of history loading) ...
+
+    updateSendButtonState(); // <-- ADD THIS LINE AFTER INITIAL LOAD/HISTORY RESTORE
+    ```
+    **Line to Add:** Add `updateSendButtonState();` after the `if (storedHistory) { ... } else { ... }` block, around line **870**.
+
+By following these modifications, your `sendButton` will transform into a `stopButton` during AI generation, and will be disabled when there's no input to send, providing the desired dynamic behavior.
+
 -------------------------------------------------------------------------------------
 
-how to do the following : 
-
-AI Persona (System Prompt) seems to be not working, so i'd prefer to add a list of all possible personas in the world of ai to be included inside a dropdown selection box.
-i want to change the "export to doc to docx file type"
-add some more themes based on different concepts which will be completely different from the current list of themes.
-the user sent messages can't be copied/dictated. (it says, "Message content not found for copying/dictation.")
-the message actions section is not visible for very small messages/messages with very few letters.
+send me the updated code.
