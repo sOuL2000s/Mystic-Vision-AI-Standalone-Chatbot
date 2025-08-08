@@ -14,6 +14,8 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Prism.js for code syntax highlighting -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <!-- jsPDF CDN for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json">
     <style>
@@ -166,36 +168,83 @@
             --cosmic-star-color: #FFEFF5;
         }
 
-        /* NEW: Golden Aurora Theme */
+        /* IMPROVED: Golden Aurora Theme */
         body.golden-aurora {
-            --primary-bg: #0A101A; /* Very dark blue */
-            --secondary-bg: #151F2A; /* Darker blue */
-            --tertiary-bg: #22354A; /* Medium dark blue */
-            --text-color: #F0F5FF; /* Pale white-blue */
-            --accent-color: #FFD700; /* Gold */
-            --border-color: #3A4F6A; /* Slightly clearer blue border */
-            --user-bubble: #304C6A; /* Darker blue bubble */
-            --ai-bubble: #1F2E40; /* Even darker blue bubble */
-            --input-bg: #0D141F;
-            --button-hover-bg: #FFC000; /* Slightly darker gold */
-            --shadow-color: rgba(0, 0, 0, 0.6);
-            --code-bg: #121A25;
-            --code-text: #F0F5FF;
-            --code-border: #3A4F6A;
-            --code-header-bg: #22354A;
-            --code-header-border: #304C6A;
-            --inline-code-bg: rgba(255, 215, 0, 0.2);
-            --inline-code-color: var(--accent-color);
-            --message-action-bg: rgba(10, 16, 26, 0.7);
-            --message-action-user-bg: rgba(48, 76, 106, 0.7);
-            --message-action-icon: #D0E0FF;
+            --primary-bg: #060B12; /* Even deeper, almost black-blue, base of the night sky */
+            --secondary-bg: #0F161E; /* Darker blue-grey for main container */
+            --tertiary-bg: #1A2533; /* Medium dark blue for header/input/sidebar section backgrounds */
+            --text-color: #F8F8F8; /* Crisp off-white for main text for better readability */
+            --accent-color: #FFD700; /* Pure, strong gold - keep this as the primary gold focus */
+            --border-color: #2F3E50; /* Subtler, deeper blue border */
+            --user-bubble: #28374A; /* A rich, slightly muted dark blue for user messages */
+            --ai-bubble: #121C27; /* A very dark, muted blue for AI messages, distinct but harmonious */
+            --input-bg: #080D14; /* Very dark for input field, blends with primary */
+            --button-hover-bg: #FFC000; /* Slightly brighter golden-orange for hover */
+            --shadow-color: rgba(0, 0, 0, 0.7); /* Deeper shadows for better separation */
+            --code-bg: #0F161E; /* Same as secondary background for code blocks, consistency */
+            --code-text: #E0FFFF; /* Pale aqua for code text for good readability on dark background */
+            --code-border: #2F3E50; /* Same as main border */
+            --code-header-bg: #1A2533; /* Same as tertiary */
+            --code-header-border: #28374A; /* Same as user bubble */
+            --inline-code-bg: rgba(255, 215, 0, 0.25); /* Slightly more opaque golden glow */
+            --inline-code-color: #FFECB3; /* Lighter gold for inline code, stands out more */
+            --message-action-bg: rgba(6, 11, 18, 0.7); /* More transparent dark for actions */
+            --message-action-user-bg: rgba(40, 55, 74, 0.7); /* More transparent user action background */
+            --message-action-icon: #BECDE0; /* Slightly bluer, lighter icon color */
             --message-action-icon-hover: var(--text-color);
-            --user-avatar-bg: #2B3D55;
-            --cosmic-glow-color-1: #FFD700;
-            --cosmic-glow-color-2: #FFA500; /* Orange glow */
-            --cosmic-star-color: #F0F5FF;
+            --user-avatar-bg: #2B3D55; /* Slightly desaturated dark blue for generic user avatar */
+            /* Cosmic Animation Colors - Focus on golden and complementary warm tones */
+            --cosmic-glow-color-1: #FFD700; /* Primary strong gold */
+            --cosmic-glow-color-2: #FFA500; /* Complementary vibrant orange for aurora effect */
+            --cosmic-star-color: #F8F8F8; /* Bright white for stars */
         }
+        /* NEW: Cosmic Gold Theme (Royal Edition) */
+        body.cosmic-gold {
+            /* Deeper, more profound blacks */
+            --primary-bg: #000000; /* True black of the cosmos */
+            --secondary-bg: #0A0A10; /* Very deep dark blue-black */
+            --tertiary-bg: #151520; /* Darker charcoal */
 
+            /* Royal Gold & Text on Gold */
+            --text-color: #FFFAF0; /* Soft, warm off-white/cream remains */
+            --accent-color: #CCAA00; /* A rich, royal gold - less yellow, more profound */
+            --text-on-accent: #000000; /* Essential: Black font for elements with gold background */
+
+            /* Borders & Shadows */
+            --border-color: #554422; /* Darker bronze/gold to complement the royal accent */
+            --shadow-color: rgba(0, 0, 0, 0.8); /* Deeper shadows for more contrast */
+
+            /* Bubbles & Input Fields */
+            --user-bubble: #252530; /* Darker charcoal for user messages */
+            --ai-bubble: #101018; /* Very dark blue-grey for AI messages, almost black */
+            --input-bg: #030305; /* Extremely dark for input, a subtle whisper of difference from true black */
+
+            /* Button Interactions */
+            --button-hover-bg: #E0B500; /* A lighter, rich gold for button hover states */
+
+            /* Code Blocks */
+            --code-bg: #08080B; /* Darker code background */
+            --code-text: var(--text-color);
+            --code-border: var(--border-color);
+            --code-header-bg: var(--tertiary-bg);
+            --code-header-border: var(--user-bubble);
+
+            /* Inline Code - Now with black text on royal gold */
+            --inline-code-bg: var(--accent-color); /* Solid royal gold background */
+            --inline-code-color: var(--text-on-accent); /* Black text on the gold */
+
+            /* Message Actions */
+            --message-action-bg: rgba(0, 0, 0, 0.7); /* Adjusted to new primary background */
+            --message-action-user-bg: rgba(25, 25, 30, 0.7); /* Adjusted to new user bubble background */
+            --message-action-icon: #C0C0C0;
+            --message-action-icon-hover: var(--text-color);
+
+            /* Avatars & Cosmic Glows */
+            --user-avatar-bg: #222222; /* Darker grey for generic user avatar */
+            --cosmic-glow-color-1: #CCAA00; /* Uses the new royal gold for glow */
+            --cosmic-glow-color-2: #D08000; /* Slightly more burnt orange for the secondary glow */
+            --cosmic-star-color: var(--text-color);
+        }
         /* Base Body Styles - MODIFIED for full screen */
         body {
             font-family: var(--font-family-primary);
@@ -270,18 +319,34 @@
             transition: width 0.3s ease-in-out, transform 0.3s ease-in-out, background-color 0.6s ease, border-color 0.6s ease;
             z-index: 20; /* Ensure sidebar is above main content if needed */
             box-shadow: 2px 0 10px rgba(0,0,0,0.3); /* Subtle shadow */
+            overflow-y: auto; /* Enable scrolling for sidebar content */
+        }
+        .chat-sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-sidebar::-webkit-scrollbar-track {
+            background: var(--primary-bg); 
+            border-radius: 10px;
+        }
+        .chat-sidebar::-webkit-scrollbar-thumb {
+            background-color: var(--accent-color); 
+            border-radius: 10px;
+            border: 1px solid var(--primary-bg); 
         }
 
         .chat-sidebar .sidebar-header {
             display: flex;
-            justify-content: space-between;
+            flex-wrap: wrap; /* Allows items to wrap if space is constrained */
             align-items: center;
+            justify-content: space-between; /* Pushes items to ends */
             margin-bottom: 20px;
             padding-bottom: 10px;
             border-bottom: 1px solid var(--border-color);
         }
         .chat-sidebar .sidebar-header h3 {
-            margin: 0;
+            margin: 0 10px; /* Adjust margin for spacing from buttons */
+            flex-grow: 1; /* Allows title to take available space */
+            text-align: center; /* Center the title visually */
             color: var(--accent-color);
             font-family: var(--font-family-secondary);
             font-size: 1.2em;
@@ -289,7 +354,7 @@
         /* New Chat Button (now within sidebar) */
         #newChatBtn {
             position: static; /* No longer absolutely positioned */
-            margin-right: 10px; /* Space from 'My Chats' title */
+            margin-right: 0; /* Remove old margin to let justify-content handle spacing */
             background-color: var(--accent-color);
             color: white;
             padding: 6px 12px;
@@ -337,73 +402,92 @@
             background-color: rgba(255,255,255,0.1);
         }
 
-        .sidebar-chat-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            flex-grow: 1; /* Allow list to take remaining space */
-            overflow-y: auto; /* Scroll for chat list */
-        }
-        .sidebar-chat-list::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .sidebar-chat-list::-webkit-scrollbar-track {
-            background: var(--primary-bg); 
-            border-radius: 10px;
-        }
-
-        .sidebar-chat-list::-webkit-scrollbar-thumb {
-            background-color: var(--accent-color); 
-            border-radius: 10px;
-            border: 1px solid var(--primary-bg); 
-        }
-
-        .sidebar-chat-list li {
+        /* NEW Sidebar Section Styling */
+        .sidebar-section {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
             background-color: var(--secondary-bg);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease;
+        }
+        .sidebar-section h4 {
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            color: var(--accent-color);
+            font-family: var(--font-family-secondary);
+            font-size: 1.1em;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            transition: color 0.6s ease, border-color 0.6s ease;
+        }
+        .sidebar-section input[type="password"], /* Keep this as it styles other inputs */
+        .sidebar-section textarea,
+        .sidebar-section select {
+            background-color: var(--input-bg);
             color: var(--text-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-bottom: 5px;
-            cursor: pointer;
-            transition: background-color 0.2s ease, color 0.6s ease;
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            font-family: var(--font-family-primary);
             font-size: 0.9em;
+            resize: vertical;
+            transition: border-color 0.3s ease, background-color 0.3s ease, color 0.6s ease;
         }
-        .sidebar-chat-list li:hover {
-            background-color: var(--primary-bg); /* Darker on hover */
+        .sidebar-section input[type="password"]:focus,
+        .sidebar-section textarea:focus,
+        .sidebar-section select:focus {
+            border-color: var(--accent-color);
+            background-color: color-mix(in srgb, var(--primary-bg) 90%, var(--tertiary-bg) 10%);
+            outline: none;
         }
-        .sidebar-chat-list li.active-chat {
-            background-color: var(--accent-color); /* Highlight active chat */
+        /* Style for regular buttons within sidebar sections */
+        .sidebar-section button {
+            background-color: var(--accent-color); /* Default button color */
             color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.9em;
             font-weight: 600;
-        }
-        .sidebar-chat-list li.active-chat .delete-chat-btn {
-            color: rgba(255,255,255,0.8);
-        }
-        .sidebar-chat-list li.active-chat .delete-chat-btn:hover {
-            background-color: rgba(255,255,255,0.1);
-            color: white;
-        }
-        .sidebar-chat-list .delete-chat-btn {
-            background: none;
-            border: none;
             cursor: pointer;
-            padding: 5px;
-            border-radius: 50%;
-            transition: background-color 0.2s ease, color 0.2s ease;
-            color: var(--accent-error);
-            display: flex;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: flex; /* For icons */
             align-items: center;
             justify-content: center;
-            margin-left: 10px;
-            flex-shrink: 0;
+            gap: 0.5rem; /* Space between text and icon */
         }
-        .sidebar-chat-list .delete-chat-btn:hover {
-            background-color: rgba(239, 68, 68, 0.2);
+        .sidebar-section button:hover {
+            background-color: var(--button-hover-bg);
+            transform: translateY(-1px);
+        }
+        .sidebar-section button:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        /* Special style for 'Clear' type buttons (e.g., Clear System Prompt) */
+        .sidebar-section button.text-red-400 {
+            background: none;
+            box-shadow: none;
             color: var(--accent-error);
+            padding: 0;
+            font-weight: normal;
+            text-align: left;
+            display: inline-block;
+            gap: 0; /* No gap for plain text buttons */
+        }
+        .sidebar-section button.text-red-400:hover {
+            text-decoration: underline;
+            background: none;
+            transform: none;
+        }
+        /* Ensure the existing settings-toggles-container correctly pushes to the bottom */
+        .settings-toggles-container {
+            margin-top: auto; /* Pushes this element to the bottom, taking all available space above it */
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color); /* Visual separator from content above */
         }
 
         /* NEW: Main Chat Content */
@@ -499,9 +583,6 @@
 
         /* NEW: Container for both Dark Mode and Simulate Typing toggles */
         .settings-toggles-container {
-            /*position: absolute;*/
-            /*top: 15px; /* Adjusted from 20px */
-            /*right: 15px; /* Adjusted from 20px */
             display: flex;
             flex-direction: column; /* Stack them vertically */
             gap: 8px; /* Space between toggles */
@@ -1401,15 +1482,64 @@
                     <span data-lucide="sparkles" class="w-4 h-4"></span>
                     New Chat
                 </button>
-                <h3 class="font-semibold text-lg">My Chats</h3>
+                <h3 class="font-semibold text-lg">App Settings</h3>
                 <!-- Button to toggle sidebar visibility on mobile/smaller screens -->
                 <button id="toggleSidebarBtn" title="Close Sidebar">
                     <span data-lucide="x" class="w-5 h-5"></span>
                 </button>
             </div>
-            <ul id="prevChatsList" class="sidebar-chat-list">
-                <!-- Chat items will be injected here by JavaScript -->
-            </ul>
+
+            <!-- AI Model Selector -->
+            <div class="sidebar-section">
+                <h4 class="font-semibold text-accent-color mb-2">AI Model</h4>
+                <select id="model-select" class="w-full">
+                    <!-- Ensure these match actual Gemini API model names and are valid for your key -->
+                    <option value="gemini-1.5-flash-latest">Gemini 1.5 Flash (Latest)</option>
+                    <option value="gemini-1.5-pro-latest">Gemini 1.5 Pro (Latest)</option>
+                    <option value="gemini-2.5-flash-preview-05-20">Gemini 2.5 Flash (Preview 05-20)</option>
+                    <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
+                    <option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
+                    <option value="gemini-2.5-flash-lite">Gemini 2.5 Flash Lite</option>
+                    <option value="gemini-2.5-flash-lite-06-17">Gemini 2.5 Flash Lite (06-17)</option>
+                    <option value="gemini-2.0-flash-preview-image-generation">Gemini 2.0 Flash (Image Gen Preview)</option>
+                    <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                    <option value="gemini-2.0-flash-001">Gemini 2.0 Flash (001)</option>
+                    <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash (Experimental)</option>
+                </select>
+            </div>
+
+            <!-- System Prompt / Persona Customization -->
+            <div class="sidebar-section">
+                <h4 class="font-semibold text-accent-color mb-2">AI Persona (System Prompt)</h4>
+                <textarea id="systemPromptInput" placeholder="Define AI's role or behavior (e.g., 'You are a helpful coding assistant who explains concepts in detail.', 'You are a sarcastic but insightful philosopher.', 'You are a whimsical storyteller for children.', 'You are a strict grammar checker.', 'You are a supportive life coach.', 'You are a knowledgeable historian.', 'You are a curious explorer of the cosmos.', 'You are an ancient oracle speaking in riddles.', 'You are a cheerful wellness guide.'). This is only for the current session." rows="4" class="w-full"></textarea>
+                <button id="clearSystemPromptBtn" class="text-red-400 mt-2">Clear Persona</button>
+            </div>
+
+            <!-- Export Current Chat Section -->
+            <div class="sidebar-section">
+                <h4 class="font-semibold text-accent-color mb-2">Export Current Chat</h4>
+                <div class="flex flex-col gap-2">
+                    <button id="exportTxtBtn">
+                        <span data-lucide="file-text" class="w-4 h-4"></span> Export as TXT
+                    </button>
+                    <button id="exportPdfBtn">
+                        <span data-lucide="file-text" class="w-4 h-4"></span> Export as PDF
+                    </button>
+                    <button id="exportDocBtn">
+                        <span data-lucide="file-text" class="w-4 h-4"></span> Export as DOC
+                    </button>
+                </div>
+            </div>
+
+            <!-- Clear Current Chat Button -->
+            <div class="sidebar-section">
+                <h4 class="font-semibold text-accent-color mb-2">Current Session Actions</h4>
+                <button id="clearChatBtn" class="w-full bg-accent-error text-white py-2 px-4 rounded-md font-semibold hover:bg-red-600 transition-colors flex items-center justify-center gap-2">
+                    <span data-lucide="delete" class="w-4 h-4"></span>
+                    Clear Current Chat
+                </button>
+            </div>
+            
             <!-- NEW: Settings Toggles Container -->
             <div class="settings-toggles-container">
                 <!-- NEW: Theme Selector -->
@@ -1421,6 +1551,7 @@
                         <option value="emerald-galaxy">Emerald Galaxy</option>
                         <option value="crimson-nebula">Crimson Nebula</option>
                         <option value="golden-aurora">Golden Aurora</option>
+                        <option value="cosmic-gold">Cosmic Gold</option>
                     </select>
                 </div>
 
@@ -1511,12 +1642,10 @@
         // !! DO NOT USE THIS METHOD IN PRODUCTION. USE A SERVER-SIDE PROXY. !!
         // The key below is a placeholder and WILL NOT WORK.
         const GEMINI_API_KEY = 'AIzaSyCzx6ReMk8ohPJcCjGwHHzu7SvFccJqAbA'; // <--- REPLACE THIS WITH YOUR ACTUAL KEY
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${GEMINI_API_KEY}`;
 
         // --- Global State Variables and Constants ---
         let conversationHistory = []; // Current chat's history (roles & parts)
-        let currentChatId = null; // ID of the chat currently loaded
-        let allChats = []; // Array to store metadata of all saved chats {id, title, lastUpdated}
+        const CURRENT_CHAT_STORAGE_KEY = 'mv-current-session-chat'; // Fixed key for the single active chat
         
         let chatAttachments = []; 
         const messageTextCache = new Map(); // Stores raw text for copy/dictate before Markdown parsing
@@ -1533,6 +1662,10 @@
 
         // NEW: Simulate Typing Mode state
         let isSimulateTypingEnabled = true; // Default to simulate typing
+
+        // NEW: AI Model and System Prompt State
+        let currentModel = localStorage.getItem('selected-gemini-model') || 'gemini-2.5-flash-preview-05-20'; // Default model
+        let systemPrompt = localStorage.getItem('system-prompt') || ''; // Stores user-defined system prompt
 
         const initialAIMessage = {
             role: 'model',
@@ -2373,389 +2506,6 @@
             "Explain diversity recruitment strategies.",
             "What is equity in the workplace?",
             "How to create belonging at work?",
-            "Tips for culturally competent leadership.",
-            "What is global citizenship?",
-            "How to understand different cultures?",
-            "Explain cross-cultural communication.",
-            "What are global etiquette rules?",
-            "How to manage international teams?",
-            "Tips for working abroad.",
-            "What is expat life?",
-            "How to adjust to a new country?",
-            "Explain cultural shock.",
-            "What are common travel scams?",
-            "How to stay safe while traveling?",
-            "Tips for responsible tourism.",
-            "What is ecotourism?",
-            "How to minimize environmental impact while traveling?",
-            "Explain sustainable tourism practices.",
-            "What are voluntourism opportunities?",
-            "How to choose an ethical volunteer program?",
-            "Tips for learning about local traditions.",
-            "What are intangible cultural heritage?",
-            "How to protect historical sites?",
-            "Explain heritage tourism.",
-            "What is pilgrimage tourism?",
-            "How to respect sacred places?",
-            "Tips for adventure travel.",
-            "What are extreme sports?",
-            "How to prepare for a hiking trip?",
-            "Explain backpacking essentials.",
-            "What is glamping?",
-            "How to choose camping gear?",
-            "Tips for wildlife viewing.",
-            "What are safari ethics?",
-            "How to photograph nature responsibly?",
-            "Explain astrophotography.",
-            "What is urban exploration?",
-            "How to practice street photography?",
-            "Tips for portrait photography.",
-            "What are landscape photography techniques?",
-            "How to use natural light in photography?",
-            "Explain composition rules in photography.",
-            "What is post-processing in photography?",
-            "How to edit photos in Lightroom?",
-            "Tips for using Photoshop.",
-            "What are video editing software options?",
-            "How to create a short film?",
-            "Explain documentary filmmaking.",
-            "What is animation?",
-            "How to draw cartoons?",
-            "Tips for digital art creation.",
-            "What are graphic design principles?",
-            "How to create a logo?",
-            "Explain typography basics.",
-            "What are color theory principles?",
-            "How to design a website?",
-            "Tips for UX/UI design.",
-            "What is user research?",
-            "How to conduct usability testing?",
-            "Explain wireframing and prototyping.",
-            "What are front-end development technologies?",
-            "How to learn React.js?",
-            "Tips for back-end development.",
-            "What is Python for data science?",
-            "How to use R for statistical analysis?",
-            "Explain machine learning algorithms.",
-            "What is deep learning?",
-            "How to build a neural network?",
-            "Tips for natural language processing (NLP).",
-            "What is computer vision?",
-            "How to apply AI in healthcare?",
-            "Explain AI in finance.",
-            "What are applications of AI in education?",
-            "How to use AI in marketing?",
-            "Tips for AI-powered customer service.",
-            "What is AI ethics?",
-            "How to ensure AI transparency?",
-            "Explain AI bias.",
-            "What are ethical guidelines for AI?",
-            "How to develop responsible AI systems?",
-            "Tips for AI governance frameworks.",
-            "What is the future of AI?",
-            "How will AI change society?",
-            "Explain the concept of superintelligence.",
-            "What are risks of advanced AI?",
-            "How to prepare for an AI-driven future?",
-            "Tips for human-AI collaboration.",
-            "What is the singularity?",
-            "How to balance technological progress with human values?",
-            "Explain the role of philosophy in AI.",
-            "What is consciousness?",
-            "How does the brain work?",
-            "Tips for understanding neuroscience.",
-            "What are mental models?",
-            "How to improve cognitive function?",
-            "Explain neurofeedback.",
-            "What are brainwave states?",
-            "How to enhance creativity through brain training?",
-            "Tips for improving memory recall.",
-            "What is mnemonics?",
-            "How to learn faster?",
-            "Explain spaced repetition.",
-            "What are active recall techniques?",
-            "Tips for note-taking strategies.",
-            "What is Cornell Notes system?",
-            "How to use mind maps for learning?",
-            "Explain Feynman technique.",
-            "What are different learning theories?",
-            "How to apply constructivism in education?",
-            "Tips for project-based learning.",
-            "What is inquiry-based science?",
-            "How to teach coding to kids?",
-            "Explain robotics for education.",
-            "What are benefits of AI in education?",
-            "How to use virtual reality for learning?",
-            "Tips for augmented reality in classrooms.",
-            "What is gamified learning?",
-            "How to design educational games?",
-            "Explain serious games for training.",
-            "What are simulations in education?",
-            "How to use digital storytelling in the classroom?",
-            "Tips for creating educational videos.",
-            "What are podcasts for learning?",
-            "How to use social media for educational purposes responsibly?",
-            "Explain online collaboration tools for students.",
-            "What are virtual field trips?",
-            "How to leverage open educational resources (OER)?",
-            "Tips for copyright and fair use in education.",
-            "What is academic integrity?",
-            "How to prevent plagiarism among students?",
-            "Explain ethical research practices.",
-            "What are student data privacy concerns?",
-            "How to protect student information?",
-            "Tips for responsible use of AI by students.",
-            "What is AI literacy?",
-            "How to teach students about AI?",
-            "Explain the societal impact of AI for young learners.",
-            "What are career opportunities in AI?",
-            "How to prepare students for an AI-driven workforce?",
-            "Tips for developing future-ready skills.",
-            "What is emotional intelligence for students?",
-            "How to teach empathy and compassion?",
-            "Explain conflict resolution skills for children.",
-            "What are positive communication techniques for students?",
-            "How to build resilience in young learners?",
-            "Tips for fostering a growth mindset in the classroom.",
-            "What is self-regulation for students?",
-            "How to manage stress in school?",
-            "Explain mindfulness practices for students.",
-            "What are positive psychology principles in education?",
-            "How to promote happiness and well-being in schools?",
-            "Tips for character education.",
-            "What are values education approaches?",
-            "How to teach ethics to children?",
-            "Explain civic responsibility for students.",
-            "What is global awareness in education?",
-            "How to foster intercultural understanding?",
-            "Tips for promoting human rights education.",
-            "What are peace education strategies?",
-            "How to teach about sustainable development goals?",
-            "Explain environmental stewardship for kids.",
-            "What is climate literacy?",
-            "How to engage students in environmental action?",
-            "Tips for community service learning projects.",
-            "What are benefits of volunteering for students?",
-            "How to promote leadership skills in school?",
-            "Explain entrepreneurship education for youth.",
-            "What are financial literacy programs for students?",
-            "How to teach personal finance skills?",
-            "Tips for career counseling for teenagers.",
-            "What are vocational education pathways?",
-            "How to prepare for higher education?",
-            "Explain college application essays.",
-            "What are scholarship opportunities?",
-            "How to choose the right college major?",
-            "Tips for career planning.",
-            "What is lifelong learning?",
-            "How to continuously develop new skills?",
-            "Explain reskilling and upskilling.",
-            "What are future skills for the workplace?",
-            "How to adapt to changing job markets?",
-            "Tips for career transitions.",
-            "What is personal development?",
-            "How to set personal goals?",
-            "Explain habits and routines for success.",
-            "What are productivity hacks?",
-            "How to manage time effectively?",
-            "Tips for overcoming procrastination.",
-            "What is self-discipline?",
-            "How to build motivation?",
-            "Explain the power of positive thinking.",
-            "What are visualization techniques?",
-            "How to use affirmations for personal growth?",
-            "Tips for gratitude practice.",
-            "What is mindfulness in daily life?",
-            "How to reduce stress and anxiety?",
-            "Explain relaxation techniques.",
-            "What are breathing exercises?",
-            "How to practice meditation for beginners?",
-            "Tips for improving sleep quality.",
-            "What are healthy eating habits?",
-            "How to maintain a balanced diet?",
-            "Explain the benefits of regular exercise.",
-            "What is a holistic approach to health?",
-            "How to boost your immune system?",
-            "Tips for managing chronic conditions.",
-            "What is preventive healthcare?",
-            "How to find a good doctor?",
-            "Explain patient advocacy.",
-            "What are health insurance options?",
-            "How to understand medical billing?",
-            "Tips for navigating the healthcare system.",
-            "What is mental well-being?",
-            "How to identify signs of mental health issues?",
-            "Explain therapy options.",
-            "What are support groups?",
-            "How to help someone with depression?",
-            "Tips for suicide prevention.",
-            "What is substance abuse awareness?",
-            "How to seek help for addiction?",
-            "Explain recovery process.",
-            "What are signs of an unhealthy relationship?",
-            "How to set healthy boundaries?",
-            "Tips for effective communication in relationships.",
-            "What is conflict resolution in personal relationships?",
-            "How to build trust in relationships?",
-            "Explain healthy dating practices.",
-            "What are signs of domestic violence?",
-            "How to seek help for abuse?",
-            "Tips for building self-esteem.",
-            "What is self-love?",
-            "How to practice self-compassion?",
-            "Explain body positivity.",
-            "What is imposter syndrome?",
-            "How to overcome self-doubt?",
-            "Tips for building confidence.",
-            "What is resilience in adults?",
-            "How to cope with stress and adversity?",
-            "Explain post-traumatic growth.",
-            "What are different types of intelligence?",
-            "How to improve emotional intelligence?",
-            "Tips for developing social skills.",
-            "What is empathy vs. sympathy?",
-            "How to be a better listener?",
-            "Explain assertive communication.",
-            "What is non-violent communication?",
-            "How to give and receive feedback effectively?",
-            "Tips for public speaking anxiety.",
-            "What is charisma?",
-            "How to build rapport quickly?",
-            "Explain negotiation skills.",
-            "What are conflict management styles?",
-            "How to mediate a dispute?",
-            "Tips for teamwork and collaboration.",
-            "What is effective leadership?",
-            "How to motivate others?",
-            "Explain delegation strategies.",
-            "What is coaching and mentoring?",
-            "How to inspire creativity in a team?",
-            "Tips for managing diverse teams.",
-            "What is cross-cultural competence?",
-            "How to resolve cultural misunderstandings?",
-            "Explain global awareness for professionals.",
-            "What are international business etiquette rules?",
-            "How to adapt to new work environments?",
-            "Tips for career planning and development.",
-            "What is a personal mission statement?",
-            "How to identify your strengths and weaknesses?",
-            "Explain career mapping.",
-            "What are job search strategies?",
-            "How to write a compelling resume?",
-            "Tips for successful job interviews.",
-            "What is networking for career advancement?",
-            "How to use LinkedIn effectively?",
-            "Explain personal branding for professionals.",
-            "What is salary negotiation?",
-            "How to manage career transitions?",
-            "Tips for entrepreneurship for beginners.",
-            "What is a business model canvas?",
-            "How to validate a business idea?",
-            "Explain lean startup methodology.",
-            "What are minimum viable products (MVPs)?",
-            "How to secure startup funding?",
-            "Tips for pitching to investors.",
-            "What is venture capital funding?",
-            "How to build a startup team?",
-            "Explain intellectual property protection.",
-            "What are legal considerations for startups?",
-            "How to create a marketing strategy for a small business?",
-            "Tips for social media marketing for businesses.",
-            "What is content marketing for startups?",
-            "How to measure marketing campaign effectiveness?",
-            "Explain customer acquisition strategies.",
-            "What is customer retention?",
-            "How to provide excellent customer service?",
-            "Tips for building customer loyalty.",
-            "What is public relations for businesses?",
-            "How to manage negative publicity?",
-            "Explain crisis communication for companies.",
-            "What are ethical business practices?",
-            "How to implement corporate social responsibility?",
-            "Tips for sustainable business models.",
-            "What is green business?",
-            "How to reduce environmental impact in business?",
-            "Explain circular economy principles for companies.",
-            "What are certifications for sustainable businesses?",
-            "How to measure environmental performance?",
-            "Tips for supply chain sustainability.",
-            "What is ethical sourcing?",
-            "How to ensure fair labor practices?",
-            "Explain responsible consumption and production.",
-            "What are UN Sustainable Development Goals for business?",
-            "How to report on sustainability efforts?",
-            "Tips for engaging employees in sustainability.",
-            "What is corporate governance?",
-            "How to ensure board diversity?",
-            "Explain shareholder activism.",
-            "What are regulations for publicly traded companies?",
-            "How to manage mergers and acquisitions?",
-            "Tips for business expansion strategies.",
-            "What is international trade?",
-            "How to export goods and services?",
-            "Explain import regulations.",
-            "What are global supply chain challenges?",
-            "How to mitigate geopolitical risks for businesses?",
-            "Tips for navigating international markets.",
-            "What is foreign exchange risk?",
-            "How to manage currency fluctuations?",
-            "Explain international financial reporting standards.",
-            "What are global tax considerations?",
-            "How to comply with international business laws?",
-            "Tips for cross-border investments.",
-            "What is the World Trade Organization (WTO)?",
-            "How do trade agreements work?",
-            "Explain economic sanctions.",
-            "What are trade wars?",
-            "How to assess country risk?",
-            "Tips for political risk analysis.",
-            "What is the role of diplomacy in international business?",
-            "How to negotiate with international partners?",
-            "Explain cultural intelligence for business leaders.",
-            "What are communication styles across cultures?",
-            "How to build trust in global teams?",
-            "Tips for managing cultural differences in the workplace.",
-            "What is virtual team management?",
-            "How to foster collaboration in remote global teams?",
-            "Explain digital nomad lifestyle.",
-            "What are remote work trends?",
-            "How to build a successful distributed company?",
-            "Tips for managing time zones effectively.",
-            "What is the future of work post-pandemic?",
-            "How will automation affect jobs?",
-            "Explain the gig economy's impact on employment.",
-            "What are new job roles in emerging technologies?",
-            "How to prepare for job displacement?",
-            "Tips for reskilling and upskilling for automation.",
-            "What is continuous learning in the workplace?",
-            "How to develop adaptability in your career?",
-            "Explain the importance of soft skills.",
-            "What are critical thinking skills for the future?",
-            "How to improve problem-solving abilities?",
-            "Tips for fostering creativity in your career.",
-            "What is emotional intelligence in the professional world?",
-            "How to build strong professional networks?",
-            "Explain mentorship and sponsorship in career growth.",
-            "What are leadership development programs?",
-            "How to become an effective leader?",
-            "Tips for strategic thinking in leadership.",
-            "What is change leadership?",
-            "How to navigate organizational change?",
-            "Explain innovation management.",
-            "What are trends in organizational culture?",
-            "How to build a positive and inclusive workplace culture?",
-            "Tips for employee well-being initiatives.",
-            "What is mental health support in the workplace?",
-            "How to prevent burnout in high-stress jobs?",
-            "Explain work-life integration.",
-            "What are flexible work arrangements?",
-            "How to manage stress and anxiety at work?",
-            "Tips for promoting psychological safety.",
-            "What is diversity, equity, and inclusion (DEI) in organizations?",
-            "How to implement DEI strategies effectively?",
-            "Explain unconscious bias training.",
-            "What are microaggressions in the workplace?",
-            "How to create a sense of belonging for all employees?",
             "Tips for allyship in the workplace.",
             "What is inclusive hiring?",
             "How to reduce bias in recruitment?",
@@ -3280,7 +3030,6 @@
         let chatHistoryDiv;
         let userInput;
         let sendButton;
-        // let darkModeToggle; // REMOVED
         let themeSelect; // NEW
         let copyMessage;
         let simulateTypingToggle; // NEW: Simulate typing toggle
@@ -3296,7 +3045,14 @@
         let toggleSidebarBtn; 
         let mobileToggleSidebarBtn; 
         let chatMainContent;
-        let prevChatsList; 
+        // NEW Sidebar Elements
+        let modelSelect;
+        let systemPromptInput;
+        let clearSystemPromptBtn;
+        let clearChatBtn;
+        let exportTxtBtn;
+        let exportPdfBtn;
+        let exportDocBtn;
 
         // NEW: Theme Constants
         const THEMES = [
@@ -3304,7 +3060,8 @@
             'starlight-lavender',
             'emerald-galaxy',
             'crimson-nebula',
-            'golden-aurora'
+            'golden-aurora',
+            'cosmic-gold'
         ];
         const DEFAULT_THEME = 'cosmic-purple';
 
@@ -3587,11 +3344,6 @@
                     toggleLoading(false); 
                     isGeneratingResponse = false; 
                     saveCurrentChat(); 
-
-                    const chatMeta = allChats.find(chat => chat.id === currentChatId);
-                    if (chatMeta && (chatMeta.title === 'Untitled Chat' || chatMeta.title === 'Chat with Attachments')) {
-                        summarizeChatAndRename(currentChatId, conversationHistory);
-                    }
                 }
             }, delay); 
         }
@@ -3721,7 +3473,22 @@
                 throw new Error("API Key is not set or is the default placeholder. Please replace 'YOUR_GEMINI_API_KEY_HERE' in the script with your actual Gemini API key.");
             }
             
-            // FIX: Filter out the 'id' property from messages before sending to Gemini API
+            const dynamicApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${GEMINI_API_KEY}`;
+
+            // Prepend system prompt if it exists and it's the beginning of a new request
+            const finalContents = [];
+            if (systemPrompt && conversationHistory.length === payload.contents.length && payload.contents[0].role === 'user') {
+                finalContents.push({
+                    role: 'user', // System instructions are usually modeled as user input to guide AI
+                    parts: [{ text: systemPrompt }]
+                });
+                finalContents.push({
+                    role: 'model', // Then a blank model response to make the next user turn the *actual* user turn for the conversation history
+                    parts: [{ text: "Acknowledged." }] // A small acknowledgement
+                });
+            }
+
+            // Filter out the 'id' property from messages before sending to Gemini API
             const cleanContents = payload.contents.map(message => {
                 const newMessage = {
                     role: message.role,
@@ -3730,8 +3497,9 @@
                 // Ensure no unexpected properties are passed to the API
                 return newMessage;
             });
+            finalContents.push(...cleanContents);
 
-            const cleanPayload = { ...payload, contents: cleanContents };
+            const finalPayload = { ...payload, contents: finalContents };
 
             let response;
             let result;
@@ -3742,10 +3510,10 @@
 
             while (retryCount < maxRetries && !success) {
                 try {
-                    response = await fetch(API_URL, {
+                    response = await fetch(dynamicApiUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(cleanPayload) // Send the cleaned payload
+                        body: JSON.stringify(finalPayload) // Send the final payload
                     });
 
                     if (response.status === 429) { 
@@ -3847,217 +3615,22 @@
             selectedSuggestionIndex = -1;
         }
 
-        // --- Chat History Management (NEW) ---
-        function loadAllChats() {
-            const storedChats = localStorage.getItem('mv-all-chats');
-            if (storedChats) {
-                allChats = JSON.parse(storedChats);
-            } else {
-                allChats = [];
-            }
-            renderPrevChatsList();
-        }
-
-        function saveAllChats() {
-            localStorage.setItem('mv-all-chats', JSON.stringify(allChats));
-        }
-
-        function renderPrevChatsList() {
-            if (!prevChatsList) return; 
-
-            prevChatsList.innerHTML = ''; 
-            if (allChats.length === 0) {
-                prevChatsList.innerHTML = '<li class="text-sm opacity-70">No previous chats.</li>';
-                return;
-            }
-
-            allChats.sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated)); 
-
-            allChats.forEach(chatMeta => {
-                const listItem = document.createElement('li');
-                listItem.classList.add('flex', 'items-center', 'justify-between', 'p-2', 'rounded-md', 'hover:bg-primary-bg', 'cursor-pointer', 'transition-colors', 'text-sm');
-                listItem.dataset.chatId = chatMeta.id;
-                if (chatMeta.id === currentChatId) {
-                    listItem.classList.add('active-chat'); 
-                }
-                listItem.innerHTML = `
-                    <span class="truncate">${chatMeta.title || 'Untitled Chat'}</span>
-                    <button class="delete-chat-btn text-accent-error ml-2" title="Delete Chat">
-                        <span data-lucide="trash-2" class="w-4 h-4"></span>
-                    </button>
-                `;
-                prevChatsList.appendChild(listItem);
-            });
-            createIcons(); 
-        }
-
+        // --- Chat History Management ---
         function saveCurrentChat() {
-            if (!currentChatId || conversationHistory.length <= 0) { // Allow saving empty new chats to get a title
-                return;
-            }
-
-            let chatTitle = 'Untitled Chat';
-            const firstUserMessage = conversationHistory.find(msg => msg.role === 'user');
-            if (firstUserMessage && firstUserMessage.parts) { 
-                const textPart = firstUserMessage.parts.find(p => p.text); 
-                if (textPart && textPart.text) {
-                    chatTitle = textPart.text.substring(0, 30);
-                    if (textPart.text.length > 30) {
-                        chatTitle += '...';
-                    }
-                } else if (firstUserMessage.parts.some(p => p.inlineData)) { 
-                    chatTitle = 'Chat with Attachments';
-                }
-            }
-
-            const chatIndex = allChats.findIndex(chat => chat.id === currentChatId);
-            if (chatIndex > -1) {
-                allChats[chatIndex].title = chatTitle;
-                allChats[chatIndex].lastUpdated = new Date().toISOString();
+            if (conversationHistory.length > 0) {
+                localStorage.setItem(CURRENT_CHAT_STORAGE_KEY, JSON.stringify(conversationHistory));
             } else {
-                allChats.push({
-                    id: currentChatId,
-                    title: chatTitle,
-                    lastUpdated: new Date().toISOString()
-                });
-            }
-            localStorage.setItem(`mv-chat-${currentChatId}`, JSON.stringify(conversationHistory));
-            saveAllChats(); 
-            renderPrevChatsList(); 
-        }
-
-        async function summarizeChatAndRename(chatId, history) {
-            const chatToUpdate = allChats.find(chat => chat.id === chatId);
-            if (!chatToUpdate || (chatToUpdate.title !== 'Untitled Chat' && chatToUpdate.title !== 'Chat with Attachments')) {
-                return; 
-            }
-
-            try {
-                const promptParts = [
-                    { text: "Summarize the following chat conversation in a concise title (5-10 words, no quotes or special characters) that captures its main topic. If it's a short initial exchange, just summarize the user's first query. Example: 'Learning JavaScript basics' or 'Travel planning for Europe'.\n\nConversation:" }
-                ];
-                
-                const relevantHistory = history.slice(0, 4); 
-                for (const msg of relevantHistory) {
-                    const msgForPrompt = { role: msg.role, parts: msg.parts };
-                    promptParts.push(msgForPrompt);
-                }
-
-                const summaryPayload = {
-                    contents: promptParts,
-                    generationConfig: {
-                        maxOutputTokens: 50, 
-                        temperature: 0.2 
-                    }
-                };
-
-                const summary = await callGeminiAPI(summaryPayload);
-                if (summary && summary.trim() !== '') {
-                    let cleanSummary = summary.trim().replace(/^['"]|['"]$/g, '');
-                    cleanSummary = cleanSummary.split('\n')[0].trim(); 
-                    cleanSummary = cleanSummary.replace(/^[-\*\d\s]*\s*/, ''); 
-
-                    if (cleanSummary.length > 50) { 
-                        cleanSummary = cleanSummary.substring(0, 47) + '...';
-                    }
-
-                    chatToUpdate.title = cleanSummary;
-                    saveAllChats();
-                    renderPrevChatsList();
-                }
-            } catch (error) {
-                console.error('Failed to summarize chat:', error);
-            }
-        }
-
-
-        function loadChat(chatToLoadId) {
-            if (currentChatId && currentChatId !== chatToLoadId) {
-                saveCurrentChat();
-            }
-
-            const storedHistory = localStorage.getItem(`mv-chat-${chatToLoadId}`);
-            if (storedHistory) {
-                conversationHistory = JSON.parse(storedHistory);
-                currentChatId = chatToLoadId;
-
-                chatHistoryDiv.innerHTML = ''; 
-                const aiMessageDivsToHighlight = []; // Collect full message divs for highlighting
-                conversationHistory.forEach(msg => {
-                    let textContent = '';
-                    let attachments = [];
-                    msg.parts.forEach(part => {
-                        if (part.text) {
-                            textContent = part.text;
-                        } else if (part.inlineData) {
-                            attachments.push({
-                                mimeType: part.inlineData.mimeType,
-                                data: part.inlineData.data,
-                                name: part.inlineData.name || 'Attachment'
-                            });
-                        }
-                    });
-                    const { messageContentDiv, messageDiv } = appendChatMessage(msg.role, textContent, attachments, msg.id);
-
-                    // For loaded AI messages, immediately populate content and add to highlight queue
-                    if (msg.role === 'model') {
-                        messageContentDiv.innerHTML = marked.parse(textContent);
-                        aiMessageDivsToHighlight.push(messageDiv); // Add the full message div
-                    }
-                });
-
-                // Apply Prism.js highlighting to all loaded AI messages after they are all in the DOM
-                if (typeof Prism !== 'undefined') {
-                    requestAnimationFrame(() => {
-                        aiMessageDivsToHighlight.forEach(div => {
-                            Prism.highlightAllUnder(div);
-                        });
-                    });
-                }
-
-                chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-                userInput.value = '';
-                userInput.style.height = 'auto';
-                chatAttachments = [];
-                chatImageUpload.value = '';
-                displayChatAttachments();
-                suggestionsContainer.classList.add('hidden');
-                selectedSuggestionIndex = -1;
-                userInput.dataset.editingMessageId = '';
-                updateButtonIcon(sendButton, 'send', 'w-5 h-5');
-
-                if (window.innerWidth <= 768) {
-                    chatSidebar.classList.remove('active-mobile-sidebar');
-                    mobileToggleSidebarBtn.style.display = 'flex';
-                }
-
-                userInput.focus();
-                renderPrevChatsList();
-            } else {
-                console.error(`Chat with ID ${chatToLoadId} not found.`);
-                startNewChat();
-            }
-        }
-
-        function deleteChat(chatIdToDelete) {
-            if (!confirm('Are you sure you want to delete this chat? This cannot be undone.')) {
-                return;
-            }
-            
-            allChats = allChats.filter(chat => chat.id !== chatIdToDelete);
-            saveAllChats();
-
-            localStorage.removeItem(`mv-chat-${chatIdToDelete}`);
-
-            renderPrevChatsList(); 
-
-            if (currentChatId === chatIdToDelete) {
-                startNewChat(); 
+                // If the chat is empty (e.g., brand new chat), ensure no empty data is saved
+                localStorage.removeItem(CURRENT_CHAT_STORAGE_KEY);
             }
         }
 
         // --- New Chat Function ---
         function startNewChat() {
+            // Step 1: Immediately clear the *current* chat from local storage.
+            // The previous content is now effectively "lost" unless exported.
+            localStorage.removeItem(CURRENT_CHAT_STORAGE_KEY);
+
             // Stop any ongoing speech or AI generation
             if (window.speechSynthesis.speaking) {
                 window.speechSynthesis.cancel();
@@ -4065,17 +3638,16 @@
                 currentUtterance = null;
                 document.querySelectorAll('.dictate-message-btn').forEach(btn => updateButtonIcon(btn, 'volume-2'));
             }
-            if (isGeneratingResponse) { 
+            if (isGeneratingResponse) {
                 isGeneratingResponse = false;
                 clearInterval(currentTypingInterval);
                 currentTypingInterval = null;
                 toggleLoading(false);
             }
 
-            saveCurrentChat(); // Save the previously active chat
-
+            // Step 2: Reset UI and in-memory history for a new chat
             chatHistoryDiv.innerHTML = '';
-            conversationHistory = [];
+            conversationHistory = []; // Reset history to empty
             chatAttachments = [];
             chatImageUpload.value = '';
             displayChatAttachments();
@@ -4087,18 +3659,16 @@
             userInput.dataset.editingMessageId = '';
             updateButtonIcon(sendButton, 'send', 'w-5 h-5');
 
-            currentChatId = `chat-${Date.now()}`;
-
-            // Append the initial AI message. It will create the shell.
+            // Step 3: Append the initial AI message for the new chat
             const initialAiMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
             const { messageContentDiv: initialAiContentDiv, messageDiv: initialAiMessageDiv } = appendChatMessage('ai', initialAIMessage.parts[0].text, [], initialAiMessageId);
-            conversationHistory.push({ ...initialAIMessage, id: initialAiMessageId });
+            conversationHistory.push({ ...initialAIMessage, id: initialAiMessageId }); // Add to the *new* history
 
             // For the initial message, it always renders instantly
             initialAiContentDiv.innerHTML = marked.parse(initialAIMessage.parts[0].text);
             if (typeof Prism !== 'undefined') {
-                requestAnimationFrame(() => { // Use requestAnimationFrame for smooth render after DOM update
-                    Prism.highlightAllUnder(initialAiMessageDiv); // Highlight the full initial message div
+                requestAnimationFrame(() => {
+                    Prism.highlightAllUnder(initialAiMessageDiv);
                 });
             }
 
@@ -4108,8 +3678,150 @@
             }
 
             userInput.focus();
-            renderPrevChatsList();
         }
+
+        // --- Export Functions ---
+        function getFormattedChatHistoryTextForExport() {
+            let text = '';
+            conversationHistory.forEach(msg => {
+                let msgText = '';
+                msg.parts.forEach(part => {
+                    if (part.text) {
+                        msgText += part.text;
+                    }
+                    // For attachments, just indicate their presence. Full content not included in text export.
+                    if (part.inlineData) {
+                        msgText += ` [Attachment: ${part.inlineData.name || part.inlineData.mimeType}]`;
+                    }
+                });
+                text += `${msg.role.toUpperCase()}:\n${msgText}\n\n`;
+            });
+            return text;
+        }
+
+        function exportAsTxt() {
+            if (conversationHistory.length === 0) {
+                alert("No chat history to export.");
+                return;
+            }
+            const textContent = getFormattedChatHistoryTextForExport();
+            const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `MysticVision_Chat_${new Date().toISOString().slice(0, 10)}.txt`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+            alert('Chat exported as TXT!');
+        }
+
+        async function exportAsPdf() {
+            if (conversationHistory.length === 0) {
+                alert("No chat history to export.");
+                return;
+            }
+            // jsPDF library needs to be loaded via CDN in HTML head
+            if (typeof jspdf === 'undefined') {
+                alert('PDF export library (jsPDF) not loaded. Please ensure internet connection or check CDN.');
+                console.error("jsPDF not loaded. Add <script src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'><script> to your HTML header.");
+                return;
+            }
+            const { jsPDF } = jspdf;
+            const doc = new jsPDF();
+
+            const title = `Mystic Vision AI Chat History - ${new Date().toLocaleString()}`;
+            const textContent = getFormattedChatHistoryTextForExport();
+            const lines = doc.splitTextToSize(textContent, 180); // Max width of 180mm for text
+
+            let y = 15; // Starting Y position, leave some margin
+            const lineHeight = 7; // Approx line height for 12pt font
+            const pageHeight = doc.internal.pageSize.height;
+            const pageWidth = doc.internal.pageSize.width;
+
+            doc.setFontSize(14);
+            doc.text(title, pageWidth / 2, y, { align: 'center' }); // Centered title
+            y += lineHeight * 2;
+
+            doc.setFontSize(10); // Smaller font for chat content
+            lines.forEach(line => {
+                if (y + lineHeight > pageHeight - 15) { // Check if new page is needed, leave bottom margin
+                    doc.addPage();
+                    y = 15; // Reset Y for new page
+                    doc.setFontSize(12);
+                    doc.text(`Chat History (continued)`, pageWidth / 2, y, { align: 'center' });
+                    y += lineHeight * 2;
+                    doc.setFontSize(10);
+                }
+                doc.text(line, 10, y); // Left aligned text
+                y += lineHeight;
+            });
+
+            doc.save(`MysticVision_Chat_${new Date().toISOString().slice(0, 10)}.pdf`);
+            alert('Chat exported as PDF!');
+        }
+
+        function exportAsDoc() {
+            if (conversationHistory.length === 0) {
+                alert("No chat history to export.");
+                return;
+            }
+            // This creates a simple HTML file with .doc extension. Most word processors
+            // will open it, but it's not a true .docx format.
+            const htmlContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Mystic Vision AI Chat History</title>
+                    <style>
+                        body { font-family: sans-serif; line-height: 1.6; margin: 20px; color: #333; }
+                        h1 { color: #555; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 20px;}
+                        p { margin-bottom: 10px; }
+                        .user-role { font-weight: bold; color: #007bff; } /* A blueish color for user */
+                        .ai-role { font-weight: bold; color: #28a745; }   /* A greenish color for AI */
+                        .message-content { margin-left: 15px; }
+                    </style>
+                </head>
+                <body>
+                    <h1>Mystic Vision AI Chat History</h1>
+                    <p>Export Date: ${new Date().toLocaleString()}</p>
+                    <hr/>
+                    ${conversationHistory.map(msg => {
+                        let msgText = '';
+                        msg.parts.forEach(part => {
+                            if (part.text) {
+                                msgText += part.text;
+                            }
+                            if (part.inlineData) {
+                                msgText += ` [Attachment: ${part.inlineData.name || part.inlineData.mimeType}]`;
+                            }
+                        });
+                        // Replace newlines with <br> for HTML formatting
+                        const formattedMsgText = msgText.replace(/\n/g, '<br>');
+                        const roleClass = msg.role === 'user' ? 'user-role' : 'ai-role';
+                        return `
+                            <p>
+                                <span class="${roleClass}">${msg.role.toUpperCase()}:</span>
+                                <span class="message-content">${formattedMsgText}</span>
+                            </p>
+                        `;
+                    }).join('')}
+                </body>
+                </html>
+            `;
+
+            const blob = new Blob([htmlContent], { type: 'application/msword;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `MysticVision_Chat_${new Date().toISOString().slice(0, 10)}.doc`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+            alert('Chat exported as DOC!');
+        }
+
 
         // --- Paste Functionality ---
         async function processPastedFile(file) {
@@ -4170,7 +3882,6 @@
             chatHistoryDiv = document.getElementById('chatHistory');
             userInput = document.getElementById('userInput');
             sendButton = document.getElementById('sendButton');
-            // darkModeToggle = document.getElementById('dark-mode-toggle'); // REMOVED
             themeSelect = document.getElementById('theme-select'); // NEW
             simulateTypingToggle = document.getElementById('simulate-typing-toggle'); // NEW
             copyMessage = document.getElementById('copy-message');
@@ -4186,7 +3897,14 @@
             toggleSidebarBtn = document.getElementById('toggleSidebarBtn'); 
             mobileToggleSidebarBtn = document.getElementById('mobileToggleSidebarBtn'); 
             chatMainContent = document.querySelector('.chat-main-content');
-            prevChatsList = document.getElementById('prevChatsList'); 
+            // NEW Sidebar Elements
+            modelSelect = document.getElementById('model-select');
+            systemPromptInput = document.getElementById('systemPromptInput');
+            clearSystemPromptBtn = document.getElementById('clearSystemPromptBtn');
+            clearChatBtn = document.getElementById('clearChatBtn');
+            exportTxtBtn = document.getElementById('exportTxtBtn');
+            exportPdfBtn = document.getElementById('exportPdfBtn');
+            exportDocBtn = document.getElementById('exportDocBtn');
 
             createIcons();
             userInput.style.height = userInput.scrollHeight + 'px';
@@ -4210,12 +3928,70 @@
             }
             simulateTypingToggle.checked = isSimulateTypingEnabled;
 
-            // Load previous chats or start a new one
-            loadAllChats(); 
-            if (allChats.length > 0) {
-                loadChat(allChats[0].id); // Load the most recent chat on startup
+            // Initialize Model Selector
+            modelSelect.value = currentModel;
+            modelSelect.addEventListener('change', (event) => {
+                currentModel = event.target.value;
+                localStorage.setItem('selected-gemini-model', currentModel);
+                console.log(`AI Model set to: ${currentModel}`);
+            });
+
+            // Initialize System Prompt Input
+            systemPromptInput.value = systemPrompt;
+            systemPromptInput.addEventListener('input', () => {
+                systemPrompt = systemPromptInput.value.trim();
+                localStorage.setItem('system-prompt', systemPrompt);
+            });
+            clearSystemPromptBtn.addEventListener('click', () => {
+                systemPromptInput.value = '';
+                systemPrompt = '';
+                localStorage.removeItem('system-prompt');
+                alert('System prompt cleared for future messages.');
+            });
+
+            // Load the current session's chat history on startup
+            const storedHistory = localStorage.getItem(CURRENT_CHAT_STORAGE_KEY);
+            if (storedHistory) {
+                conversationHistory = JSON.parse(storedHistory);
+                const aiMessageDivsToHighlight = []; // For Prism.js highlighting
+                chatHistoryDiv.innerHTML = ''; // Clear existing UI
+
+                conversationHistory.forEach(msg => {
+                    let textContent = '';
+                    let attachments = [];
+                    msg.parts.forEach(part => {
+                        if (part.text) {
+                            textContent = part.text;
+                        } else if (part.inlineData) {
+                            attachments.push({
+                                mimeType: part.inlineData.mimeType,
+                                data: part.inlineData.data,
+                                name: part.inlineData.name || 'Attachment'
+                            });
+                        }
+                    });
+                    // Ensure message has an ID for action buttons even if loaded from older saves
+                    const msgId = msg.id || `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                    const { messageContentDiv, messageDiv } = appendChatMessage(msg.role, textContent, attachments, msgId);
+                    if (!msg.id) msg.id = msgId; // Update history with new ID if missing
+
+                    if (msg.role === 'model') {
+                        messageContentDiv.innerHTML = marked.parse(textContent);
+                        aiMessageDivsToHighlight.push(messageDiv);
+                    }
+                });
+
+                if (typeof Prism !== 'undefined') {
+                    requestAnimationFrame(() => {
+                        aiMessageDivsToHighlight.forEach(div => {
+                            Prism.highlightAllUnder(div);
+                        });
+                    });
+                }
+                chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
             } else {
-                startNewChat(); // Start a new chat if no previous chats exist
+                // If no stored history, start a truly new chat with the AI's first message
+                startNewChat();
             }
 
             if ('serviceWorker' in navigator) {
@@ -4536,12 +4312,6 @@
                             toggleLoading(false); // Hide loading indicator for instant mode
                             isGeneratingResponse = false; // Mark generation as complete
                             saveCurrentChat(); // Save the chat now that the response is complete
-
-                            // Also trigger chat renaming if necessary
-                            const chatMeta = allChats.find(chat => chat.id === currentChatId);
-                            if (chatMeta && (chatMeta.title === 'Untitled Chat' || chatMeta.title === 'Chat with Attachments')) {
-                                summarizeChatAndRename(currentChatId, conversationHistory);
-                            }
                         }
                     }
                     
@@ -4838,6 +4608,18 @@
 
             newChatBtnSidebar.addEventListener('click', startNewChat);
 
+            // Clear Current Chat Button Listener
+            clearChatBtn.addEventListener('click', () => {
+                if (confirm('Are you sure you want to clear the current chat history? This cannot be undone.')) {
+                    startNewChat(); // This now clears local storage and restarts the chat
+                }
+            });
+
+            // Add event listeners for the export buttons
+            exportTxtBtn.addEventListener('click', exportAsTxt);
+            exportPdfBtn.addEventListener('click', exportAsPdf);
+            exportDocBtn.addEventListener('click', exportAsDoc);
+
             mobileToggleSidebarBtn.addEventListener('click', () => {
                 chatSidebar.classList.add('active-mobile-sidebar');
                 mobileToggleSidebarBtn.style.display = 'none'; 
@@ -4846,18 +4628,6 @@
             toggleSidebarBtn.addEventListener('click', () => {
                 chatSidebar.classList.remove('active-mobile-sidebar');
                 mobileToggleSidebarBtn.style.display = 'flex'; 
-            });
-
-            prevChatsList.addEventListener('click', (event) => {
-                const listItem = event.target.closest('li[data-chat-id]');
-                const deleteButton = event.target.closest('.delete-chat-btn');
-
-                if (deleteButton && listItem) {
-                    event.stopPropagation(); 
-                    deleteChat(listItem.dataset.chatId);
-                } else if (listItem) {
-                    loadChat(listItem.dataset.chatId);
-                }
             });
 
             window.addEventListener('resize', () => {
