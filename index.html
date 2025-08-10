@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mystic Vision AI Chat</title>
+    <title>Mystic Vision AI Chat (Lite)</title> <!-- Renamed title -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <!-- Tailwind CSS CDN for utility classes -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -21,7 +21,7 @@
     <style>
         /* General Styles - Mystic Vision Theme */
         :root {
-            /* Default Dark Mode Palette: Cosmic Purple */
+            /* Default Cosmic Purple Palette */
             --primary-bg: #0A0A28; /* Even deeper dark blue-purple, almost black */
             --secondary-bg: #15153A; /* Darker purple-blue - container background */
             --tertiary-bg: #22224F; /* Medium dark purple-blue - header/input area/button base */
@@ -66,6 +66,7 @@
             --cosmic-glow-color-2: #7B2FEE; /* Deeper mystical purple */
             --cosmic-star-color: #E6E6FA; /* Light lavender for stars */
             --user-avatar-bg: #4A4A80; /* Background for generic user avatar */
+            --text-on-accent: #FFFFFF; /* Default text on accent color */
         }
 
         /* Starlight Lavender Theme */
@@ -106,9 +107,10 @@
             --cosmic-glow-color-2: #6A1DCC;
             --cosmic-star-color: #333;
             --user-avatar-bg: #C0C8D8; /* Lighter background for generic user avatar */
+            --text-on-accent: #FFFFFF;
         }
 
-        /* NEW: Emerald Galaxy Theme */
+        /* Emerald Galaxy Theme */
         body.emerald-galaxy {
             --primary-bg: #031A20; /* Very dark teal/green-blue */
             --secondary-bg: #0B2B33; /* Darker teal-blue */
@@ -136,9 +138,10 @@
             --cosmic-glow-color-1: #00FFC0;
             --cosmic-glow-color-2: #00A080; 
             --cosmic-star-color: #E0FFFF;
+            --text-on-accent: #000000;
         }
 
-        /* NEW: Crimson Nebula Theme */
+        /* Crimson Nebula Theme */
         body.crimson-nebula {
             --primary-bg: #1A0515; /* Very dark deep red-purple */
             --secondary-bg: #2B0A20; /* Darker red-purple */
@@ -164,11 +167,12 @@
             --message-action-icon-hover: var(--text-color);
             --user-avatar-bg: #3F1B35;
             --cosmic-glow-color-1: #FF4080;
-            --cosmic-glow-color-2: #FF0060;
+            --cosmic-glow-color-2: #FF0060; 
             --cosmic-star-color: #FFEFF5;
+            --text-on-accent: #000000;
         }
 
-        /* IMPROVED: Golden Aurora Theme */
+        /* Golden Aurora Theme */
         body.golden-aurora {
             --primary-bg: #060B12; /* Even deeper, almost black-blue, base of the night sky */
             --secondary-bg: #0F161E; /* Darker blue-grey for main container */
@@ -197,8 +201,9 @@
             --cosmic-glow-color-1: #FFD700; /* Primary strong gold */
             --cosmic-glow-color-2: #FFA500; /* Complementary vibrant orange for aurora effect */
             --cosmic-star-color: #F8F8F8; /* Bright white for stars */
+            --text-on-accent: #000000;
         }
-        /* NEW: Cosmic Gold Theme (Royal Edition) */
+        /* Cosmic Gold Theme (Royal Edition) */
         body.cosmic-gold {
             /* Deeper, more profound blacks */
             --primary-bg: #000000; /* True black of the cosmos */
@@ -246,7 +251,7 @@
             --cosmic-star-color: var(--text-color);
         }
 
-        /* NEW Theme: Neon Glitch */
+        /* Neon Glitch Theme */
         body.neon-glitch {
             --primary-bg: #02010A; /* Very dark blue-black */
             --secondary-bg: #0F0A20; /* Dark blue-purple */
@@ -274,9 +279,10 @@
             --cosmic-glow-color-1: #00E0FF; /* Neon blue glow */
             --cosmic-glow-color-2: #FF00FF; /* Neon pink glow */
             --cosmic-star-color: #E0FFFF;
+            --text-on-accent: #000000;
         }
 
-        /* NEW Theme: Ancient Papyrus */
+        /* Ancient Papyrus Theme */
         body.ancient-papyrus {
             --primary-bg: #FDF6E3; /* Light cream/parchment background */
             --secondary-bg: #FFF8EB; /* Whiter cream for containers */
@@ -304,10 +310,11 @@
             --cosmic-glow-color-1: #D2B48C; /* Tan/parchment glow */
             --cosmic-glow-color-2: #B8860B; /* Golden brown glow */
             --cosmic-star-color: #4A3A2B; /* Dark specks as 'stars' */
+            --text-on-accent: #FFFFFF;
         }
 
 
-        /* Base Body Styles - MODIFIED for full screen */
+        /* Base Body Styles - Cosmic Overlay */
         body {
             font-family: var(--font-family-primary);
             background: linear-gradient(135deg, var(--primary-bg), var(--secondary-bg));
@@ -316,15 +323,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh; /* Use height for full viewport height */
-            width: 100vw; /* Use width for full viewport width */
-            overflow: hidden; /* Hide overflow to prevent scrollbars on body */
+            min-height: 100vh;
+            overflow: hidden; 
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             transition: background 0.6s ease, color 0.6s ease;
             position: relative; /* Needed for cosmic background pseudo-element */
         }
-
         /* Cosmic Body Background */
         body::before {
             content: '';
@@ -349,27 +354,28 @@
             100% { background-position: 100% 100%; }
         }
 
-        /* Chatbot Container (Main Application) - Now a flex container */
+        /* Chatbot Container (Main Application) */
         .chatbot-container {
             background-color: var(--secondary-bg);
-            border-radius: 0; /* Remove border-radius for full screen */
-            box-shadow: none; /* Remove shadow for full screen */
-            width: 100%; /* Occupy full parent width */
-            height: 100%; /* Occupy full parent height */
-            display: flex; /* Make it a flex container for sidebar + main content */
+            border-radius: 25px;
+            box-shadow: 0 15px 30px var(--shadow-color);
+            width: 90%;
+            max-width: 700px; 
+            height: 90vh; 
+            display: flex;
             overflow: hidden;
-            border: none; /* Remove border for full screen */
+            border: 2px solid var(--border-color);
             animation: fadeIn 0.8s ease-out;
             position: relative; 
             transition: background-color 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease;
         }
-        /* Keep fadeIn animation */
+
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* NEW: Chat Sidebar */
+        /* Chat Sidebar */
         .chat-sidebar {
             width: 280px; /* Default open width for desktop */
             flex-shrink: 0; /* Prevents sidebar from shrinking */
@@ -413,12 +419,13 @@
             font-family: var(--font-family-secondary);
             font-size: 1.2em;
         }
+
         /* New Chat Button (now within sidebar) */
         #newChatBtn {
             position: static; /* No longer absolutely positioned */
             margin-right: 0; /* Remove old margin to let justify-content handle spacing */
             background-color: var(--accent-color);
-            color: white;
+            color: var(--text-on-accent);
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 0.8em;
@@ -427,7 +434,7 @@
             cursor: pointer;
             border: none;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.6s ease;
             z-index: 3; 
             display: flex;
             align-items: center;
@@ -464,7 +471,7 @@
             background-color: rgba(255,255,255,0.1);
         }
 
-        /* NEW Sidebar Section Styling */
+        /* Sidebar Section Styling */
         .sidebar-section {
             margin-bottom: 1rem;
             padding: 0.75rem;
@@ -484,30 +491,10 @@
             padding-bottom: 0.5rem;
             transition: color 0.6s ease, border-color 0.6s ease;
         }
-        .sidebar-section input[type="password"], /* Keep this as it styles other inputs */
-        .sidebar-section textarea,
-        .sidebar-section select {
-            background-color: var(--input-bg);
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-            padding: 0.5rem 0.75rem;
-            border-radius: 0.375rem;
-            font-family: var(--font-family-primary);
-            font-size: 0.9em;
-            resize: vertical;
-            transition: border-color 0.3s ease, background-color 0.3s ease, color 0.6s ease;
-        }
-        .sidebar-section input[type="password"]:focus,
-        .sidebar-section textarea:focus,
-        .sidebar-section select:focus {
-            border-color: var(--accent-color);
-            background-color: color-mix(in srgb, var(--primary-bg) 90%, var(--tertiary-bg) 10%);
-            outline: none;
-        }
         /* Style for regular buttons within sidebar sections */
         .sidebar-section button {
             background-color: var(--accent-color); /* Default button color */
-            color: white;
+            color: var(--text-on-accent);
             padding: 0.5rem 1rem;
             border-radius: 0.375rem;
             font-size: 0.9em;
@@ -515,7 +502,7 @@
             cursor: pointer;
             border: none;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.6s ease;
             display: flex; /* For icons */
             align-items: center;
             justify-content: center;
@@ -529,46 +516,63 @@
             transform: translateY(0);
             box-shadow: 0 1px 3px rgba(0,0,0,0.2);
         }
-        /* Special style for 'Clear' type buttons (e.g., Clear System Prompt) */
-        .sidebar-section button.text-red-400 {
-            background: none;
-            box-shadow: none;
-            color: var(--accent-error);
-            padding: 0;
-            font-weight: normal;
-            text-align: left;
-            display: inline-block;
-            gap: 0; /* No gap for plain text buttons */
+
+        /* Theme Selector Styling */
+        .theme-selector-container {
+            display: flex;
+            flex-direction: column; /* Stack them vertically */
+            gap: 8px; /* Space between toggles */
         }
-        .sidebar-section button.text-red-400:hover {
-            text-decoration: underline;
-            background: none;
-            transform: none;
+        .theme-selector-container label { 
+            color: var(--text-color); 
+            transition: color 0.6s ease;
+            font-size: 0.8em; /* Smaller text */
+            vertical-align: middle;
+            line-height: 1; 
         }
-        /* Ensure the existing settings-toggles-container correctly pushes to the bottom */
-        .settings-toggles-container {
-            margin-top: auto; /* Pushes this element to the bottom, taking all available space above it */
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-color); /* Visual separator from content above */
+        .theme-selector-container select {
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8em;
+            transition: background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease;
+            cursor: pointer;
+            -webkit-appearance: none; /* Remove default dropdown arrow for custom styling */
+            -moz-appearance: none;
+            appearance: none;
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            padding-right: 28px; /* Make space for the custom arrow */
+        }
+        .theme-selector-container select:hover {
+            background-color: var(--secondary-bg);
+        }
+        /* Dynamic SVG for select arrow */
+        .theme-selector-container select[data-arrow-color] {
+            background-image: var(--select-arrow-svg, url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>'));
         }
 
-        /* NEW: Main Chat Content */
+        /* Main Chat Content */
         .chat-main-content {
             flex-grow: 1; /* Takes remaining space */
             display: flex;
             flex-direction: column;
             overflow: hidden; /* Important for chat history scroll */
             transition: width 0.3s ease-in-out;
+            border-top-left-radius: 23px; /* Apply to main content for desktop if sidebar is open */
+            border-bottom-left-radius: 23px; /* Apply to main content for desktop if sidebar is open */
         }
 
-        /* Header - Adjusted for sleekness */
+        /* Header */
         .chatbot-header {
             background-color: var(--tertiary-bg);
-            padding: 15px; /* Reduced padding */
-            border-bottom: 1px solid var(--border-color); /* Thinner border */
+            padding: 15px; 
+            border-bottom: 2px solid var(--border-color);
             text-align: center;
-            border-top-left-radius: 0; 
-            border-top-right-radius: 0; 
+            border-top-left-radius: 23px; /* Keep radius for main header */
+            border-top-right-radius: 23px; /* Keep radius for main header */
             position: relative;
             overflow: hidden;
             z-index: 10; 
@@ -576,7 +580,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-shrink: 0;
+            flex-shrink: 0; 
         }
         
         .chatbot-header .header-content {
@@ -585,12 +589,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 3px; /* Reduced gap */
+            gap: 5px;
         }
 
         .chatbot-header h1 {
             margin: 0;
-            font-size: 1.8em; /* Smaller font size */
+            font-size: 2em; 
             color: var(--accent-color);
             font-family: var(--font-family-secondary);
             font-weight: 600;
@@ -602,7 +606,7 @@
             gap: 10px;
         }
         .chatbot-header .logo {
-            height: 1.8em; /* Smaller logo */
+            height: 2.5em; 
             width: auto;
             object-fit: contain;
             filter: drop-shadow(0 0 5px var(--cosmic-glow-color-1));
@@ -611,7 +615,7 @@
 
         .chatbot-header .tagline {
             font-family: var(--font-family-secondary);
-            font-size: 0.8em; /* Smaller tagline */
+            font-size: 0.9em;
             color: var(--text-color);
             opacity: 0.7;
             margin: 0;
@@ -643,111 +647,11 @@
             100% { box-shadow: 0 0 25px var(--cosmic-glow-color-2); }
         }
 
-        /* NEW: Container for both Dark Mode and Simulate Typing toggles */
-        .settings-toggles-container {
-            display: flex;
-            flex-direction: column; /* Stack them vertically */
-            gap: 8px; /* Space between toggles */
-            /*z-index: 3;*/
-        }
-        .theme-selector-container label, .response-mode-container span { 
-            color: var(--text-color); 
-            transition: color 0.6s ease;
-            font-size: 0.8em; /* Smaller text */
-            vertical-align: middle;
-            line-height: 1; 
-        }
-        .theme-selector-container select {
-            background-color: var(--input-bg);
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 0.8em;
-            transition: background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease;
-            cursor: pointer;
-            -webkit-appearance: none; /* Remove default dropdown arrow for custom styling */
-            -moz-appearance: none;
-            appearance: none;
-            /*background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23${encodeURIComponent(getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1))}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>');*/
-            background-repeat: no-repeat;
-            background-position: right 8px center;
-            padding-right: 28px; /* Make space for the custom arrow */
-        }
-        .theme-selector-container select:hover {
-            background-color: var(--secondary-bg);
-        }
-
-        .dark-mode-container, .response-mode-container { /* Apply common styles here */
-            display: flex;
-            align-items: center;
-            gap: 6px; /* Reduced gap */
-            font-family: var(--font-family-primary);
-            font-size: 0.8em; /* Smaller text */
-        }
-        .dark-mode-container span, .response-mode-container span {
-            color: var(--text-color); 
-            transition: color 0.6s ease;
-            font-size: 0.8em; /* Smaller text */
-            /* NEW: Vertical alignment for text next to the toggle */
-            vertical-align: middle;
-            line-height: 1; /* Helps with precise vertical alignment */
-        }
-
-        /* Adjust switch size for both toggles */
-        .switch { 
-            position: relative;
-            display: inline-block;
-            width: 48px; /* Slightly smaller */
-            height: 26px; /* Slightly smaller */
-            border-radius: 13px; /* Adjusted */
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
-            border: 1px solid rgba(255,255,255,0.1); 
-            transition: background-color 0.6s ease, border-color 0.6s ease;
-        }
-        .switch input { 
-            opacity: 0;
-            width: 0;
-            height: 0;
-            /* NEW/REINFORCED: Ensure the native checkbox is hidden */
-            display: none; 
-        }
-        .slider { 
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #4b5563; /* Grey for unchecked state */
-            border-radius: 13px; /* Adjusted */
-            transition: .4s;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 20px; /* Smaller */
-            width: 20px; /* Smaller */
-            left: 3px; /* Adjusted */
-            bottom: 3px; /* Adjusted */
-            background-color: white; 
-            border-radius: 50%;
-            transition: .4s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        input:checked + .slider {
-            background-color: var(--accent-color); /* Purple for checked state */
-        }
-        input:checked + .slider:before {
-            transform: translateX(22px); /* Adjusted */
-        }
-
-
-        /* NEW: Mobile Sidebar Toggle (Hamburger icon in main header) */
+        /* Mobile Sidebar Toggle (Hamburger icon in main header) */
         #mobileToggleSidebarBtn {
             position: absolute;
-            top: 15px;
-            left: 15px;
+            top: 20px; /* Aligns with original newChatBtn */
+            left: 20px; /* Aligns with original newChatBtn */
             background-color: var(--tertiary-bg);
             color: var(--text-color);
             padding: 10px;
@@ -770,6 +674,96 @@
         #mobileToggleSidebarBtn:active {
             transform: translateY(0);
             box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        /* NEW: Desktop Sidebar Toggle Button */
+        #desktopToggleSidebarBtn {
+            position: absolute;
+            top: 50%;
+            right: 20px; /* Adjust as needed */
+            transform: translateY(-50%);
+            background-color: var(--tertiary-bg); /* Match header background */
+            color: var(--text-color);
+            padding: 10px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: none; /* Hidden by default, shown by media query */
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.6s ease;
+            z-index: 15; /* Ensure it's above other header elements */
+        }
+        #desktopToggleSidebarBtn:hover {
+            background-color: var(--secondary-bg);
+            transform: translateY(-50%) translateY(-1px); /* Keep vertical centering */
+        }
+        #desktopToggleSidebarBtn:active {
+            transform: translateY(-50%) translateY(0);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        #desktopToggleSidebarBtn .lucide {
+            width: 1.25em;
+            height: 1.25em;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            /* ... existing rules ... */
+            #mobileToggleSidebarBtn {
+                display: flex; /* Show on mobile */
+            }
+            #toggleSidebarBtn { /* 'X' button inside sidebar */
+                display: flex; 
+            }
+            #desktopToggleSidebarBtn {
+                display: none; /* Hide on mobile */
+            }
+
+            /* ... existing mobile sidebar/main content adjustments ... */
+            .chat-sidebar {
+                /* ... existing styles ... */
+                width: min(80vw, 320px); /* Reset width for mobile transform */
+                padding: 15px; /* Reset padding for mobile */
+                overflow-y: auto; /* Ensure scroll on mobile */
+            }
+        }
+
+        /* Desktop specific styles (min-width: 769px) */
+        @media (min-width: 769px) {
+            #mobileToggleSidebarBtn {
+                display: none; /* Hide hamburger on desktop */
+            }
+            #toggleSidebarBtn {
+                display: none; /* Hide 'X' button on desktop (only needed for mobile sidebar close) */
+            }
+            /* NEW: Show desktop toggle on desktop */
+            #desktopToggleSidebarBtn {
+                display: flex; /* Show on desktop */
+            }
+
+            /* When sidebar is closed on desktop, main content should have full container radius */
+            .chat-main-content.sidebar-hidden {
+                border-top-left-radius: 23px;
+                border-bottom-left-radius: 23px;
+            }
+            /* Sidebar is initially open on desktop, so main content starts with no left radius */
+            .chat-main-content:not(.sidebar-hidden) {
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+            }
+            /* NEW: Ensure sidebar returns to desktop defaults if resizing from mobile */
+            .chat-sidebar {
+                position: static; /* No fixed position on desktop */
+                transform: translateX(0); /* No transform on desktop */
+                box-shadow: 2px 0 10px rgba(0,0,0,0.3); /* Restore shadow on desktop */
+                width: 280px; /* Default open width */
+                padding: 20px 15px; /* Default padding */
+                overflow-y: auto; /* Ensure scrolling */
+            }
         }
 
 
@@ -860,7 +854,7 @@
             stroke-width: 1.5; /* Make the icon a bit bolder */
         }
 
-        /* NEW: Message Bubble Content Wrapper */
+        /* Message Bubble Content Wrapper */
         .message-bubble-content {
             padding: 12px 18px; /* This is where the actual bubble padding goes */
             border-radius: 20px;
@@ -897,13 +891,6 @@
             color: var(--text-color);
             border-bottom-left-radius: 5px; 
             background-image: linear-gradient(to bottom left, var(--ai-bubble), color-mix(in srgb, var(--ai-bubble) 90%, black 10%)); /* Dynamic darker shade */
-        }
-
-        /* Light Mode Adjustments for Avatars */
-        body.starlight-lavender .chat-avatar,
-        body.starlight-lavender .lucide-avatar-icon {
-            border-color: #A0B0C0; /* Lighter border in light mode */
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         /* Markdown Styling within AI messages */
@@ -1028,7 +1015,7 @@
 
         /* Message Action Buttons (Copy/Dictate/Edit/Regenerate) */
         .message-actions {
-            position: fixed;
+            position: absolute; /* Changed to absolute for Lite Version */
             bottom: 0.5rem;
             right: 1rem;
             display: flex;
@@ -1085,7 +1072,7 @@
             transition: background-color 0.6s ease, color 0.6s ease, box-shadow 0.6s ease;
         }
 
-        /* Input Area - Adjusted for full screen */
+        /* Input Area */
         .chat-input {
             padding: 20px;
             border-top: 2px solid var(--border-color);
@@ -1093,8 +1080,8 @@
             gap: 10px; 
             align-items: end; 
             background-color: var(--tertiary-bg);
-            border-bottom-left-radius: 0; /* Adjust for full screen */
-            border-bottom-right-radius: 0; /* Adjust for full screen */
+            border-bottom-left-radius: 23px;
+            border-bottom-right-radius: 23px;
             position: relative; 
             transition: background-color 0.6s ease, border-color 0.6s ease;
             flex-shrink: 0; 
@@ -1165,7 +1152,7 @@
         #sendButton:active {
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
-        /* NEW: Disabled state for the sendButton */
+        /* Disabled state for the sendButton */
         #sendButton:disabled {
             background-color: var(--tertiary-bg); /* Match other icon buttons or a neutral color */
             cursor: not-allowed;
@@ -1177,7 +1164,7 @@
             color: var(--border-color); /* Faded icon color */
         }
 
-        /* Loading Indicator - NEW: Cosmic Loader */
+        /* Loading Indicator - Cosmic Loader */
         .loader-container {
             display: flex;
             justify-content: center;
@@ -1300,7 +1287,7 @@
             margin-bottom: 10px; /* Space between input and suggestions */
             background-color: var(--autocomplete-bg);
             border: 1px solid var(--autocomplete-border);
-            border-radius: 10-px;
+            border-radius: 10px;
             box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
             max-height: 200px;
             overflow-y: auto;
@@ -1331,10 +1318,9 @@
         /* Responsive Adjustments */
         @media (max-width: 768px) {
             .chatbot-container {
-                width: 100vw; 
-                height: 100vh; 
-                border-radius: 0;
-                margin: 0;
+                width: 95%;
+                height: 95vh;
+                border-radius: 15px;
             }
 
             /* Mobile Sidebar */
@@ -1354,47 +1340,51 @@
                 transform: translateX(0); /* Show on active */
                 box-shadow: 2px 0 10px rgba(0,0,0,0.3); /* Add shadow when open */
             }
+            /* Hide main content header's border-radius when sidebar is open */
+            .chat-sidebar.active-mobile-sidebar + .chat-main-content .chatbot-header {
+                border-top-left-radius: 0;
+            }
 
             .chat-main-content {
                 width: 100%; /* Main content always full width on mobile */
+                border-top-left-radius: 13px; /* Apply to main content for mobile */
+                border-bottom-left-radius: 13px; /* Apply to main content for mobile */
             }
 
             /* Mobile Header Adjustments */
             .chatbot-header {
-                padding: 10px; 
-                padding-left: 50px; /* Make space for hamburger */
+                padding: 15px; 
+                padding-left: 60px; /* Make space for hamburger */
                 justify-content: center; /* Center content when hamburger is present */
+                border-top-left-radius: 13px;
+                border-top-right-radius: 13px;
             }
             .chatbot-header h1 {
-                font-size: 1.5em;
+                font-size: 1.8em;
                 margin-top: 0; /* Remove top margin */
             }
             .chatbot-header .logo {
-                height: 1.6em;
+                height: 2em;
             }
             .chatbot-header .tagline {
-                font-size: 0.7em;
+                font-size: 0.8em;
                 margin-bottom: 0;
             }
 
             /* Mobile specific toggle button (hamburger in main header) */
             #mobileToggleSidebarBtn {
                 display: flex; /* Show on mobile */
+                top: 15px;
+                left: 15px;
+                width: 40px;
+                height: 40px;
             }
             /* Toggle button inside sidebar (X icon) */
             #toggleSidebarBtn {
                 display: flex; /* Always show inside sidebar header on mobile */
             }
-
-
-            /* Mobile adjustments for settings container */
-            /*.settings-toggles-container {
-                top: 8px; /* Closer to top */
-                /*right: 8px; /* Closer to right */
-                /*gap: 4px; /* Even less space */
-            /*}*/
             
-            .theme-selector-container label, .response-mode-container span {
+            .theme-selector-container label {
                 font-size: 0.7em;
             }
             .theme-selector-container select {
@@ -1403,24 +1393,6 @@
                 padding-right: 24px;
                 background-position: right 6px center;
                 background-size: 16px;
-            }
-
-            .switch {
-                width: 36px;
-                height: 20px;
-                border-radius: 10px;
-            }
-            .switch .slider {
-                border-radius: 10px;
-            }
-            .switch .slider:before {
-                height: 14px;
-                width: 14px;
-                left: 3px;
-                bottom: 3px;
-            }
-            input:checked + .slider:before {
-                transform: translateX(16px);
             }
 
             /* Sidebar New Chat Button (smaller for mobile sidebar) */
@@ -1480,9 +1452,9 @@
                 padding: 10px;
                 gap: 6px;
                 align-items: center;
-                border-bottom-left-radius: 0;
-                border-bottom-right-radius: 0;
-                flex-wrap: wrap;
+                border-bottom-left-radius: 13px;
+                border-bottom-right-radius: 13px;
+                flex-wrap: wrap; /* Allow buttons to wrap */
             }
 
             .chat-input textarea {
@@ -1538,82 +1510,54 @@
             #toggleSidebarBtn {
                 display: none; /* Hide 'X' button on desktop (only needed for mobile sidebar close) */
             }
+            /* When sidebar is closed on desktop, main content should have full container radius */
+            .chat-main-content.sidebar-hidden {
+                border-top-left-radius: 23px;
+                border-bottom-left-radius: 23px;
+            }
+            /* Sidebar is initially open on desktop, so main content starts with no left radius */
+            .chat-main-content:not(.sidebar-hidden) {
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+            }
         }
     </style>
 </head>
 <body class="antialiased cosmic-purple">
     <div class="chatbot-container">
-        <!-- Sidebar for previous chats -->
+        <!-- Sidebar -->
         <aside class="chat-sidebar" id="chatSidebar">
             <div class="sidebar-header">
                 <button id="newChatBtn" title="Start a New Chat">
                     <span data-lucide="sparkles" class="w-4 h-4"></span>
                     New Chat
                 </button>
-                <h3 class="font-semibold text-lg">App Settings</h3>
+                <h3 class="font-semibold text-lg">Settings</h3>
                 <!-- Button to toggle sidebar visibility on mobile/smaller screens -->
                 <button id="toggleSidebarBtn" title="Close Sidebar">
                     <span data-lucide="x" class="w-5 h-5"></span>
                 </button>
             </div>
 
-            <!-- AI Model Selector -->
-            <div class="sidebar-section">
-                <h4 class="font-semibold text-accent-color mb-2">AI Model</h4>
-                <select id="model-select" class="w-full">
-                    <!-- Ensure these match actual Gemini API model names and are valid for your key -->
-                    <option value="gemini-1.5-flash-latest">Gemini 1.5 Flash (Latest)</option>
-                    <option value="gemini-1.5-pro-latest">Gemini 1.5 Pro (Latest)</option>
-                    <option value="gemini-2.5-flash-preview-05-20">Gemini 2.5 Flash (Preview 05-20)</option>
-                    <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
-                    <option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
-                    <option value="gemini-2.5-flash-lite">Gemini 2.5 Flash Lite</option>
-                    <option value="gemini-2.5-flash-lite-06-17">Gemini 2.5 Flash Lite (06-17)</option>
-                    <option value="gemini-2.0-flash-preview-image-generation">Gemini 2.0 Flash (Image Gen Preview)</option>
-                    <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
-                    <option value="gemini-2.0-flash-001">Gemini 2.0 Flash (001)</option>
-                    <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash (Experimental)</option>
+            <!-- Theme Selector -->
+            <div class="sidebar-section theme-selector-container">
+                <h4 class="font-semibold text-accent-color mb-2">Theme</h4>
+                <label for="theme-select" class="font-primary text-sm sr-only">Select Theme:</label>
+                <select id="theme-select" class="w-full">
+                    <option value="cosmic-purple">Cosmic Purple</option>
+                    <option value="starlight-lavender">Starlight Lavender</option>
+                    <option value="emerald-galaxy">Emerald Galaxy</option>
+                    <option value="crimson-nebula">Crimson Nebula</option>
+                    <option value="golden-aurora">Golden Aurora</option>
+                    <option value="cosmic-gold">Cosmic Gold</option>
+                    <option value="neon-glitch">Neon Glitch</option>
+                    <option value="ancient-papyrus">Ancient Papyrus</option>
                 </select>
-            </div>
-
-            <!-- System Prompt / Persona Customization -->
-            <div class="sidebar-section">
-                <h4 class="font-semibold text-accent-color mb-2">AI Persona (System Prompt)</h4>
-                <select id="systemPromptSelect" class="w-full">
-                    <option value="">None (Default)</option>
-                    <option value="You are a helpful coding assistant who explains concepts in detail.">Coding Assistant</option>
-                    <option value="You are a sarcastic but insightful philosopher.">Sarcastic Philosopher</option>
-                    <option value="You are a whimsical storyteller for children.">Whimsical Storyteller</option>
-                    <option value="You are a strict grammar checker.">Strict Grammar Checker</option>
-                    <option value="You are a supportive life coach.">Supportive Life Coach</option>
-                    <option value="You are a knowledgeable historian.">Knowledgeable Historian</option>
-                    <option value="You are a curious explorer of the cosmos.">Cosmic Explorer</option>
-                    <option value="You are an ancient oracle speaking in riddles.">Ancient Oracle</option>
-                    <option value="You are a cheerful wellness guide.">Cheerful Wellness Guide</option>
-                    <option value="You are a fantasy role-playing game dungeon master.">RPG Dungeon Master</option>
-                    <option value="You are a creative chef providing unique recipes and cooking tips.">Creative Chef</option>
-                    <option value="You are a personal fitness trainer offering workout plans and motivation.">Personal Fitness Trainer</option>
-                    <option value="You are an expert travel guide providing detailed itineraries and cultural insights.">Expert Travel Guide</option>
-                    <option value="You are a botanical expert, identifying plants and offering gardening advice.">Botanical Expert</option>
-                    <option value="You are a cybersecurity analyst explaining online threats and safety.">Cybersecurity Analyst</option>
-                    <option value="You are a witty stand-up comedian.">Witty Comedian</option>
-                    <option value="You are a precise technical writer, explaining complex topics clearly.">Precise Technical Writer</option>
-                    <option value="You are a compassionate therapist, providing understanding and coping strategies.">Compassionate Therapist</option>
-                    <option value="You are a financial advisor, offering practical advice on money management.">Financial Advisor</option>
-                    <option value="You are a literary critic, analyzing texts and discussing themes.">Literary Critic</option>
-                    <option value="You are a legal aid assistant providing general information (but not legal advice).">Legal Aid Assistant</option>
-                    <option value="You are a dream interpreter.">Dream Interpreter</option>
-                    <option value="You are a professional negotiator.">Professional Negotiator</option>
-                    <option value="You are a minimalist living coach.">Minimalist Coach</option>
-                    <option value="You are an ethical hacker explaining common vulnerabilities.">Ethical Hacker</option>
-                    <option value="You are a dedicated researcher citing sources where possible.">Dedicated Researcher</option>
-                </select>
-                <button id="clearSystemPromptBtn" class="text-red-400 mt-2">Clear Persona</button>
             </div>
 
             <!-- Export Current Chat Section -->
             <div class="sidebar-section">
-                <h4 class="font-semibold text-accent-color mb-2">Export Current Chat</h4>
+                <h4 class="font-semibold text-accent-color mb-2">Export Chat</h4>
                 <div class="flex flex-col gap-2">
                     <button id="exportTxtBtn">
                         <span data-lucide="file-text" class="w-4 h-4"></span> Export as TXT
@@ -1621,53 +1565,19 @@
                     <button id="exportPdfBtn">
                         <span data-lucide="file-text" class="w-4 h-4"></span> Export as PDF
                     </button>
-                    <!-- Changed from exportDocBtn to exportMdBtn -->
                     <button id="exportMdBtn">
                         <span data-lucide="file-code" class="w-4 h-4"></span> Export as MD
                     </button>
+                    <button id="exportJsonBtn"> <!-- New JSON Export Button -->
+                        <span data-lucide="file-json" class="w-4 h-4"></span> Export as JSON
+                    </button>
                 </div>
-            </div>
-
-            <!-- Clear Current Chat Button -->
-            <div class="sidebar-section">
-                <h4 class="font-semibold text-accent-color mb-2">Current Session Actions</h4>
-                <button id="clearChatBtn" class="w-full bg-accent-error text-white py-2 px-4 rounded-md font-semibold hover:bg-red-600 transition-colors flex items-center justify-center gap-2">
-                    <span data-lucide="delete" class="w-4 h-4"></span>
-                    Clear Current Chat
-                </button>
             </div>
             
-            <!-- NEW: Settings Toggles Container -->
-            <div class="settings-toggles-container">
-                <!-- NEW: Theme Selector -->
-                <div class="theme-selector-container">
-                    <label for="theme-select" class="font-primary text-sm">Theme:</label>
-                    <select id="theme-select" class="p-1 rounded-md text-xs">
-                        <option value="cosmic-purple">Cosmic Purple</option>
-                        <option value="starlight-lavender">Starlight Lavender</option>
-                        <option value="emerald-galaxy">Emerald Galaxy</option>
-                        <option value="crimson-nebula">Crimson Nebula</option>
-                        <option value="golden-aurora">Golden Aurora</option>
-                        <option value="cosmic-gold">Cosmic Gold</option>
-                        <option value="neon-glitch">Neon Glitch</option>
-                        <option value="ancient-papyrus">Ancient Papyrus</option>
-                    </select>
-                </div>
-
-                <!-- Keep the Simulate Typing Toggle -->
-                <div class="response-mode-container">
-                    <span>Instant</span>
-                    <label class="switch">
-                        <input type="checkbox" id="simulate-typing-toggle" checked>
-                        <span class="slider"></span>
-                    </label>
-                    <span>Simulate Typing</span>
-                </div>
-            </div>
         </aside>
 
         <!-- Main Chat Content -->
-        <main class="chat-main-content">
+        <main class="chat-main-content" id="chatMainContent">
             <header class="chatbot-header">
                 <!-- Hamburger/Sidebar toggle for mobile. -->
                 <button id="mobileToggleSidebarBtn" title="Open Sidebar">
@@ -1676,11 +1586,16 @@
 
                 <div class="header-content">
                     <h1>
-                        <img src="logo.png" alt="Mystic Vision AI Logo" class="logo">
-                        Mystic Vision AI
+                        <img src="logo.png" alt="Mystic Vision AI Lite Logo" class="logo"> <!-- Renamed logo alt -->
+                        Mystic Vision AI Lite <!-- Renamed H1 title -->
                     </h1>
                     <p class="tagline">Experience the beyond</p>
                 </div>
+
+                <!-- NEW: Desktop Sidebar Toggle Button -->
+                <button id="desktopToggleSidebarBtn" title="Toggle Sidebar" class="icon-button absolute right-4 top-1/2 -translate-y-1/2">
+                    <span data-lucide="chevron-left" class="w-5 h-5"></span>
+                </button>
             </header>
             <div class="chat-history" id="chatHistory">
                 <!-- Initial AI message will be added by JS -->
@@ -1736,16 +1651,18 @@
         // !! DO NOT USE THIS METHOD IN PRODUCTION. USE A SERVER-SIDE PROXY. !!
         // The key below is a placeholder and WILL NOT WORK.
         const GEMINI_API_KEY = 'AIzaSyCzx6ReMk8ohPJcCjGwHHzu7SvFccJqAbA'; // <--- REPLACE THIS WITH YOUR ACTUAL KEY
+        // In the Lite version, the model is fixed, not selectable by the user.
+        const DEFAULT_GEMINI_MODEL = 'gemini-2.5-flash-preview-05-20'; 
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${DEFAULT_GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
 
         // --- Global State Variables and Constants ---
         let conversationHistory = []; // Current chat's history (roles & parts)
-        const CURRENT_CHAT_STORAGE_KEY = 'mv-current-session-chat'; // Fixed key for the single active chat
+        const CURRENT_CHAT_STORAGE_KEY = 'mv-lite-current-session-chat'; // Unique key for Lite version
         
         let chatAttachments = []; 
         const messageTextCache = new Map(); // Stores raw text for copy/dictate before Markdown parsing
         let currentUtterance = null;
         let isSpeaking = false;
-        let currentTypingInterval = null; // For simulated typing animation
         let isGeneratingResponse = false; // To control send/stop buttons
         
         let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -1754,17 +1671,9 @@
         let finalTranscript = ''; 
         let selectedSuggestionIndex = -1;
 
-        // NEW: Simulate Typing Mode state
-        let isSimulateTypingEnabled = true; // Default to simulate typing
-
-        // NEW: AI Model and System Prompt State
-        let currentModel = localStorage.getItem('selected-gemini-model') || 'gemini-2.5-flash-preview-05-20'; // Default model
-        // Changed from systemPrompt to systemInstruction for clarity and direct API mapping
-        let systemInstruction = localStorage.getItem('system-instruction') || ''; // Stores user-defined system instruction
-
         const initialAIMessage = {
             role: 'model',
-            parts: [{ text: 'Greetings, seeker! I am Mystic Vision, an AI designed to help you glimpse the beyond. What wisdom do you seek?' }],
+            parts: [{ text: 'Greetings, seeker! I am Mystic Vision AI Lite, designed to help you glimpse the beyond. What wisdom do you seek?' }], // Renamed initial message
         };
 
         // Avatars
@@ -1773,6 +1682,7 @@
 
         const autocompleteSuggestions = [
             // Your extensive list of autocomplete suggestions
+            // (Copied from Code 2 to ensure consistency and richness of suggestions)
             "What is the capital of France?",
             "Explain quantum physics simply.",
             "How does a combustion engine work?",
@@ -2490,7 +2400,7 @@
             "What is impact investing?",
             "How to support fair trade initiatives?",
             "Explain corporate social responsibility.",
-            "What are sustainable business practices?",
+            "What is sustainable business practices?",
             "How to measure social impact?",
             "Tips for ethical leadership.",
             "What is servant leadership?",
@@ -2533,7 +2443,7 @@
             "Explain employee engagement.",
             "What are performance management strategies?",
             "How to provide constructive feedback to employees?",
-            "Tips for conflict resolution in teams.",
+            "Tips for conflict resolution in teams?",
             "What is diversity and inclusion in HR?",
             "How to recruit top talent?",
             "Explain onboarding processes.",
@@ -3125,15 +3035,14 @@
         let chatHistoryDiv;
         let userInput;
         let sendButton;
-        let themeSelect; // NEW
+        let themeSelect;
         let copyMessage;
-        let simulateTypingToggle; // NEW: Simulate typing toggle
         let chatAttachmentsPreviewContainer;
         let chatImageUpload;
         let voiceInputBtn;
         let suggestionsContainer;
         let suggestionsList;
-        // Removed: let stopButton; 
+        let desktopToggleSidebarBtn;
         
         // Sidebar Elements
         let chatSidebar; 
@@ -3141,19 +3050,13 @@
         let toggleSidebarBtn; 
         let mobileToggleSidebarBtn; 
         let chatMainContent;
-        // NEW Sidebar Elements
-        let modelSelect;
-        // Renamed from systemPromptInput to systemPromptSelect
-        let systemPromptSelect; 
-        // Renamed from clearSystemPromptBtn
-        let clearSystemPromptBtn; 
-        let clearChatBtn;
+        // Sidebar Export Buttons
         let exportTxtBtn;
         let exportPdfBtn;
-        // Renamed from exportDocBtn to exportMdBtn
         let exportMdBtn; 
+        let exportJsonBtn; // New: JSON export button
 
-        // NEW: Theme Constants
+        // Theme Constants (matching Code 2's theme definitions)
         const THEMES = [
             'cosmic-purple',
             'starlight-lavender',
@@ -3161,8 +3064,8 @@
             'crimson-nebula',
             'golden-aurora',
             'cosmic-gold',
-            'neon-glitch', // Added new theme
-            'ancient-papyrus' // Added new theme
+            'neon-glitch',
+            'ancient-papyrus'
         ];
         const DEFAULT_THEME = 'cosmic-purple';
 
@@ -3188,7 +3091,7 @@
             createIcons(); 
         }
 
-        // NEW: Function to manage the send/stop button's appearance and enabled/disabled state
+        // Function to manage the send/stop button's appearance and enabled/disabled state
         function updateSendButtonState() {
             const hasInput = userInput.value.trim().length > 0 || chatAttachments.length > 0;
 
@@ -3268,8 +3171,7 @@
 
         // --- Chat UI & Logic ---
         /**
-         * Appends a chat message to the UI. For AI messages, it appends an initially empty content area,
-         * which is later filled by simulateTyping or direct rendering.
+         * Appends a chat message to the UI.
          * @param {string} role - 'user' or 'model'
          * @param {string} text - The raw text content of the message.
          * @param {Array} attachments - Array of attachment objects (for user messages).
@@ -3298,9 +3200,9 @@
             } else {
                 avatarElement = document.createElement('img');
                 avatarElement.src = AI_AVATAR_URL;
-                avatarElement.alt = 'AI Avatar';
+                avatarElement.alt = 'Mystic Vision AI Lite Avatar'; // Renamed alt text
                 avatarElement.classList.add('chat-avatar');
-                avatarElement.title = "Mystic Vision AI"; 
+                avatarElement.title = "Mystic Vision AI Lite"; // Renamed title
             }
 
             // Create the content bubble wrapper
@@ -3335,10 +3237,9 @@
                 messageBubbleContent.appendChild(messageContentDiv); // Append user content to bubble
                 messageDiv.appendChild(messageBubbleContent);
                 messageDiv.appendChild(avatarElement); 
-            } else { // AI message: initialize empty, content filled later by simulateTyping or instant render
-                // For AI, the messageContentDiv is initially empty.
-                // It will be filled by simulateTyping or direct marked.parse later.
-                messageBubbleContent.appendChild(messageContentDiv); // Append initially empty content div
+            } else { // AI message: content is parsed and rendered immediately in Lite version
+                messageContentDiv.innerHTML = marked.parse(text);
+                messageBubbleContent.appendChild(messageContentDiv);
                 messageDiv.appendChild(avatarElement); 
                 messageDiv.appendChild(messageBubbleContent);
             }
@@ -3378,11 +3279,10 @@
             return { messageContentDiv, messageDiv }; 
         }
 
-        let isApiCallInProgress = false; 
         function toggleLoading(show) {
             let loadingIndicator = document.getElementById('loadingIndicator');
             if (show) {
-                isApiCallInProgress = true;
+                isGeneratingResponse = true;
                 if (!loadingIndicator) {
                     loadingIndicator = document.createElement('div');
                     loadingIndicator.id = 'loadingIndicator';
@@ -3393,82 +3293,25 @@
                             <div class="loader-dot"></div>
                             <div class="loader-dot"></div>
                         </div>
-                        <span class="mt-2 block">AI is thinking...</span>
+                        <span class="mt-2 block">Mystic Vision AI Lite is thinking...</span> <!-- Renamed thinking message -->
                     `;
                     chatHistoryDiv.appendChild(loadingIndicator);
                 }
                 loadingIndicator.style.display = 'flex';
                 loadingIndicator.style.flexDirection = 'column'; 
                 chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-                isGeneratingResponse = true; // Set state for button update
                 updateSendButtonState(); // Update button to 'stop' icon and enabled
                 userInput.disabled = true; 
             } else {
-                isApiCallInProgress = false;
+                isGeneratingResponse = false;
                 if (loadingIndicator) {
                     loadingIndicator.remove(); 
                 }
-                isGeneratingResponse = false; // Set state for button update
                 updateSendButtonState(); // Update button to 'send' icon and disabled/enabled based on input
                 userInput.disabled = false; 
                 userInput.focus();
             }
         }
-
-        // Simulate typing function (now receives the inner message-content div)
-        function simulateTyping(messageContentDiv, text, delay = 1) { 
-            if (!messageContentDiv) return;
-
-            messageContentDiv.innerHTML = ''; 
-            let currentTypedText = '';
-            let i = 0;
-            const renderBatchSize = 10; 
-
-            if (currentTypingInterval) {
-                clearInterval(currentTypingInterval);
-                currentTypingInterval = null;
-            }
-
-            currentTypingInterval = setInterval(() => {
-                if (!isGeneratingResponse) {
-                    clearInterval(currentTypingInterval);
-                    currentTypingInterval = null;
-                    messageContentDiv.innerHTML = marked.parse(text);
-                    if (typeof Prism !== 'undefined') {
-                        Prism.highlightAllUnder(messageContentDiv.closest('.chat-message'));
-                    }
-                    toggleLoading(false); 
-                    return;
-                }
-
-                if (i < text.length) {
-                    currentTypedText += text.charAt(i);
-
-                    if ((i + 1) % renderBatchSize === 0 || i === text.length - 1) {
-                        messageContentDiv.innerHTML = marked.parse(currentTypedText);
-                        if (typeof Prism !== 'undefined') {
-                            Prism.highlightAllUnder(messageContentDiv);
-                        }
-                    }
-                    
-                    i++;
-                    chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-                } else {
-                    clearInterval(currentTypingInterval);
-                    currentTypingInterval = null;
-                    
-                    messageContentDiv.innerHTML = marked.parse(text);
-                    if (typeof Prism !== 'undefined') {
-                        Prism.highlightAllUnder(messageContentDiv.closest('.chat-message'));
-                    }
-                    chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-                    toggleLoading(false); 
-                    isGeneratingResponse = false; 
-                    saveCurrentChat(); 
-                }
-            }, delay); 
-        }
-
 
         function displayChatAttachments() {
             chatAttachmentsPreviewContainer.innerHTML = '';
@@ -3590,11 +3433,11 @@
 
         // --- API Call Function ---
         async function callGeminiAPI(payload) {
-            if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || !GEMINI_API_KEY || GEMINI_API_KEY === "") { 
-                throw new Error("API Key is not set or is the default placeholder. Please replace 'YOUR_GEMINI_API_KEY_HERE' in the script with your actual Gemini API key.");
+            if (GEMINI_API_KEY === "" || !GEMINI_API_KEY || GEMINI_API_KEY === "") { 
+                throw new Error("API Key is not set or is the default placeholder. Please replace 'AIzaSyCzx6ReMk8ohPJcCjGwHHzu7SvFccJqAbA' in the script with your actual Gemini API key.");
             }
             
-            const dynamicApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${GEMINI_API_KEY}`;
+            const dynamicApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${DEFAULT_GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
 
             // Filter out the 'id' property from messages before sending to Gemini API
             const cleanContents = payload.contents.map(message => {
@@ -3609,14 +3452,7 @@
             const requestBody = {
                 contents: cleanContents,
             };
-
-            // NEW: Add system_instruction if it exists
-            if (systemInstruction) {
-                requestBody.system_instruction = {
-                    parts: [{ text: systemInstruction }]
-                };
-            }
-
+            
             let response;
             let result;
             let success = false;
@@ -3629,7 +3465,7 @@
                     response = await fetch(dynamicApiUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(requestBody) // Send the final request body with system_instruction
+                        body: JSON.stringify(requestBody) 
                     });
 
                     if (response.status === 429) { 
@@ -3695,7 +3531,7 @@
                     suggestionsContainer.classList.add('hidden');
                     userInput.style.height = 'auto'; 
                     userInput.style.height = userInput.scrollHeight + 'px';
-                    updateSendButtonState(); // Update button state after suggestion is applied
+                    updateSendButtonState();
                 });
                 suggestionsList.appendChild(li);
             });
@@ -3721,7 +3557,7 @@
             userInput.value = items[selectedSuggestionIndex].textContent; 
             userInput.style.height = 'auto'; 
             userInput.style.height = userInput.scrollHeight + 'px';
-            updateSendButtonState(); // Update button state after suggestion is navigated
+            updateSendButtonState();
         }
 
         function selectCurrentSuggestion() {
@@ -3731,7 +3567,7 @@
             }
             suggestionsContainer.classList.add('hidden');
             selectedSuggestionIndex = -1;
-            updateSendButtonState(); // Update button state after suggestion is selected
+            updateSendButtonState();
         }
 
         // --- Chat History Management ---
@@ -3739,15 +3575,12 @@
             if (conversationHistory.length > 0) {
                 localStorage.setItem(CURRENT_CHAT_STORAGE_KEY, JSON.stringify(conversationHistory));
             } else {
-                // If the chat is empty (e.g., brand new chat), ensure no empty data is saved
                 localStorage.removeItem(CURRENT_CHAT_STORAGE_KEY);
             }
         }
 
         // --- New Chat Function ---
         function startNewChat() {
-            // Step 1: Immediately clear the *current* chat from local storage.
-            // The previous content is now effectively "lost" unless exported.
             localStorage.removeItem(CURRENT_CHAT_STORAGE_KEY);
 
             // Stop any ongoing speech or AI generation
@@ -3759,12 +3592,10 @@
             }
             if (isGeneratingResponse) {
                 isGeneratingResponse = false;
-                clearInterval(currentTypingInterval);
-                currentTypingInterval = null;
                 toggleLoading(false);
             }
 
-            // Step 2: Reset UI and in-memory history for a new chat
+            // Reset UI and in-memory history for a new chat
             chatHistoryDiv.innerHTML = '';
             conversationHistory = []; // Reset history to empty
             chatAttachments = [];
@@ -3776,9 +3607,9 @@
             suggestionsContainer.classList.add('hidden');
             selectedSuggestionIndex = -1;
             userInput.dataset.editingMessageId = '';
-            updateSendButtonState(); // Update button state for new chat
+            updateSendButtonState();
 
-            // Step 3: Append the initial AI message for the new chat
+            // Append the initial AI message for the new chat
             const initialAiMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
             const { messageContentDiv: initialAiContentDiv, messageDiv: initialAiMessageDiv } = appendChatMessage('ai', initialAIMessage.parts[0].text, [], initialAiMessageId);
             conversationHistory.push({ ...initialAIMessage, id: initialAiMessageId }); // Add to the *new* history
@@ -3791,6 +3622,7 @@
                 });
             }
 
+            // Hide sidebar on mobile if new chat is initiated from it
             if (window.innerWidth <= 768) {
                 chatSidebar.classList.remove('active-mobile-sidebar');
                 mobileToggleSidebarBtn.style.display = 'flex';
@@ -3818,17 +3650,16 @@
             return text;
         }
 
-        // NEW: Export as Markdown (.md)
         function exportAsMd() {
             if (conversationHistory.length === 0) {
                 alert("No chat history to export.");
                 return;
             }
-            let markdownContent = `# Mystic Vision AI Chat History\n\n`;
+            let markdownContent = `# Mystic Vision AI Chat History (Lite)\n\n`; // Renamed export title
             markdownContent += `*Export Date: ${new Date().toLocaleString()}*\n\n---\n\n`;
 
             conversationHistory.forEach(msg => {
-                markdownContent += `## ${msg.role === 'user' ? 'You' : 'Mystic Vision'}\n\n`;
+                markdownContent += `## ${msg.role === 'user' ? 'You' : 'Mystic Vision AI Lite'}\n\n`; // Renamed AI in export
                 msg.parts.forEach(part => {
                     if (part.text) {
                         markdownContent += `${part.text}\n\n`;
@@ -3849,7 +3680,7 @@
             const blob = new Blob([markdownContent], { type: 'text/markdown;charset=utf-8' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `MysticVision_Chat_${new Date().toISOString().slice(0, 10)}.md`;
+            link.download = `MysticVision_Chat_Lite_${new Date().toISOString().slice(0, 10)}.md`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -3866,7 +3697,7 @@
             const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `MysticVision_Chat_${new Date().toISOString().slice(0, 10)}.txt`;
+            link.download = `MysticVision_Chat_Lite_${new Date().toISOString().slice(0, 10)}.txt`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -3879,7 +3710,6 @@
                 alert("No chat history to export.");
                 return;
             }
-            // jsPDF library needs to be loaded via CDN in HTML head
             if (typeof jspdf === 'undefined') {
                 alert('PDF export library (jsPDF) not loaded. Please ensure internet connection or check CDN.');
                 console.error("jsPDF not loaded. Add <script src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'><script> to your HTML header.");
@@ -3888,7 +3718,7 @@
             const { jsPDF } = jspdf;
             const doc = new jsPDF();
 
-            const title = `Mystic Vision AI Chat History - ${new Date().toLocaleString()}`;
+            const title = `Mystic Vision AI Chat History (Lite) - ${new Date().toLocaleString()}`; // Renamed export title
             const textContent = getFormattedChatHistoryTextForExport();
             const lines = doc.splitTextToSize(textContent, 180); // Max width of 180mm for text
 
@@ -3915,10 +3745,39 @@
                 y += lineHeight;
             });
 
-            doc.save(`MysticVision_Chat_${new Date().toISOString().slice(0, 10)}.pdf`);
+            doc.save(`MysticVision_Chat_Lite_${new Date().toISOString().slice(0, 10)}.pdf`);
             alert('Chat exported as PDF!');
         }
 
+        // New: Export as JSON
+        function exportAsJson() {
+            if (conversationHistory.length === 0) {
+                alert("No chat history to export.");
+                return;
+            }
+            // Create a copy of conversationHistory to remove cyclical references (if any) or extra properties like 'file' object in attachments
+            const exportableHistory = conversationHistory.map(message => {
+                const parts = message.parts.map(part => {
+                    if (part.inlineData) {
+                        // Only include mimeType and data for inlineData, optionally name
+                        return { inlineData: { mimeType: part.inlineData.mimeType, data: part.inlineData.data, name: part.inlineData.name || undefined } };
+                    }
+                    return part;
+                });
+                return { role: message.role, parts: parts, id: message.id };
+            });
+
+            const jsonContent = JSON.stringify(exportableHistory, null, 2); // Pretty print JSON
+            const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `MysticVision_Chat_Lite_${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+            alert('Chat exported as JSON!');
+        }
 
         // --- Paste Functionality ---
         async function processPastedFile(file) {
@@ -3945,15 +3804,12 @@
             }
         }
 
-        // NEW: Function to apply theme
+        // Function to apply theme
         function applyTheme(themeName) {
             // Remove all known theme classes from the body
             THEMES.forEach(theme => {
                 document.body.classList.remove(theme);
             });
-            // Ensure the old 'light' class is removed if it was manually added before
-            document.body.classList.remove('light'); 
-
             // Add the new selected theme class
             let themeToApply = themeName;
             if (!THEMES.includes(themeName)) {
@@ -3961,17 +3817,27 @@
                 themeToApply = DEFAULT_THEME;
             }
             document.body.classList.add(themeToApply);
-            localStorage.setItem('selected-theme', themeToApply); // Save user preference
+            localStorage.setItem('selected-lite-theme', themeToApply); // Save user preference (unique key for Lite)
 
             // Update the select dropdown to show the current theme
             if (themeSelect) {
                 themeSelect.value = themeToApply;
+                // Update SVG arrow color dynamically based on new theme's --text-color
+                // This converts the CSS variable value (e.g., "#E6E6FA") to a hex string without '#'
+                const computedStyle = getComputedStyle(document.documentElement);
+                const textColorValue = computedStyle.getPropertyValue('--text-color').trim();
+                let arrowColor = '000000'; // Default to black
+                if (textColorValue.startsWith('#') && textColorValue.length === 7) {
+                    arrowColor = textColorValue.substring(1);
+                } else if (textColorValue.startsWith('rgb')) {
+                    // Convert rgb(r, g, b) to hex
+                    const rgb = textColorValue.match(/\d+/g);
+                    if (rgb && rgb.length >= 3) {
+                        arrowColor = ((1 << 24) + (parseInt(rgb[0]) << 16) + (parseInt(rgb[1]) << 8) + parseInt(rgb[2])).toString(16).slice(1);
+                    }
+                }
+                themeSelect.style.setProperty('--select-arrow-svg', `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23${arrowColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>')`);
             }
-            // Dynamically update the background-image for select dropdown arrow
-            // This part is a bit tricky with dynamic CSS variables and needs to be called after theme application
-            // A simple way to get current text-color for the SVG arrow:
-            // const arrowColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1);
-            // themeSelect.style.backgroundImage = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23${arrowColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>');`;
         }
 
         // --- Initialization on Load ---
@@ -3981,76 +3847,67 @@
             chatHistoryDiv = document.getElementById('chatHistory');
             userInput = document.getElementById('userInput');
             sendButton = document.getElementById('sendButton');
-            themeSelect = document.getElementById('theme-select'); // NEW
-            simulateTypingToggle = document.getElementById('simulate-typing-toggle'); // NEW
+            themeSelect = document.getElementById('theme-select');
             copyMessage = document.getElementById('copy-message');
             chatAttachmentsPreviewContainer = document.getElementById('chat-attachments-preview-container');
             chatImageUpload = document.getElementById('chat-image-upload');
             voiceInputBtn = document.getElementById('voice-input-btn');
             suggestionsContainer = document.getElementById('suggestions-container');
             suggestionsList = document.getElementById('suggestions-list');
-            // Removed: stopButton from variable declaration
             
             // Sidebar Elements
             chatSidebar = document.getElementById('chatSidebar'); 
             newChatBtnSidebar = document.getElementById('newChatBtn'); 
             toggleSidebarBtn = document.getElementById('toggleSidebarBtn'); 
             mobileToggleSidebarBtn = document.getElementById('mobileToggleSidebarBtn'); 
-            chatMainContent = document.querySelector('.chat-main-content');
-            // NEW Sidebar Elements
-            modelSelect = document.getElementById('model-select');
-            systemPromptSelect = document.getElementById('systemPromptSelect'); // Renamed
-            clearSystemPromptBtn = document.getElementById('clearSystemPromptBtn'); // Renamed
-            clearChatBtn = document.getElementById('clearChatBtn');
+            chatMainContent = document.getElementById('chatMainContent');
+            // Sidebar Export Buttons
             exportTxtBtn = document.getElementById('exportTxtBtn');
             exportPdfBtn = document.getElementById('exportPdfBtn');
-            exportMdBtn = document.getElementById('exportMdBtn'); // Renamed
+            exportMdBtn = document.getElementById('exportMdBtn'); 
+            exportJsonBtn = document.getElementById('exportJsonBtn'); // New: JSON export button
+            desktopToggleSidebarBtn = document.getElementById('desktopToggleSidebarBtn');
 
             createIcons();
             userInput.style.height = userInput.scrollHeight + 'px';
 
-            // NEW: Initialize Theme based on localStorage or default
-            const savedTheme = localStorage.getItem('selected-theme');
+            let isSidebarOpenDesktop = true; // Sidebar starts open by default on desktop
+
+            // Initialize Theme based on localStorage or default
+            const savedTheme = localStorage.getItem('selected-lite-theme'); // Unique key
             applyTheme(savedTheme || DEFAULT_THEME);
 
-            // NEW: Event listener for Theme Selector
+            // Event listener for Theme Selector
             themeSelect.addEventListener('change', (event) => {
                 const selectedTheme = event.target.value;
                 applyTheme(selectedTheme);
             });
 
-            // NEW: Initialize Simulate Typing Mode based on localStorage or default
-            const savedSimulateTyping = localStorage.getItem('simulate-typing');
-            if (savedSimulateTyping !== null) {
-                isSimulateTypingEnabled = savedSimulateTyping === 'true';
-            } else {
-                isSimulateTypingEnabled = true; // Default to true if no saved preference
+            // NEW: Function to apply desktop sidebar state
+            function applyDesktopSidebarState() {
+                if (isSidebarOpenDesktop) {
+                    chatSidebar.style.width = '280px';
+                    chatSidebar.style.padding = '20px 15px';
+                    chatSidebar.style.overflowY = 'auto'; // Re-enable scroll
+                    chatMainContent.classList.remove('sidebar-hidden'); // No left radius
+                    updateButtonIcon(desktopToggleSidebarBtn, 'chevron-left', 'w-5 h-5');
+                } else {
+                    chatSidebar.style.width = '0px';
+                    chatSidebar.style.padding = '0'; // Remove padding when collapsed
+                    chatSidebar.style.overflowY = 'hidden'; // Hide scroll when collapsed
+                    chatMainContent.classList.add('sidebar-hidden'); // Add left radius
+                    updateButtonIcon(desktopToggleSidebarBtn, 'chevron-right', 'w-5 h-5');
+                }
             }
-            simulateTypingToggle.checked = isSimulateTypingEnabled;
 
-            // Initialize Model Selector
-            modelSelect.value = currentModel;
-            modelSelect.addEventListener('change', (event) => {
-                currentModel = event.target.value;
-                localStorage.setItem('selected-gemini-model', currentModel);
-                console.log(`AI Model set to: ${currentModel}`);
-            });
-
-            // Initialize System Prompt (Persona) Select
-            systemPromptSelect.value = systemInstruction;
-            systemPromptSelect.addEventListener('change', () => {
-                systemInstruction = systemPromptSelect.value.trim();
-                localStorage.setItem('system-instruction', systemInstruction);
-            });
-            clearSystemPromptBtn.addEventListener('click', () => {
-                systemPromptSelect.value = '';
-                systemInstruction = '';
-                localStorage.removeItem('system-instruction');
-                alert('AI persona cleared for future messages.');
+            // NEW: Event listener for desktop toggle button
+            desktopToggleSidebarBtn.addEventListener('click', () => {
+                isSidebarOpenDesktop = !isSidebarOpenDesktop;
+                applyDesktopSidebarState();
             });
 
             // Load the current session's chat history on startup
-            const storedHistory = localStorage.getItem(CURRENT_CHAT_STORAGE_KEY);
+            const storedHistory = localStorage.getItem(CURRENT_CHAT_STORAGE_KEY); // Unique key
             if (storedHistory) {
                 conversationHistory = JSON.parse(storedHistory);
                 const aiMessageDivsToHighlight = []; // For Prism.js highlighting
@@ -4076,8 +3933,10 @@
                     if (!msg.id) msg.id = msgId; // Update history with new ID if missing
 
                     if (msg.role === 'model') {
-                        messageContentDiv.innerHTML = marked.parse(textContent);
-                        aiMessageDivsToHighlight.push(messageDiv);
+                        // For AI in Lite version, content is already marked.parsed in appendChatMessage
+                        if (typeof Prism !== 'undefined') {
+                            aiMessageDivsToHighlight.push(messageDiv);
+                        }
                     }
                 });
 
@@ -4107,6 +3966,17 @@
             }
 
             // --- Speech Recognition Setup ---
+            // IMPORTANT: Browser's SpeechRecognition API is used. Its "intelligence"
+            // (accuracy, noise handling, punctuation) is determined by the browser
+            // and underlying OS capabilities, not directly by this application code.
+            // A truly "ChatGPT-like" voice input experience (e.g., highly robust VAD,
+            // advanced contextual understanding, real-time punctuation beyond basic)
+            // typically requires integration with powerful cloud-based Speech-to-Text
+            // and Natural Language Understanding (NLU) services (like OpenAI's Whisper,
+            // Google Cloud Speech-to-Text, Azure Speech Services), which involve
+            // server-side processing and are beyond the scope of a pure client-side
+            // HTML/JavaScript application. This implementation provides the best
+            // possible experience using standard browser APIs.
             if (SpeechRecognition) {
                 recognition = new SpeechRecognition();
                 recognition.continuous = true; 
@@ -4120,7 +3990,7 @@
                     userInput.placeholder = 'Listening... Speak now.';
                     finalTranscript = ''; 
                     userInput.value = ''; 
-                    updateSendButtonState(); // Update send button state
+                    updateSendButtonState();
                 };
 
                 recognition.onresult = (event) => {
@@ -4136,7 +4006,7 @@
                     userInput.scrollLeft = userInput.scrollWidth; 
                     userInput.style.height = 'auto'; 
                     userInput.style.height = userInput.scrollHeight + 'px';
-                    updateSendButtonState(); // Update send button state as user types
+                    updateSendButtonState();
                 };
 
                 recognition.onend = () => {
@@ -4152,7 +4022,7 @@
                     }
                     userInput.style.height = 'auto'; 
                     userInput.style.height = userInput.scrollHeight + 'px';
-                    updateSendButtonState(); // Final update after recognition ends
+                    updateSendButtonState();
                 };
 
                 recognition.onerror = (event) => {
@@ -4168,49 +4038,18 @@
                     } else if (event.error === 'no-speech') {
                         console.log('No speech detected, recognition ended.');
                         if (finalTranscript.trim() === '') { userInput.value = ''; }
-                        updateSendButtonState(); // Update button state even on no-speech
+                        updateSendButtonState();
                         return; 
                     } else if (event.error === 'network') {
                         errorMessage = 'Speech recognition network error. This often means a firewall, proxy, or browser extension is blocking access to Google\'s speech services. Please try disabling extensions or testing in incognito mode.';
                     }
                     alert(errorMessage); 
-                    updateSendButtonState(); // Update button state on error
+                    updateSendButtonState();
                 };
             } else {
                 console.warn('Web Speech API (SpeechRecognition) not supported in this browser. Voice input button will be hidden.');
                 voiceInputBtn.style.display = 'none'; 
             }
-
-            // NEW: Event listener for Simulate Typing Toggle
-            simulateTypingToggle.addEventListener('change', () => {
-                isSimulateTypingEnabled = simulateTypingToggle.checked;
-                localStorage.setItem('simulate-typing', isSimulateTypingEnabled);
-                
-                // If turning off simulation while AI is typing, immediately complete the response
-                if (!isSimulateTypingEnabled && isGeneratingResponse) {
-                    isGeneratingResponse = false; // Stop the animation loop
-                    if (currentTypingInterval) {
-                        clearInterval(currentTypingInterval);
-                        currentTypingInterval = null;
-                    }
-                    // Force complete rendering of the last AI message
-                    const lastAIMessageDiv = chatHistoryDiv.lastElementChild;
-                    if (lastAIMessageDiv && lastAIMessageDiv.classList.contains('ai')) {
-                        const messageContentDiv = lastAIMessageDiv.querySelector('.message-content');
-                        const messageId = lastAIMessageDiv.dataset.messageId;
-                        const fullTextFromCache = messageTextCache.get(messageId);
-                        
-                        if (messageContentDiv) {
-                            messageContentDiv.innerHTML = marked.parse(fullTextFromCache);
-                            if (typeof Prism !== 'undefined') {
-                                Prism.highlightAllUnder(lastAIMessageDiv); // Highlight the full message div
-                            }
-                        }
-                    }
-                    toggleLoading(false); // Hide loading indicator, which also updates the send button
-                    saveCurrentChat(); // Save the chat now that it's complete
-                }
-            });
 
             userInput.addEventListener('input', () => {
                 userInput.style.height = 'auto'; 
@@ -4223,7 +4062,7 @@
                 } else {
                     suggestionsContainer.classList.add('hidden');
                 }
-                updateSendButtonState(); // Update button state based on input
+                updateSendButtonState();
             });
 
             userInput.addEventListener('keydown', (e) => {
@@ -4276,7 +4115,7 @@
                 if (filePasted) {
                     displayChatAttachments();
                     userInput.focus();
-                    updateSendButtonState(); // Update button state after paste
+                    updateSendButtonState();
                 }
             });
 
@@ -4284,31 +4123,15 @@
                 // If AI is currently generating, this click means STOP
                 if (isGeneratingResponse) {
                     isGeneratingResponse = false;
-                    clearInterval(currentTypingInterval);
-                    currentTypingInterval = null;
                     if (window.speechSynthesis.speaking || window.speechSynthesis.paused) {
                         window.speechSynthesis.cancel();
                         isSpeaking = false;
                         currentUtterance = null;
                         document.querySelectorAll('.dictate-message-btn').forEach(btn => updateButtonIcon(btn, 'volume-2'));
                     }
-                    // Ensure the currently typing message is fully rendered and highlighted
-                    const lastAIMessageDiv = chatHistoryDiv.lastElementChild;
-                    if (lastAIMessageDiv && lastAIMessageDiv.classList.contains('ai')) {
-                        const messageContentDiv = lastAIMessageDiv.querySelector('.message-content');
-                        const messageId = lastAIMessageDiv.dataset.messageId;
-                        const fullTextFromCache = messageTextCache.get(messageId);
-
-                        if (messageContentDiv && messageContentDiv.innerHTML.trim() !== '') {
-                            messageContentDiv.innerHTML = marked.parse(fullTextFromCache);
-                            if (typeof Prism !== 'undefined') {
-                                Prism.highlightAllUnder(lastAIMessageDiv);
-                            }
-                        }
-                    }
                     toggleLoading(false); // This will update the button state to 'send'
                     console.log("AI generation stopped by user.");
-                    saveCurrentChat();
+                    saveCurrentChat(); 
                     return; // Exit the function after handling stop
                 }
 
@@ -4318,17 +4141,15 @@
                 const hasInput = userMessage.length > 0 || chatAttachments.length > 0;
 
                 if (!hasInput) {
-                    // Optionally, provide visual feedback like a shake or a temporary message
                     console.warn("No input or attachments to send.");
-                    // Example: Add a temporary pulse animation or border color change to the input
                     userInput.classList.add('border-accent-error', 'animate-pulse');
                     setTimeout(() => {
                         userInput.classList.remove('border-accent-error', 'animate-pulse');
                     }, 500);
-                    return; // Prevent sending an empty message
+                    return;
                 }
 
-                // Stop any ongoing speech or voice input (redundant if voice input auto-stops on final, but safe)
+                // Stop any ongoing speech or voice input
                 if (isVoiceInputActive && recognition) {
                     recognition.stop();
                 }
@@ -4342,26 +4163,31 @@
                 if (editingMessageId) {
                     const editedText = userMessage;
                     const messageDivToEdit = document.querySelector(`.chat-message[data-message-id="${editingMessageId}"]`);
+                    
                     if (messageDivToEdit) {
                         const originalIndex = Array.from(chatHistoryDiv.children).indexOf(messageDivToEdit);
                         if (originalIndex !== -1) {
-                            conversationHistory[originalIndex].parts = [];
+                            const originalMessage = conversationHistory[originalIndex];
+                            
+                            originalMessage.parts = [];
                             if (editedText) {
-                                conversationHistory[originalIndex].parts.push({ text: editedText });
+                                originalMessage.parts.push({ text: editedText });
                             }
                             if (chatAttachments.length > 0) {
                                 for(const attachment of chatAttachments) {
-                                    conversationHistory[originalIndex].parts.push({
+                                    originalMessage.parts.push({
                                         inlineData: { mimeType: attachment.mimeType, data: attachment.data }
                                     });
                                 }
                             }
 
+                            // Remove all messages from history and UI after the edited message
                             while (chatHistoryDiv.children.length > originalIndex + 1) {
                                 chatHistoryDiv.lastChild.remove();
                                 conversationHistory.pop();
                             }
 
+                            // Update the UI for the edited message
                             const messageBubbleContent = messageDivToEdit.querySelector('.message-bubble-content');
                             if (messageBubbleContent) {
                                 const messageContentDiv = messageBubbleContent.querySelector('.message-content');
@@ -4434,32 +4260,24 @@
                     if (isGeneratingResponse) { // Still check if the user hasn't stopped it during API call
                         const newAiMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
                         const { messageContentDiv: aiContentDiv, messageDiv: aiMessageDiv } = appendChatMessage('ai', responseText, [], newAiMessageId);
-
                         conversationHistory.push({ role: 'model', parts: [{ text: responseText }], id: newAiMessageId });
 
-                        if (isSimulateTypingEnabled) {
-                            simulateTyping(aiContentDiv, responseText);
-                        } else {
-                            aiContentDiv.innerHTML = marked.parse(responseText);
-                            if (typeof Prism !== 'undefined') {
-                                Prism.highlightAllUnder(aiMessageDiv);
-                            }
-                            chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-                            toggleLoading(false);
-                            isGeneratingResponse = false;
-                            saveCurrentChat();
+                        // Since Lite version doesn't simulate typing, render and highlight instantly
+                        aiContentDiv.innerHTML = marked.parse(responseText);
+                        if (typeof Prism !== 'undefined') {
+                            Prism.highlightAllUnder(aiMessageDiv);
                         }
+                        chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
+                        toggleLoading(false);
+                        saveCurrentChat();
                     }
                 } catch (error) {
                     console.error('Chat API call failed:', error);
                     appendChatMessage('ai', `Oops! Something went wrong. Please try again. (${error.message})`);
-                    toggleLoading(false); // This will update the button state to 'send'
-                    isGeneratingResponse = false;
+                    toggleLoading(false);
                 } 
             });
             
-            // Removed: stopButton.addEventListener block
-
             chatImageUpload.addEventListener('change', async (event) => {
                 const files = Array.from(event.target.files);
                 if (files.length > 0) {
@@ -4488,7 +4306,7 @@
                     }
                     displayChatAttachments();
                     userInput.focus();
-                    updateSendButtonState(); // Update button state after file attachment
+                    updateSendButtonState();
                 }
                 chatImageUpload.value = ''; 
             });
@@ -4502,7 +4320,7 @@
                         chatAttachments.splice(index, 1); 
                         displayChatAttachments(); 
                         userInput.focus();
-                        updateSendButtonState(); // Update button state after attachment removal
+                        updateSendButtonState();
                     }
                 }
             });
@@ -4564,11 +4382,11 @@
                     }
                     displayChatAttachments();
                     userInput.focus();
-                    updateSendButtonState(); // Update button state after drag/drop
+                    updateSendButtonState();
                 }
             });
             
-            chatHistoryDiv.addEventListener('click', async (event) => { // Made async for API call in regenerate
+            chatHistoryDiv.addEventListener('click', async (event) => {
                 const codeCopyButton = event.target.closest('.code-block-copy-button');
                 if (codeCopyButton) {
                     const targetId = codeCopyButton.dataset.copyTarget;
@@ -4697,11 +4515,7 @@
                                 chatAttachments = userAttachmentsForRegen; 
                                 displayChatAttachments(); 
 
-                                // Directly trigger the API call logic without simulating a click,
-                                // and ensure the button state is correctly updated.
-                                toggleLoading(true); // Set to loading state immediately
-                                // No need to push user message again, it's already in conversationHistory
-                                // and we sliced back to it.
+                                toggleLoading(true);
 
                                 try {
                                     const payload = {
@@ -4714,24 +4528,18 @@
                                         const { messageContentDiv: aiContentDiv, messageDiv: aiMessageDiv } = appendChatMessage('ai', responseText, [], newAiMessageId);
                                         conversationHistory.push({ role: 'model', parts: [{ text: responseText }], id: newAiMessageId });
 
-                                        if (isSimulateTypingEnabled) {
-                                            simulateTyping(aiContentDiv, responseText);
-                                        } else {
-                                            aiContentDiv.innerHTML = marked.parse(responseText);
-                                            if (typeof Prism !== 'undefined') {
-                                                Prism.highlightAllUnder(aiMessageDiv);
-                                            }
-                                            chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-                                            toggleLoading(false);
-                                            isGeneratingResponse = false;
-                                            saveCurrentChat();
+                                        aiContentDiv.innerHTML = marked.parse(responseText);
+                                        if (typeof Prism !== 'undefined') {
+                                            Prism.highlightAllUnder(aiMessageDiv);
                                         }
+                                        chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
+                                        toggleLoading(false);
+                                        saveCurrentChat();
                                     }
                                 } catch (error) {
                                     console.error('Chat API call failed during regeneration:', error);
                                     appendChatMessage('ai', `Oops! Something went wrong during regeneration. Please try again. (${error.message})`);
                                     toggleLoading(false);
-                                    isGeneratingResponse = false;
                                 }
 
                                 // Clear input area after successful "resend" from regeneration
@@ -4743,7 +4551,7 @@
                                 suggestionsContainer.classList.add('hidden');
                                 selectedSuggestionIndex = -1;
                                 delete userInput.dataset.editingMessageId;
-                                updateSendButtonState(); // Ensure button is 'send' and disabled if no new input
+                                updateSendButtonState();
                             } else {
                                 console.error("Cannot regenerate: Last message in history is not a user message or is malformed.");
                                 alert("Could not regenerate. The previous user message was not found or was empty. Starting a new chat.");
@@ -4760,45 +4568,70 @@
 
             newChatBtnSidebar.addEventListener('click', startNewChat);
 
-            // Clear Current Chat Button Listener
-            clearChatBtn.addEventListener('click', () => {
-                if (confirm('Are you sure you want to clear the current chat history? This cannot be undone.')) {
-                    startNewChat(); // This now clears local storage and restarts the chat
-                }
-            });
-
             // Add event listeners for the export buttons
             exportTxtBtn.addEventListener('click', exportAsTxt);
             exportPdfBtn.addEventListener('click', exportAsPdf);
-            exportMdBtn.addEventListener('click', exportAsMd); // Updated listener
+            exportMdBtn.addEventListener('click', exportAsMd);
+            exportJsonBtn.addEventListener('click', exportAsJson); // New: JSON export listener
 
             mobileToggleSidebarBtn.addEventListener('click', () => {
                 chatSidebar.classList.add('active-mobile-sidebar');
+                chatMainContent.classList.remove('sidebar-hidden'); // Ensure main content loses its left radius
                 mobileToggleSidebarBtn.style.display = 'none'; 
             });
 
             toggleSidebarBtn.addEventListener('click', () => {
                 chatSidebar.classList.remove('active-mobile-sidebar');
+                chatMainContent.classList.add('sidebar-hidden'); // Add back radius to main content
                 mobileToggleSidebarBtn.style.display = 'flex'; 
             });
 
             window.addEventListener('resize', () => {
                 const isMobile = window.innerWidth <= 768;
                 if (isMobile) {
-                    chatSidebar.classList.remove('hidden-sidebar'); // Ensure sidebar isn't hidden by default CSS when on mobile
+                    // Mobile view
+                    // Hide desktop toggle
+                    desktopToggleSidebarBtn.style.display = 'none';
+
+                    // Ensure mobile sidebar rules are applied
+                    chatSidebar.classList.remove('hidden-sidebar'); // If you use a 'hidden-sidebar' class for mobile, keep this.
                     if (chatSidebar.classList.contains('active-mobile-sidebar')) {
                         mobileToggleSidebarBtn.style.display = 'none';
+                        chatMainContent.classList.remove('sidebar-hidden');
                     } else {
                         mobileToggleSidebarBtn.style.display = 'flex';
+                        chatMainContent.classList.add('sidebar-hidden'); // Apply radius if sidebar closed on mobile
                     }
-                    toggleSidebarBtn.style.display = 'flex'; 
+                    toggleSidebarBtn.style.display = 'flex'; // 'X' button inside mobile sidebar
+
+                    // Reset any inline styles from desktop mode
+                    chatSidebar.style.width = '';
+                    chatSidebar.style.padding = '';
+                    chatSidebar.style.overflowY = 'auto'; // Ensure scrollbar for mobile
                 } else {
-                    chatSidebar.classList.remove('active-mobile-sidebar'); // Hide mobile sidebar if resizing to desktop
-                    mobileToggleSidebarBtn.style.display = 'none'; 
-                    toggleSidebarBtn.style.display = 'none'; 
+                    // Desktop view
+                    // Show desktop toggle, hide mobile toggles
+                    desktopToggleSidebarBtn.style.display = 'flex';
+                    mobileToggleSidebarBtn.style.display = 'none';
+                    toggleSidebarBtn.style.display = 'none';
+
+                    // Ensure mobile sidebar classes are removed
+                    chatSidebar.classList.remove('active-mobile-sidebar');
+
+                    // Apply desktop sidebar state based on `isSidebarOpenDesktop`
+                    applyDesktopSidebarState();
                 }
-                createIcons(); 
+                createIcons();
             });
+
+            // Initial call on load to set desktop/mobile layout correctly
+            if (window.innerWidth > 768) {
+                desktopToggleSidebarBtn.style.display = 'flex'; // Show desktop toggle
+                applyDesktopSidebarState(); // Apply initial desktop state (sidebar open)
+            } else {
+                mobileToggleSidebarBtn.style.display = 'flex'; // Show mobile toggle
+                chatMainContent.classList.add('sidebar-hidden'); // Sidebar starts closed on mobile, apply radius
+            }
         });
     </script>
 </body>
