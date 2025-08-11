@@ -1,6 +1,6 @@
 {
-  "name": "Mystic Vision AI Chat",
-  "short_name": "Mystic Vision",
+  "name": "Mystic Vision AI Chat Basic",
+  "short_name": "Mystic Vision AI Basic",
   "description": "Chat with Mystic Vision AI for insights and predictions.",
   "start_url": "./",
   "display": "standalone",
