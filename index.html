@@ -24,13 +24,18 @@
     <style>
         /* --- Custom Styles for Standalone AI Chatbot (Adapted from Dream11 Predictor Chat) --- */
         
+        /* Ensure HTML and Body take full height and prevent main scrollbar */
+        html, body {
+            height: 100%;
+            overflow: hidden; /* Prevent body scrollbar, main-chat-container handles it */
+        }
+
         /* Basic font and transition settings for the whole page */
         body {
             font-family: 'Inter', sans-serif;
             transition: background-color 0.6s ease, color 0.6s ease;
             display: flex; /* Make body a flex container */
             flex-direction: column; /* Arrange children vertically */
-            min-height: 100vh; /* Ensure full viewport height */
             margin: 0;
             background-color: #f3f4f6; /* Default light background */
             color: #1f2937; /* Default light text color */
@@ -83,7 +88,8 @@
         body.dark .hover\:bg-gray-300:hover { background-color: #52525b; }
         body.dark .bg-gray-100 { background-color: #27272a; }
         body.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45); }
-        body.dark #error-message { background-color: #fee2e2; color: #b91c1c; } /* Light red error for contrast */
+        /* Adjusted for chat error message background */
+        /* Note: The dark mode specific colors for chat-error-message should be placed under body.dark selector for proper cascade */
 
         /* Custom styles for dark mode toggle switch */
         .slider {
@@ -145,21 +151,22 @@
             }
         }
         
-        /* Main Chat Container styles (adapted from #chat-popup-window) */
+        /* Main Chat Container styles for full-screen */
         #main-chat-container {
-            flex-grow: 1; /* Allows it to take up remaining vertical space */
+            height: 100%; /* Take full height of its parent (body) */
+            width: 100%; /* Take full width */
             display: flex;
             flex-direction: column;
             background-color: rgba(255, 255, 255, 0.95); /* Nearly opaque white */
-            border-radius: 0; /* No rounded corners for full screen */
-            box-shadow: none; /* No shadow for full screen */
-            border: none; /* No border for full screen */
+            border-radius: 0;
+            box-shadow: none;
+            border: none;
             backdrop-filter: blur(8px); /* Frosted glass effect */
             -webkit-backdrop-filter: blur(8px); /* Safari support */
-            overflow: hidden; /* Important for chat history scroll */
+            overflow: hidden; /* Hide scrollbars of the container itself */
         }
         body.dark #main-chat-container {
-            background-color: rgba(19, 19, 26, 0.95); /* Nearly opaque dark */
+            background-color: rgba(19, 19, 26, 0.95);
             border-color: rgba(45, 55, 72, 0.7);
             box-shadow: none;
         }
@@ -562,18 +569,36 @@
             box-shadow: 0 0 20px var(--accent-primary-dark), 0 0 30px var(--accent-primary-dark) inset;
         }
 
-        /* PDF Export template styles (hidden from direct view) */
+        /* PDF Export template styles (hidden from direct view) - Retained for dependency consistency, but not actively used for chat export */
         #pdf-export-content {
-            display: none; /* Hidden by default */
+            display: none; 
+        }
+
+        /* Styles for the chat-specific error message */
+        #chat-error-message {
+            margin-bottom: 1rem;
+            background-color: #fee2e2; /* Light red */
+            border: 1px solid #fca5a5; /* Red-300 */
+            color: #b91c1c; /* Red-700 */
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
+            align-items: center; /* These will apply when display is not 'none' */
+            gap: 0.5rem;          /* These will apply when display is not 'none' */
+        }
+        body.dark #chat-error-message {
+            background-color: #450a0a; /* Darker red */
+            border-color: #7f1d1d; /* Red-800 */
+            color: #fca5a5; /* Red-300 */
         }
     </style>
 </head>
 <body class="antialiased dark">
 
-    <!-- Main Chat Container -->
+    <!-- Main Chat Container (takes full screen) -->
     <div id="main-chat-container">
         <!-- Header for the chat -->
-        <div class="header-section p-4 md:p-6 flex justify-between items-center bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <div class="header-section p-4 md:p-6 flex justify-between items-center bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
             <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-200">Mystic Vision AI Mini</h1>
             <div class="flex items-center space-x-2">
                 <span class="text-gray-500 text-sm">Light</span>
@@ -587,11 +612,16 @@
         
         <!-- Chat history div with a minimum height and scroll -->
         <div id="chat-history" class="p-4 overflow-y-auto flex-1 flex flex-col">
+            <!-- Dynamic error message for chat -->
+            <div id="chat-error-message" class="hidden" role="alert">
+                <span data-lucide="alert-circle" class="w-5 h-5 flex-shrink-0"></span>
+                <span id="chat-error-text"></span>
+            </div>
             <!-- Chat messages will be appended here by JS -->
         </div>
         
         <!-- Chat input section with attachment, voice and send button -->
-        <div class="p-4 border-t border-gray-200 dark:border-gray-700 relative">
+        <div class="p-4 border-t border-gray-200 dark:border-gray-700 relative flex-shrink-0">
             <!-- Attachment preview -->
             <div id="chat-attachments-preview-container" class="mb-2 flex flex-wrap items-center gap-2 hidden">
                 <!-- Attachments previews will be dynamically added here -->
@@ -644,7 +674,7 @@
         // Register Service Worker for PWA capabilities
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js') // Updated to service-worker.js
+                navigator.serviceWorker.register('/service-worker.js')
                     .then(registration => {
                         console.log('ServiceWorker registration successful with scope: ', registration.scope);
                     })
@@ -678,6 +708,8 @@
         const voiceInputBtn = document.getElementById('voice-input-btn');
         const addChatAttachmentBtn = document.getElementById('add-chat-attachment-btn');
         const chatActionsDropdown = document.getElementById('chat-actions-dropdown');
+        const chatErrorMessageDiv = document.getElementById('chat-error-message');
+        const chatErrorText = document.getElementById('chat-error-text');
         
         // Copy message element
         const copyMessage = document.getElementById('copy-message');
@@ -700,7 +732,24 @@
         // !! IMPORTANT: REPLACE WITH YOUR ACTUAL GEMINI API KEY !!
         // !! DO NOT USE THIS METHOD IN PRODUCTION. USE A SERVER-SIDE PROXY. !!
         // The key below is a placeholder and WILL NOT WORK.
+        // Get your API key from Google AI Studio: https://makersuite.google.com/
         const GEMINI_API_KEY = 'AIzaSyCzx6ReMk8ohPJcCjGwHHzu7SvFccJqAbA'; // <--- REPLACE THIS WITH YOUR ACTUAL KEY
+
+        /**
+         * Displays a chat-specific error message.
+         * @param {string} message The error message to display.
+         */
+        function showChatError(message) {
+            chatErrorText.textContent = message;
+            chatErrorMessageDiv.classList.remove('hidden');
+            chatErrorMessageDiv.classList.add('flex'); // Explicitly add flex to make it visible
+            // Hide after 5 seconds
+            setTimeout(() => {
+                chatErrorMessageDiv.classList.add('hidden');
+                chatErrorMessageDiv.classList.remove('flex'); // Explicitly remove flex when hiding
+                chatErrorText.textContent = '';
+            }, 5000);
+        }
 
         // Initialize SpeechRecognition if available
         if (SpeechRecognition) {
@@ -717,6 +766,8 @@
                 finalTranscript = ''; // Clear previous transcript for a new session
                 chatInput.value = ''; // Clear input field
                 chatActionsDropdown.classList.add('hidden'); // Hide dropdown when voice input starts
+                chatErrorMessageDiv.classList.add('hidden'); // Hide any previous errors
+                chatErrorMessageDiv.classList.remove('flex'); // Ensure it's not flex when starting a new operation
             };
 
             recognition.onresult = (event) => {
@@ -766,7 +817,7 @@
                 } else if (event.error === 'network') {
                     errorMessage = 'Speech recognition network error. This often means a firewall, proxy, or browser extension is blocking access to Google\'s speech services. Please try disabling extensions or testing in incognito mode.';
                 }
-                alert(errorMessage); // Using alert for simplicity in a standalone app without specific error display div
+                showChatError(errorMessage);
             };
             
             // Optional: Listen for audio start/end for more granular control/feedback
@@ -795,7 +846,7 @@
             darkModeToggle.checked = true;
         } else {
             document.body.classList.remove('dark');
-            darkModeToggle.checked = false;
+            localStorage.setItem('dark-mode', 'false');
         }
 
         darkModeToggle.addEventListener('change', () => {
@@ -965,7 +1016,7 @@
                         const { mimeType, data } = await fileToBase64(file);
                         chatAttachments.push({ file, mimeType, data, name: file.name });
                     } catch (error) {
-                        alert(`Failed to read chat file ${file.name}.`); // Using alert for simplicity
+                        showChatError(`Failed to read chat file ${file.name}.`);
                         console.error('Chat file read error:', error);
                     }
                 }
@@ -1035,6 +1086,8 @@
 
             // Hide dropdown if open
             chatActionsDropdown.classList.add('hidden');
+            chatErrorMessageDiv.classList.add('hidden'); // Hide any previous errors
+            chatErrorMessageDiv.classList.remove('flex'); // Ensure it's not flex when starting a new operation
 
             // Build the parts for the user message
             const userParts = [];
@@ -1091,7 +1144,7 @@
                 
             } catch (error) {
                 console.error('Chat API call failed:', error);
-                alert(`An error occurred in the chat: ${error.message}`); // Using alert for simplicity
+                showChatError(`An error occurred in the chat: ${error.message}`);
             } finally {
                 sendChatBtn.disabled = false;
                 const loadingDiv = document.getElementById('chat-loading');
@@ -1119,7 +1172,7 @@
                     recognition.start();
                 }
             } else {
-                alert('Speech recognition is not supported in this browser.'); // Using alert for simplicity
+                showChatError('Speech recognition is not supported in this browser.');
             }
         });
 
@@ -1154,6 +1207,9 @@
             e.preventDefault();
             e.stopPropagation();
             mainChatContainer.classList.remove('drag-over-active');
+            chatErrorMessageDiv.classList.add('hidden'); // Hide any previous errors
+            chatErrorMessageDiv.classList.remove('flex'); // Ensure it's not flex when starting a new operation
+
 
             const files = Array.from(e.dataTransfer.files);
             if (files.length > 0) {
@@ -1170,11 +1226,11 @@
                             const { mimeType, data } = await fileToBase64(file);
                             chatAttachments.push({ file, mimeType, data, name: file.name });
                         } catch (error) {
-                            alert(`Failed to read chat file ${file.name}.`); // Using alert for simplicity
+                            showChatError(`Failed to read chat file ${file.name}.`);
                             console.error('Chat file read error:', error);
                         }
                     } else {
-                        alert(`File type not supported for chat: ${file.name} (${file.type}).`); // Using alert for simplicity
+                        showChatError(`File type not supported for chat: ${file.name} (${file.type}).`);
                     }
                 }
                 displayChatAttachments();
@@ -1214,7 +1270,7 @@
                         updateButtonIcon(chatCopyButton, 'clipboard');
                     }, 2000);
                 } else {
-                    alert('Message content not found for copying.'); // Using alert for simplicity
+                    showChatError('Message content not found for copying.');
                 }
                 return; // Prevent further bubbling
             }
@@ -1227,7 +1283,7 @@
                 if (messageContent) {
                     toggleSpeech(messageContent, dictateButton);
                 } else {
-                    alert('Message content not found for dictation.'); // Using alert for simplicity
+                    showChatError('Message content not found for dictation.');
                 }
                 return; // Prevent further bubbling
             }
@@ -1242,7 +1298,7 @@
                     })
                     .catch(err => {
                         console.error('Failed to copy: ', err);
-                        alert('Failed to copy text. Please copy manually.'); // Using alert for simplicity
+                        showChatError('Failed to copy text. Please copy manually.');
                     });
             } else {
                 // Fallback for older browsers
@@ -1255,7 +1311,7 @@
                     showCopyMessage();
                 } catch (err) {
                     console.error('Failed to copy (fallback):', err);
-                    alert('Failed to copy text. Please copy manually.'); // Using alert for simplicity
+                    showChatError('Failed to copy text. Please copy manually.');
                 }
                 document.body.removeChild(tempTextArea);
             }
@@ -1264,7 +1320,7 @@
         // Helper function for text-to-speech
         function toggleSpeech(text, buttonElement) {
             if (!window.speechSynthesis) {
-                alert('Speech synthesis not supported in this browser.'); // Using alert for simplicity
+                showChatError('Speech synthesis not supported in this browser.');
                 return;
             }
 
@@ -1312,7 +1368,7 @@
             };
             utterance.onerror = (event) => {
                 console.error('Speech synthesis error:', event.error);
-                alert('Failed to dictate message. Check console for details.'); // Using alert for simplicity
+                showChatError('Failed to dictate message. Check console for details.');
                 isSpeaking = false;
                 currentUtterance = null;
                 updateButtonIcon(buttonElement, 'volume-2');
@@ -1321,10 +1377,18 @@
             window.speechSynthesis.speak(utterance);
         }
 
+        // Function to show a temporary message for clipboard copy
+        function showCopyMessage() {
+            copyMessage.classList.add('show');
+            setTimeout(() => {
+                copyMessage.classList.remove('show');
+            }, 3000);
+        }
+
         // Generic API call function with exponential backoff
         async function callGeminiAPI(payload) {
-            if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || !GEMINI_API_KEY || GEMINI_API_KEY === "") { 
-                throw new Error("API Key is not set or is the default placeholder. Please replace 'YOUR_GEMINI_API_KEY_HERE' in the script with your actual Gemini API key.");
+            if (GEMINI_API_KEY === "" || !GEMINI_API_KEY || GEMINI_API_KEY === "") { 
+                throw new Error("API Key is not set or is the default placeholder. Please replace 'AIzaSyCzx6ReMk8ohPJcCjGwHHzu7SvFccJqAbA' in the script with your actual Gemini API key.");
             }
 
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${GEMINI_API_KEY}`;
