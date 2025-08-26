@@ -37,34 +37,57 @@
             display: flex; /* Make body a flex container */
             flex-direction: column; /* Arrange children vertically */
             margin: 0;
-            background-color: #f3f4f6; /* Default light background */
-            color: #1f2937; /* Default light text color */
+            /* Default fallback colors if no theme/dark mode is set, taken from Code 1's light default */
+            background-color: #f3f4f6;
+            color: #1f2937;
         }
 
         /* Defining a vibrant color palette using CSS variables */
+        /* These act as the base for the 'default' theme's light mode (from Code 1) */
         :root {
-            /* Light mode colors */
-            --bg-color-light: #f3f4f6; /* Light gray */
-            --card-bg-light: #ffffff; /* White */
-            --text-color-light: #1f2937; /* Dark gray */
-            --border-color-light: #e5e7eb; /* Light border gray */
-            
-            /* Dark mode colors */
-            --bg-color-dark: #0a0a0f; /* Deep dark blue-black */
-            --card-bg-dark: #13131a; /* Slightly lighter dark blue-black */
-            --text-color-dark: #e5e7eb; /* Off-white */
-            --border-color-dark: #2d3748; /* Darker blue-gray border */
-            
-            /* Accent colors for buttons, highlights, etc. */
+            /* Default Theme (Light Mode from Code 1) */
+            --bg-color-light: #f3f4f6;
+            --card-bg-light: #ffffff;
+            --text-color-light: #1f2937;
+            --border-color-light: #e5e7eb;
+            --user-msg-bg-light: #e0f2fe; /* Light blue */
+            --user-msg-text-light: #1e40af; /* Dark blue */
+            --ai-msg-bg-light: #f3f4f6; /* Light gray */
+            --ai-msg-text-light: #374151; /* Dark gray */
+            --chat-input-bg-light: #ffffff;
+            --chat-input-border-light: #d1d5db;
+            --chat-input-text-light: #1f2937;
+            --input-btn-bg-light: #e5e7eb;
+            --input-btn-text-light: #4b5563;
+            --header-bg-light: #f9fafb; /* Similar to bg-gray-50 */
+
+            /* Accent colors (Default Theme - from Code 1) */
             --accent-primary: #6366f1; /* Indigo-500 */
             --accent-primary-dark: #818cf8; /* Indigo-400 for dark mode */
             --accent-secondary: #22d3ee; /* Cyan-400 */
             --accent-secondary-dark: #67e8f9; /* Cyan-300 for dark mode */
             --accent-error: #ef4444; /* Red-500 */
             --accent-success: #22c55e; /* Green-500 */
+
+            /* Default Theme (Dark Mode - from Code 1's original dark values) */
+            /* These will be set when body.theme-default.dark is active */
+            --bg-color-dark: #0a0a0f; 
+            --card-bg-dark: #13131a; 
+            --text-color-dark: #e5e7eb; 
+            --border-color-dark: #2d3748;
+            --user-msg-bg-dark: #1a237e; 
+            --user-msg-text-dark: #e0e7ff; 
+            --ai-msg-bg-dark: #2d3748; 
+            --ai-msg-text-dark: #f9fafb; 
+            --chat-input-bg-dark: #1f2937;
+            --chat-input-border-dark: #374151;
+            --chat-input-text-dark: #e5e7eb;
+            --input-btn-bg-dark: #374151;
+            --input-btn-text-dark: #d1d5db;
+            --header-bg-dark: #1f2937; /* Similar to bg-gray-800 */
         }
         
-        /* Apply colors based on light or dark body class */
+        /* Apply current theme's light/dark colors dynamically based on .light or .dark class on body */
         body.light {
             background-color: var(--bg-color-light);
             color: var(--text-color-light);
@@ -75,39 +98,319 @@
             color: var(--text-color-dark);
         }
 
-        /* Tailwind overrides for dark mode to ensure consistency */
-        body.dark .bg-white { background-color: var(--card-bg-dark); }
-        body.dark .bg-gray-50 { background-color: #1a1a2e; } /* Darker alternative to bg-gray-50 */
-        body.dark .border-gray-100 { border-color: var(--border-color-dark); }
-        body.dark .border-gray-200 { border-color: #3f3f46; } /* Deeper gray border */
-        body.dark .text-gray-800 { color: var(--text-color-dark); }
-        body.dark .text-gray-900 { color: var(--text-color-dark); }
-        body.dark .text-gray-600 { color: #a1a1aa; } /* Gray 400 */
-        body.dark .text-gray-700 { color: #d4d4d8; } /* Gray 300 */
-        body.dark .bg-gray-200 { background-color: #3f3f46; color: #f4f4f5; }
-        body.dark .hover\:bg-gray-300:hover { background-color: #52525b; }
-        body.dark .bg-gray-100 { background-color: #27272a; }
-        body.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45); }
-        /* Adjusted for chat error message background */
-        /* Note: The dark mode specific colors for chat-error-message should be placed under body.dark selector for proper cascade */
+        /* THEME DEFINITIONS - From Code 2 */
+        /* Each theme class overrides the CSS variables for both light and dark modes */
 
-        /* Custom styles for dark mode toggle switch */
-        .slider {
-            background-color: #d1d5db;
-            transition: .4s;
+        /* Badass Black Theme */
+        body.theme-badass-black {
+            --accent-primary: #ef4444; /* Red-500 */
+            --accent-primary-dark: #f87171; /* Red-400 */
+            --accent-secondary: #eab308; /* Yellow-500 */
+            --accent-secondary-dark: #facc15; /* Yellow-400 */
+            --accent-error: #dc2626; /* Red-600 */
+            --accent-success: #16a34a; /* Green-600 */
         }
-        .dark .slider {
-            background-color: #4b5563;
+        body.theme-badass-black.light { /* Still very dark for "light" mode */
+            --bg-color-light: #171717;
+            --card-bg-light: #262626;
+            --text-color-light: #f5f5f5;
+            --border-color-light: #404040;
+            --user-msg-bg-light: #440000;
+            --user-msg-text-light: #fca5a5;
+            --ai-msg-bg-light: #333333;
+            --ai-msg-text-light: #e5e5e5;
+            --chat-input-bg-light: #262626;
+            --chat-input-border-light: #404040;
+            --chat-input-text-light: #f5f5f5;
+            --input-btn-bg-light: #404040;
+            --input-btn-text-light: #d4d4d8;
+            --header-bg-light: #171717;
         }
-        .slider:before {
-            background-color: white;
-            transition: .4s;
+        body.theme-badass-black.dark { /* Even darker */
+            --bg-color-dark: #0a0a0a;
+            --card-bg-dark: #1c1c1c;
+            --text-color-dark: #e5e5e5;
+            --border-color-dark: #333333;
+            --user-msg-bg-dark: #800000;
+            --user-msg-text-dark: #fecaca;
+            --ai-msg-bg-dark: #222222;
+            --ai-msg-text-dark: #f5f5f5;
+            --chat-input-bg-dark: #1c1c1c;
+            --chat-input-border-dark: #333333;
+            --chat-input-text-dark: #e5e5e5;
+            --input-btn-bg-dark: #333333;
+            --input-btn-text-dark: #d4d4d8;
+            --header-bg-dark: #0a0a0a;
         }
-        input:checked + .slider {
-            background-color: var(--accent-primary);
+
+        /* Golden Glory Theme */
+        body.theme-golden-glory {
+            --accent-primary: #d97706; /* Amber-700 */
+            --accent-primary-dark: #fcd34d; /* Amber-300 */
+            --accent-secondary: #fcd34d; /* Amber-300 */
+            --accent-secondary-dark: #fbbf24; /* Amber-400 */
+            --accent-error: #ef4444; /* Red-500 */
+            --accent-success: #22c55e; /* Green-500 */
         }
-        input:checked + .slider:before {
-            transform: translateX(24px);
+        body.theme-golden-glory.light {
+            --bg-color-light: #fef3c7; /* Amber-100 */
+            --card-bg-light: #ffffff;
+            --text-color-light: #451a03; /* Amber-950 */
+            --border-color-light: #fcd34d; /* Amber-300 */
+            --user-msg-bg-light: #fde68a; /* Amber-200 */
+            --user-msg-text-light: #78350f; /* Amber-800 */
+            --ai-msg-bg-light: #fffbeb; /* Amber-50 */
+            --ai-msg-text-light: #451a03; /* Amber-950 */
+            --chat-input-bg-light: #ffffff;
+            --chat-input-border-light: #fcd34d;
+            --chat-input-text-light: #451a03;
+            --input-btn-bg-light: #fcd34d;
+            --input-btn-text-light: #78350f;
+            --header-bg-light: #fef9c3; /* Amber-50 */
+        }
+        body.theme-golden-glory.dark {
+            --bg-color-dark: #1e1b07; /* Amber-950 */
+            --card-bg-dark: #2e2609;
+            --text-color-dark: #fef3c7; /* Amber-100 */
+            --border-color-dark: #92400e; /* Amber-800 */
+            --user-msg-bg-dark: #78350f; /* Amber-800 */
+            --user-msg-text-dark: #fde68a; /* Amber-200 */
+            --ai-msg-bg-dark: #3e310a;
+            --ai-msg-text-dark: #fcd34d; /* Amber-300 */
+            --chat-input-bg-dark: #2e2609;
+            --chat-input-border-dark: #92400e;
+            --chat-input-text-dark: #fef3c7;
+            --input-btn-bg-dark: #92400e;
+            --input-btn-text-dark: #fde68a;
+            --header-bg-dark: #1e1b07;
+        }
+
+        /* Minimal Criminal Theme */
+        body.theme-minimal-criminal {
+            --accent-primary: #737373; /* Gray-500 */
+            --accent-primary-dark: #a3a3a3; /* Gray-400 */
+            --accent-secondary: #a3a3a3; /* Gray-400 */
+            --accent-secondary-dark: #d4d4d4; /* Gray-300 */
+            --accent-error: #ef4444; /* Red-500 */
+            --accent-success: #22c55e; /* Green-500 */
+        }
+        body.theme-minimal-criminal.light {
+            --bg-color-light: #f8f8f8;
+            --card-bg-light: #ffffff;
+            --text-color-light: #333333;
+            --border-color-light: #e0e0e0;
+            --user-msg-bg-light: #e6e6e6;
+            --user-msg-text-light: #4d4d4d;
+            --ai-msg-bg-light: #f0f0f0;
+            --ai-msg-text-light: #333333;
+            --chat-input-bg-light: #ffffff;
+            --chat-input-border-light: #e0e0e0;
+            --chat-input-text-light: #333333;
+            --input-btn-bg-light: #e0e0e0;
+            --input-btn-text-light: #4d4d4d;
+            --header-bg-light: #f5f5f5;
+        }
+        body.theme-minimal-criminal.dark {
+            --bg-color-dark: #1a1a1a;
+            --card-bg-dark: #2a2a2a;
+            --text-color-dark: #e0e0e0;
+            --border-color-dark: #4a4a4a;
+            --user-msg-bg-dark: #3a3a3a;
+            --user-msg-text-dark: #d4d4d4;
+            --ai-msg-bg-dark: #2f2f2f;
+            --ai-msg-text-dark: #e0e0e0;
+            --chat-input-bg-dark: #2a2a2a;
+            --chat-input-border-dark: #4a4a4a;
+            --chat-input-text-dark: #e0e0e0;
+            --input-btn-bg-dark: #4a4a4a;
+            --input-btn-text-dark: #d4d4d4;
+            --header-bg-dark: #1a1a1a;
+        }
+
+        /* La Futura Theme */
+        body.theme-la-futura {
+            --accent-primary: #6d28d9; /* Violet-700 */
+            --accent-primary-dark: #a78bfa; /* Violet-400 */
+            --accent-secondary: #0ea5e9; /* Sky-500 */
+            --accent-secondary-dark: #38bdf8; /* Sky-400 */
+            --accent-error: #ef4444; /* Red-500 */
+            --accent-success: #22c55e; /* Green-500 */
+        }
+        body.theme-la-futura.light {
+            --bg-color-light: #e0f2fe; /* Sky-100 */
+            --card-bg-light: #ffffff;
+            --text-color-light: #1e3a8a; /* Blue-900 */
+            --border-color-light: #93c5fd; /* Blue-300 */
+            --user-msg-bg-light: #c7d2fe; /* Indigo-200 */
+            --user-msg-text-light: #312e81; /* Indigo-900 */
+            --ai-msg-bg-light: #eff6ff; /* Blue-50 */
+            --ai-msg-text-light: #1e3a8a; /* Blue-900 */
+            --chat-input-bg-light: #ffffff;
+            --chat-input-border-light: #93c5fd;
+            --chat-input-text-light: #1e3a8a;
+            --input-btn-bg-light: #dbeafe; /* Blue-100 */
+            --input-btn-text-light: #3b82f6; /* Blue-500 */
+            --header-bg-light: #bfdbfe; /* Blue-200 */
+        }
+        body.theme-la-futura.dark {
+            --bg-color-dark: #0f172a; /* Slate-900 */
+            --card-bg-dark: #1e293b; /* Slate-800 */
+            --text-color-dark: #e2e8f0; /* Slate-200 */
+            --border-color-dark: #334155; /* Slate-700 */
+            --user-msg-bg-dark: #4c1d95; /* Violet-900 */
+            --user-msg-text-dark: #e0e7ff; /* Indigo-100 */
+            --ai-msg-bg-dark: #1a2230;
+            --ai-msg-text-dark: #a78bfa; /* Violet-400 */
+            --chat-input-bg-dark: #1e293b;
+            --chat-input-border-dark: #334155;
+            --chat-input-text-dark: #e2e8f0;
+            --input-btn-bg-dark: #334155;
+            --input-btn-text-dark: #94a3b8; /* Slate-400 */
+            --header-bg-dark: #0f172a;
+        }
+
+        /* God's Plan Theme */
+        body.theme-gods-plan {
+            --accent-primary: #10b981; /* Emerald-500 */
+            --accent-primary-dark: #34d399; /* Emerald-400 */
+            --accent-secondary: #3b82f6; /* Blue-500 */
+            --accent-secondary-dark: #60a5fa; /* Blue-400 */
+            --accent-error: #ef4444; /* Red-500 */
+            --accent-success: #22c55e; /* Green-500 */
+        }
+        body.theme-gods-plan.light {
+            --bg-color-light: #ecfdf5; /* Emerald-50 */
+            --card-bg-light: #ffffff;
+            --text-color-light: #064e3b; /* Emerald-900 */
+            --border-color-light: #a7f3d0; /* Emerald-200 */
+            --user-msg-bg-light: #d1fae5; /* Emerald-100 */
+            --user-msg-text-light: #047857; /* Emerald-700 */
+            --ai-msg-bg-light: #f0fdf4; /* Green-50 */
+            --ai-msg-text-light: #064e3b; /* Emerald-900 */
+            --chat-input-bg-light: #ffffff;
+            --chat-input-border-light: #a7f3d0;
+            --chat-input-text-light: #064e3b;
+            --input-btn-bg-light: #d1fae5;
+            --input-btn-text-light: #047857;
+            --header-bg-light: #d1fae5;
+        }
+        body.theme-gods-plan.dark {
+            --bg-color-dark: #062e24; /* Emerald-950 */
+            --card-bg-dark: #0a3d34;
+            --text-color-dark: #d1fae5; /* Emerald-100 */
+            --border-color-dark: #0f5d47; /* Emerald-800 */
+            --user-msg-bg-dark: #059669; /* Emerald-600 */
+            --user-msg-text-dark: #d1fae5; /* Emerald-100 */
+            --ai-msg-bg-dark: #0a3d34;
+            --ai-msg-text-dark: #a7f3d0; /* Emerald-200 */
+            --chat-input-bg-dark: #0a3d34;
+            --chat-input-border-dark: #0f5d47;
+            --chat-input-text-dark: #d1fae5;
+            --input-btn-bg-dark: #0f5d47;
+            --input-btn-text-dark: #a7f3d0;
+            --header-bg-dark: #062e24;
+        }
+
+        /* The Ecstacy Theme */
+        body.theme-the-ecstacy {
+            --accent-primary: #a855f7; /* Violet-500 */
+            --accent-primary-dark: #c084fc; /* Violet-400 */
+            --accent-secondary: #f472b6; /* Pink-400 */
+            --accent-secondary-dark: #f87171; /* Red-400 */
+            --accent-error: #ef4444; /* Red-500 */
+            --accent-success: #22c55e; /* Green-500 */
+        }
+        body.theme-the-ecstacy.light {
+            --bg-color-light: #f3e8ff; /* Violet-100 */
+            --card-bg-light: #ffffff;
+            --text-color-light: #581c87; /* Violet-900 */
+            --border-color-light: #d8b4fe; /* Violet-300 */
+            --user-msg-bg-light: #e9d5ff; /* Violet-200 */
+            --user-msg-text-light: #7e22ce; /* Violet-700 */
+            --ai-msg-bg-light: #faf5ff; /* Violet-50 */
+            --ai-msg-text-light: #581c87; /* Violet-900 */
+            --chat-input-bg-light: #ffffff;
+            --chat-input-border-light: #d8b4fe;
+            --chat-input-text-light: #581c87;
+            --input-btn-bg-light: #e9d5ff;
+            --input-btn-text-light: #a855f7;
+            --header-bg-light: #f3e8ff;
+        }
+        body.theme-the-ecstacy.dark {
+            --bg-color-dark: #170d2b; /* Violet-950 */
+            --card-bg-dark: #2a1c43;
+            --text-color-dark: #f3e8ff; /* Violet-100 */
+            --border-color-dark: #4c1d95; /* Violet-900 */
+            --user-msg-bg-dark: #6b21a8; /* Violet-700 */
+            --user-msg-text-dark: #f3e8ff; /* Violet-100 */
+            --ai-msg-bg-dark: #2a1c43;
+            --ai-msg-text-dark: #d8b4fe; /* Violet-300 */
+            --chat-input-bg-dark: #2a1c43;
+            --chat-input-border-dark: #4c1d95;
+            --chat-input-text-dark: #f3e8ff;
+            --input-btn-bg-dark: #4c1d95;
+            --input-btn-text-dark: #e9d5ff;
+            --header-bg-dark: #170d2b;
+        }
+
+        /* Header specific overrides */
+        .header-section {
+            background-color: var(--header-bg-light);
+            border-color: var(--border-color-light);
+        }
+        body.dark .header-section {
+            background-color: var(--header-bg-dark);
+            border-color: var(--border-color-dark);
+        }
+        /* Explicitly set H1 color based on theme */
+        .header-section h1 {
+            color: var(--text-color-light);
+        }
+        body.dark .header-section h1 {
+            color: var(--text-color-dark);
+        }
+        /* Explicitly set colors for the Light/Dark toggle labels, they use text-gray-500 */
+        .header-section .text-gray-500 {
+            color: #6b7280; /* Tailwind gray-500 equivalent for light mode consistency */
+        }
+        body.dark .header-section .text-gray-500 {
+            color: #9ca3af; /* Tailwind gray-400 equivalent for dark mode consistency */
+        }
+
+        /* Action buttons in header (Theme Selector, New Chat) */
+        #theme-selector-btn, #new-chat-btn {
+            background-color: var(--input-btn-bg-light);
+            color: var(--input-btn-text-light); /* For the Lucide icon */
+        }
+        #theme-selector-btn:hover, #new-chat-btn:hover {
+            background-color: color-mix(in srgb, var(--input-btn-bg-light) 80%, black 10%);
+        }
+        body.dark #theme-selector-btn, body.dark #new-chat-btn {
+            background-color: var(--input-btn-bg-dark);
+            color: var(--input-btn-text-dark); /* For the Lucide icon */
+        }
+        body.dark #theme-selector-btn:hover, body.dark #new-chat-btn:hover {
+            background-color: color-mix(in srgb, var(--input-btn-bg-dark) 80%, white 10%);
+        }
+
+        /* Main Chat Container styles for full-screen */
+        #main-chat-container {
+            height: 100%; /* Take full height of its parent (body) */
+            width: 100%; /* Take full width */
+            display: flex;
+            flex-direction: column;
+            background-color: rgba(255, 255, 255, 0.95); /* Nearly opaque white from Code 1 */
+            border-radius: 0;
+            box-shadow: none;
+            border: none;
+            backdrop-filter: blur(8px); /* Frosted glass effect */
+            -webkit-backdrop-filter: blur(8px); /* Safari support */
+            overflow: hidden; /* Hide scrollbars of the container itself */
+        }
+        body.dark #main-chat-container {
+            background-color: rgba(19, 19, 26, 0.95); /* From Code 1 */
+            border-color: rgba(45, 55, 72, 0.7); /* From Code 1 */
+            box-shadow: none;
         }
 
         /* Custom scrollbar for a sleek look */
@@ -120,18 +423,11 @@
         body.dark #chat-history::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
         
         /* Modern loading animation */
-        .loader-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-        }
         .loader-dot {
             width: 12px;
             height: 12px;
             margin: 0 4px;
-            background-color: var(--accent-primary);
+            background-color: #888; /* Gray for dots themselves as per Code 1 */
             border-radius: 50%;
             display: inline-block;
             animation: bounce 1.4s infinite ease-in-out both;
@@ -151,26 +447,6 @@
             }
         }
         
-        /* Main Chat Container styles for full-screen */
-        #main-chat-container {
-            height: 100%; /* Take full height of its parent (body) */
-            width: 100%; /* Take full width */
-            display: flex;
-            flex-direction: column;
-            background-color: rgba(255, 255, 255, 0.95); /* Nearly opaque white */
-            border-radius: 0;
-            box-shadow: none;
-            border: none;
-            backdrop-filter: blur(8px); /* Frosted glass effect */
-            -webkit-backdrop-filter: blur(8px); /* Safari support */
-            overflow: hidden; /* Hide scrollbars of the container itself */
-        }
-        body.dark #main-chat-container {
-            background-color: rgba(19, 19, 26, 0.95);
-            border-color: rgba(45, 55, 72, 0.7);
-            box-shadow: none;
-        }
-
         /* New chat message styles */
         .chat-message {
             margin-bottom: 0.75rem; /* 12px */
@@ -186,73 +462,67 @@
             padding-bottom: 2.5rem; /* Make space for action buttons */
         }
 
+        /* Fixed: Message content boxes to be solid color (removed gradient) */
         .chat-message.user {
-            background-color: #e0f2fe; /* Light blue */
-            color: #1e40af; /* Dark blue */
+            background-color: var(--user-msg-bg-light);
+            color: var(--user-msg-text-light);
             margin-left: auto;
             border-bottom-right-radius: 0.5rem; /* 8px */
-            background-image: linear-gradient(to bottom right, #e0f2fe, #bfdbfe); /* Subtle gradient */
+            /* Removed background-image: linear-gradient for solid color */
         }
         body.dark .chat-message.user {
-            background-color: #1a237e; /* Darker blue */
-            color: #e0e7ff; /* Lighter blue */
-            background-image: linear-gradient(to bottom right, #1a237e, #312e81);
+            background-color: var(--user-msg-bg-dark);
+            color: var(--user-msg-text-dark);
+            /* Removed background-image: linear-gradient for solid color */
         }
 
         .chat-message.ai {
-            background-color: #f3f4f6; /* Light gray */
-            color: #374151; /* Dark gray */
+            background-color: var(--ai-msg-bg-light);
+            color: var(--ai-msg-text-light);
             margin-right: auto;
             border-bottom-left-radius: 0.5rem; /* 8px */
-            background-image: linear-gradient(to bottom left, #f3f4f6, #e5e7eb); /* Subtle gradient */
+            /* Removed background-image: linear-gradient for solid color */
         }
         body.dark .chat-message.ai {
-            background-color: #2d3748; /* Darker gray */
-            color: #f9fafb; /* Lighter gray */
-            background-image: linear-gradient(to bottom left, #2d3748, #475569);
+            background-color: var(--ai-msg-bg-dark);
+            color: var(--ai-msg-text-dark);
+            /* Removed background-image: linear-gradient for solid color */
         }
 
         /* Styling for chat attachments */
-        .chat-image {
-            max-width: 100%;
-            height: auto;
-            border-radius: 0.75rem;
-            margin-top: 0.5rem;
-            display: block;
-        }
         .chat-attachment-preview-item {
             display: flex;
             align-items: center;
             gap: 0.5rem;
             padding: 0.5rem 0.75rem;
             border-radius: 1rem;
-            background-color: #e0e7ff; /* Light indigo */
-            color: #3730a3; /* Dark indigo */
+            background-color: var(--input-btn-bg-light);
+            color: var(--input-btn-text-light);
             font-size: 0.875rem;
             box-shadow: 0 1px 2px rgba(0,0,0,0.08);
             transition: all 0.2s ease;
         }
         body.dark .chat-attachment-preview-item {
-            background-color: #3730a3; /* Dark indigo */
-            color: #e0e7ff; /* Light indigo */
+            background-color: var(--input-btn-bg-dark);
+            color: var(--input-btn-text-dark);
         }
         .chat-attachment-preview-item .remove-attachment-btn {
             background: none;
             border: none;
-            color: #6366f1; /* Indigo */
+            color: var(--accent-primary);
             cursor: pointer;
             padding: 0.1rem;
             border-radius: 50%;
             transition: background-color 0.2s ease;
         }
         body.dark .chat-attachment-preview-item .remove-attachment-btn {
-            color: #a5b4fc; /* Light indigo */
+            color: var(--accent-primary-dark);
         }
         .chat-attachment-preview-item .remove-attachment-btn:hover {
-            background-color: rgba(99, 102, 241, 0.2);
+            background-color: color-mix(in srgb, var(--accent-primary) 20%, transparent);
         }
         body.dark .chat-attachment-preview-item .remove-attachment-btn:hover {
-            background-color: rgba(165, 180, 252, 0.2);
+            background-color: color-mix(in srgb, var(--accent-primary-dark) 20%, transparent);
         }
 
         /* Styling for the copy message */
@@ -322,23 +592,23 @@
             border-left: 4px solid var(--accent-secondary);
             padding-left: 1em;
             margin-left: 0;
-            color: #555;
+            color: var(--text-color-light); /* From code 2 */
         }
         body.dark .chat-message.ai .message-content blockquote {
-             color: #a1a1aa; /* Gray 400 */
+             color: var(--text-color-dark); /* From code 2 */
              border-left: 4px solid var(--accent-secondary-dark);
         }
 
         /* Code block specific styling */
         .code-block-container {
             position: relative;
-            background-color: #27272a; /* Dark background for code */
-            color: #f8f8f2; /* Light text color for code */
+            background-color: var(--bg-color-dark); /* Consistent dark background for code */
+            color: var(--text-color-dark);
             border-radius: 0.75rem; /* Rounded corners */
             margin-top: 1rem;
             margin-bottom: 1rem;
             overflow: hidden; /* Ensure rounded corners clip content */
-            border: 1px solid #3f3f46; /* Subtle border */
+            border: 1px solid var(--border-color-dark); /* Subtle border */
             box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         }
         
@@ -355,10 +625,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #374151; /* Header background */
-            color: #d1d5db; /* Header text */
+            background-color: var(--input-btn-bg-dark);
+            color: var(--input-btn-text-dark);
             padding: 0.5rem 1rem;
-            border-bottom: 1px solid #4b5563;
+            border-bottom: 1px solid color-mix(in srgb, var(--border-color-dark) 70%, transparent);
             font-size: 0.85em;
             border-top-left-radius: 0.75rem;
             border-top-right-radius: 0.75rem;
@@ -367,7 +637,7 @@
         .code-block-copy-button {
             background-color: transparent;
             border: none;
-            color: #d1d5db;
+            color: var(--input-btn-text-dark);
             cursor: pointer;
             padding: 0.25rem 0.5rem;
             border-radius: 0.375rem;
@@ -378,8 +648,8 @@
             font-size: 0.85em;
         }
         .code-block-copy-button:hover {
-            background-color: #4b5563;
-            color: white;
+            background-color: color-mix(in srgb, var(--input-btn-bg-dark) 80%, var(--accent-primary-dark) 20%);
+            color: var(--text-color-dark);
         }
         .code-block-copy-button:active {
             transform: scale(0.95);
@@ -387,16 +657,16 @@
 
         /* Smallest font size for inline code blocks if any */
         .chat-message.ai .message-content code:not(pre > code) {
-            background-color: rgba(100, 116, 139, 0.2); /* slategray-200 with transparency */
+            background-color: color-mix(in srgb, var(--accent-primary) 20%, transparent);
             border-radius: 0.25rem;
             padding: 0.2em 0.4em;
             font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
             font-size: 0.9em;
-            color: #5b21b6; /* deep violet for inline code */
+            color: var(--accent-primary);
         }
         body.dark .chat-message.ai .message-content code:not(pre > code) {
-            background-color: rgba(100, 116, 139, 0.4);
-            color: #a78bfa; /* violet-400 */
+            background-color: color-mix(in srgb, var(--accent-primary-dark) 20%, transparent);
+            color: var(--accent-primary-dark);
         }
 
         /* Ensure links are distinguishable */
@@ -406,13 +676,13 @@
             transition: color 0.2s ease;
         }
         .chat-message.ai .message-content a:hover {
-            color: #0d47a1; /* Darker blue on hover */
+            color: color-mix(in srgb, var(--accent-primary) 80%, black 20%);
         }
         body.dark .chat-message.ai .message-content a {
-            color: #60a5fa; /* Blue-400 */
+            color: var(--accent-primary-dark);
         }
         body.dark .chat-message.ai .message-content a:hover {
-            color: #93c5fd; /* Blue-300 */
+            color: color-mix(in srgb, var(--accent-primary-dark) 80%, white 20%);
         }
 
         /* Styles for message action buttons (copy/dictate) */
@@ -452,19 +722,19 @@
         }
 
         .message-actions button .lucide { /* Target the SVG element directly for color */
-            color: #6b7280; /* Gray 500 */
+            color: var(--input-btn-text-light); /* From code 2 */
             width: 1rem;
             height: 1rem;
         }
         body.dark .message-actions button .lucide {
-            color: #9ca3af; /* Gray 400 */
+            color: var(--input-btn-text-dark); /* From code 2 */
         }
 
         .message-actions button:hover .lucide {
-            color: #1f2937; /* Gray 900 */
+            color: var(--accent-primary); /* From code 2 */
         }
         body.dark .message-actions button:hover .lucide {
-            color: #e5e7eb; /* Gray 200 */
+            color: var(--accent-primary-dark); /* From code 2 */
         }
         .message-actions button:hover {
             background-color: rgba(0, 0, 0, 0.1);
@@ -489,12 +759,12 @@
         }
 
         @keyframes pulse-red {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-error) 70%, transparent); } /* From code 2 */
+            50% { box-shadow: 0 0 0 10px color-mix(in srgb, var(--accent-error) 0%, transparent); } /* From code 2 */
         }
 
-        /* Chat action buttons dropdown */
-        .chat-actions-dropdown {
+        /* Chat action buttons dropdown & Theme dropdown - unified from Code 2 */
+        .actions-dropdown { /* General class for any dropdowns like chat-actions or theme-selector */
             position: absolute;
             bottom: calc(100% + 8px); /* Position above the input bar */
             right: 0; /* Align with the parent's right edge */
@@ -513,18 +783,18 @@
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
         }
-        body.dark .chat-actions-dropdown {
+        body.dark .actions-dropdown {
             background-color: var(--card-bg-dark);
             border-color: var(--border-color-dark);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
-        .chat-actions-dropdown.hidden {
+        .actions-dropdown.hidden {
             opacity: 0;
             transform: scale(0.9);
             pointer-events: none;
         }
-        .chat-actions-dropdown button,
-        .chat-actions-dropdown label {
+        .actions-dropdown button,
+        .actions-dropdown label {
             display: flex;
             align-items: center;
             padding: 0.5rem 0.75rem;
@@ -534,28 +804,28 @@
             transition: background-color 0.2s ease;
             color: var(--text-color-light); /* Default text color */
         }
-        body.dark .chat-actions-dropdown button,
-        body.dark .chat-actions-dropdown label {
+        body.dark .actions-dropdown button,
+        body.dark .actions-dropdown label {
             color: var(--text-color-dark);
         }
-        .chat-actions-dropdown button:hover,
-        .chat-actions-dropdown label:hover {
+        .actions-dropdown button:hover,
+        .actions-dropdown label:hover {
             background-color: var(--bg-color-light); /* Lighter hover for light theme */
         }
-        body.dark .chat-actions-dropdown button:hover,
-        body.dark .chat-actions-dropdown label:hover {
-            background-color: #1a1a2e; /* Darker hover for dark theme */
+        body.dark .actions-dropdown button:hover,
+        body.dark .actions-dropdown label:hover {
+            background-color: color-mix(in srgb, var(--card-bg-dark) 80%, var(--accent-primary-dark) 5%); /* Darker hover for dark theme */
         }
-        .chat-actions-dropdown button .lucide,
-        .chat-actions-dropdown label .lucide {
+        .actions-dropdown button .lucide,
+        .actions-dropdown label .lucide {
             margin-right: 0.5rem;
             width: 1.25rem;
             height: 1.25rem;
             flex-shrink: 0;
             color: var(--accent-primary); /* Use primary accent for icons */
         }
-        body.dark .chat-actions-dropdown button .lucide,
-        body.dark .chat-actions-dropdown label .lucide {
+        body.dark .actions-dropdown button .lucide,
+        body.dark .actions-dropdown label .lucide {
             color: var(--accent-primary-dark);
         }
 
@@ -569,28 +839,95 @@
             box-shadow: 0 0 20px var(--accent-primary-dark), 0 0 30px var(--accent-primary-dark) inset;
         }
         
-        /* New CSS for chat input drag-over */
+        /* New CSS for chat input drag-over - unified from Code 2 */
+        .chat-input { /* Apply chat-input class from HTML */
+            background-color: var(--chat-input-bg-light);
+            border-color: var(--chat-input-border-light);
+            color: var(--chat-input-text-light);
+            outline: none; /* Remove default browser outline */
+        }
+        .chat-input:focus {
+            border-color: var(--accent-primary) !important; /* Use accent for border on focus */
+            box-shadow: 0 0 0 2px var(--accent-primary) !important; /* Use accent for ring on focus */
+        }
+        body.dark .chat-input {
+            background-color: var(--chat-input-bg-dark);
+            border-color: var(--chat-input-border-dark);
+            color: var(--chat-input-text-dark);
+        }
+        body.dark .chat-input:focus {
+            border-color: var(--accent-primary-dark) !important;
+            box-shadow: 0 0 0 2px var(--accent-primary-dark) !important;
+        }
         .chat-input-drag-over {
             border-color: var(--accent-primary) !important;
-            box-shadow: 0 0 0 2px var(--accent-primary); /* Subtle glow effect */
+            box-shadow: 0 0 0 2px var(--accent-primary);
         }
         body.dark .chat-input-drag-over {
             border-color: var(--accent-primary-dark) !important;
             box-shadow: 0 0 0 2px var(--accent-primary-dark);
         }
 
-
-        /* PDF Export template styles (hidden from direct view) - Retained for dependency consistency, but not actively used for chat export */
-        #pdf-export-content {
-            display: none; 
+        /* Input control buttons - unified from Code 2 */
+        #add-chat-attachment-btn {
+            background-color: var(--input-btn-bg-light);
+            color: var(--input-btn-text-light);
+        }
+        #add-chat-attachment-btn:hover {
+            background-color: color-mix(in srgb, var(--input-btn-bg-light) 80%, black 10%);
         }
 
-        /* Styles for the chat-specific error message */
+        #send-chat-btn {
+            background-color: var(--accent-primary);
+            color: white; /* Text color always white for send button */
+        }
+        #send-chat-btn:disabled {
+            background-color: color-mix(in srgb, var(--accent-primary) 50%, transparent);
+            cursor: not-allowed;
+        }
+
+        body.dark #add-chat-attachment-btn {
+            background-color: var(--input-btn-bg-dark);
+            color: var(--input-btn-text-dark);
+        }
+        body.dark #add-chat-attachment-btn:hover {
+            background-color: color-mix(in srgb, var(--input-btn-bg-dark) 80%, white 10%);
+        }
+        body.dark #send-chat-btn {
+            background-color: var(--accent-primary-dark);
+            color: white; /* Text color always white for send button */
+        }
+        body.dark #send-chat-btn:disabled {
+            background-color: color-mix(in srgb, var(--accent-primary-dark) 50%, transparent);
+        }
+        
+        #add-chat-attachment-btn .lucide, #send-chat-btn .lucide {
+            color: inherit; /* inherit color from button */
+        }
+
+        /* Fixed: Dark mode toggle colors (simplified for robustness) */
+        .slider {
+            background-color: #d1d5db; /* Default track color (unchecked, light) */
+            transition: .4s;
+        }
+        /* Removed the conflicting .dark .slider rule. The checked state now properly takes precedence. */
+        .slider:before {
+            background-color: white; /* Thumb color always white */
+            transition: .4s;
+        }
+        input:checked + .slider {
+            background-color: var(--accent-primary); /* Track color when checked (dark mode active) */
+        }
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        /* Styles for the chat-specific error message - unified from Code 2 */
         #chat-error-message {
             margin-bottom: 1rem;
-            background-color: #fee2e2; /* Light red */
-            border: 1px solid #fca5a5; /* Red-300 */
-            color: #b91c1c; /* Red-700 */
+            background-color: color-mix(in srgb, var(--accent-error) 20%, white);
+            border: 1px solid color-mix(in srgb, var(--accent-error) 50%, transparent);
+            color: color-mix(in srgb, var(--accent-error) 80%, black);
             padding: 0.75rem 1.25rem;
             border-radius: 0.75rem;
             font-size: 0.875rem;
@@ -598,26 +935,67 @@
             gap: 0.5rem;          /* These will apply when display is not 'none' */
         }
         body.dark #chat-error-message {
-            background-color: #450a0a; /* Darker red */
-            border-color: #7f1d1d; /* Red-800 */
-            color: #fca5a5; /* Red-300 */
+            background-color: color-mix(in srgb, var(--accent-error) 20%, black);
+            border-color: color-mix(in srgb, var(--accent-error) 50%, transparent);
+            color: color-mix(in srgb, var(--accent-error) 60%, white);
+        }
+
+        /* Ensure PDF export content is always hidden */
+        #pdf-export-content {
+            display: none !important; 
         }
     </style>
 </head>
-<body class="antialiased dark">
+<body class="antialiased theme-default dark">
 
     <!-- Main Chat Container (takes full screen) -->
     <div id="main-chat-container">
         <!-- Header for the chat -->
-        <div class="header-section p-4 md:p-6 flex justify-between items-center bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
-            <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-200">Mystic Vision AI Mini</h1>
-            <div class="flex items-center space-x-2">
-                <span class="text-gray-500 text-sm">Light</span>
+        <div class="header-section p-4 md:p-6 flex justify-between items-center border-b flex-shrink-0">
+            <h1 class="text-2xl sm:text-3xl font-bold">Mystic Vision AI Mini</h1>
+            <div class="flex items-center space-x-4 relative">
+                <!-- Theme Selector -->
+                <div class="relative">
+                    <button id="theme-selector-btn" aria-label="Select Theme" class="flex items-center justify-center w-10 h-10 rounded-full shadow-sm transition-all duration-300 flex-shrink-0">
+                        <span data-lucide="palette" class="w-5 h-5"></span>
+                    </button>
+                    <div id="theme-dropdown" class="actions-dropdown hidden left-0 right-auto" style="bottom: auto; top: calc(100% + 8px);">
+                        <button class="theme-option w-full justify-start text-left" data-theme="default">
+                            <span data-lucide="sun" class="w-5 h-5"></span> Default
+                        </button>
+                        <button class="theme-option w-full justify-start text-left" data-theme="badass-black">
+                            <span data-lucide="moon" class="w-5 h-5"></span> Badass Black
+                        </button>
+                        <button class="theme-option w-full justify-start text-left" data-theme="golden-glory">
+                            <span data-lucide="sparkles" class="w-5 h-5"></span> Golden Glory
+                        </button>
+                        <button class="theme-option w-full justify-start text-left" data-theme="minimal-criminal">
+                            <span data-lucide="square" class="w-5 h-5"></span> Minimal Criminal
+                        </button>
+                        <button class="theme-option w-full justify-start text-left" data-theme="la-futura">
+                            <span data-lucide="zap" class="w-5 h-5"></span> La Futura
+                        </button>
+                        <button class="theme-option w-full justify-start text-left" data-theme="gods-plan">
+                            <span data-lucide="leaf" class="w-5 h-5"></span> God's Plan
+                        </button>
+                        <button class="theme-option w-full justify-start text-left" data-theme="the-ecstacy">
+                            <span data-lucide="star" class="w-5 h-5"></span> The Ecstacy
+                        </button>
+                    </div>
+                </div>
+
+                <!-- New Chat Button -->
+                <button id="new-chat-btn" aria-label="Start New Chat" class="flex items-center justify-center w-10 h-10 rounded-full shadow-sm transition-all duration-300 flex-shrink-0">
+                    <span data-lucide="message-square-plus" class="w-5 h-5"></span>
+                </button>
+                
+                <!-- Dark Mode Toggle -->
+                <span class="text-gray-500 text-sm hidden sm:inline">Light</span>
                 <label class="switch relative inline-block w-14 h-8">
                     <input type="checkbox" id="dark-mode-toggle" class="opacity-0 w-0 h-0">
                     <span class="slider absolute cursor-pointer top-0 left-0 right-0 bottom-0 rounded-full before:absolute before:content-[''] before:h-6 before:w-6 before:left-1 before:bottom-1 before:rounded-full"></span>
                 </label>
-                <span class="text-gray-500 text-sm">Dark</span>
+                <span class="text-gray-500 text-sm hidden sm:inline">Dark</span>
             </div>
         </div>
         
@@ -632,14 +1010,14 @@
         </div>
         
         <!-- Chat input section with attachment, voice and send button -->
-        <div class="p-4 border-t border-gray-200 dark:border-gray-700 relative flex-shrink-0">
+        <div class="p-4 border-t relative flex-shrink-0">
             <!-- Attachment preview -->
             <div id="chat-attachments-preview-container" class="mb-2 flex flex-wrap items-center gap-2 hidden">
                 <!-- Attachments previews will be dynamically added here -->
             </div>
 
             <!-- Dropdown for attachment/voice buttons -->
-            <div id="chat-actions-dropdown" class="chat-actions-dropdown hidden">
+            <div id="chat-actions-dropdown" class="actions-dropdown hidden">
                 <button id="voice-input-btn" class="w-full justify-start text-left">
                     <span data-lucide="mic" class="w-5 h-5"></span> Voice Input
                 </button>
@@ -650,13 +1028,13 @@
             </div>
 
             <div class="flex gap-2 items-end">
-                <input type="text" id="chat-input" class="flex-1 p-3 rounded-full border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Ask a question or type a command...">
+                <input type="text" id="chat-input" class="chat-input flex-1 p-3 rounded-full border transition-colors shadow-sm" placeholder="Ask a question or type a command...">
                 
-                <button id="add-chat-attachment-btn" aria-label="Add attachment or voice input" class="flex items-center justify-center w-12 h-12 rounded-full bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200 shadow-lg hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer transition-all duration-300 flex-shrink-0">
+                <button id="add-chat-attachment-btn" aria-label="Add attachment or voice input" class="flex items-center justify-center w-12 h-12 rounded-full shadow-lg cursor-pointer transition-all duration-300 flex-shrink-0">
                     <span data-lucide="plus" class="w-5 h-5"></span>
                 </button>
 
-                <button id="send-chat-btn" aria-label="Send Message" class="flex items-center justify-center w-12 h-12 rounded-full bg-indigo-600 text-white shadow-lg focus:outline-none focus:ring-4 focus:ring-indigo-300 transition-all duration-300 disabled:bg-indigo-400 disabled:cursor-not-allowed flex-shrink-0">
+                <button id="send-chat-btn" aria-label="Send Message" class="flex items-center justify-center w-12 h-12 rounded-full shadow-lg transition-all duration-300 disabled:cursor-not-allowed flex-shrink-0">
                     <span data-lucide="send" class="w-5 h-5"></span>
                 </button>
             </div>
@@ -721,6 +1099,12 @@
         const chatActionsDropdown = document.getElementById('chat-actions-dropdown');
         const chatErrorMessageDiv = document.getElementById('chat-error-message');
         const chatErrorText = document.getElementById('chat-error-text');
+        
+        // New elements for theme and new chat (from Code 2)
+        const newChatBtn = document.getElementById('new-chat-btn');
+        const themeSelectorBtn = document.getElementById('theme-selector-btn');
+        const themeDropdown = document.getElementById('theme-dropdown');
+        const themeOptions = document.querySelectorAll('.theme-option');
         
         // Copy message element
         const copyMessage = document.getElementById('copy-message');
@@ -845,28 +1229,72 @@
             voiceInputBtn.style.display = 'none'; // Hide the voice input button if not supported
         }
 
-        // Dark Mode Initialization and Listener
-        // Set dark mode as default if not already set in local storage
-        if (localStorage.getItem('dark-mode') === null) {
-            localStorage.setItem('dark-mode', 'true');
-        }
-        
-        const isDarkMode = localStorage.getItem('dark-mode') === 'true';
-        if (isDarkMode) {
-            document.body.classList.add('dark');
-            darkModeToggle.checked = true;
-        } else {
-            document.body.classList.remove('dark');
-            localStorage.setItem('dark-mode', 'false');
+        // --- Theme and Dark Mode Logic (from Code 2) ---
+        const ALL_THEME_CLASSES = ['theme-default', 'theme-badass-black', 'theme-golden-glory', 'theme-minimal-criminal', 'theme-la-futura', 'theme-gods-plan', 'theme-the-ecstacy'];
+
+        function applyTheme(themeName) {
+            document.body.classList.remove(...ALL_THEME_CLASSES);
+            document.body.classList.add(`theme-${themeName}`);
+            localStorage.setItem('selected-theme', themeName);
         }
 
-        darkModeToggle.addEventListener('change', () => {
-            if (darkModeToggle.checked) {
+        function applyDarkMode(isDark) {
+            if (isDark) {
+                document.body.classList.remove('light');
                 document.body.classList.add('dark');
-                localStorage.setItem('dark-mode', 'true');
             } else {
                 document.body.classList.remove('dark');
-                localStorage.setItem('dark-mode', 'false');
+                document.body.classList.add('light');
+            }
+            localStorage.setItem('dark-mode', isDark);
+        }
+
+        // Initialize theme and dark mode on load
+        window.addEventListener('load', () => {
+            // Default to 'default' theme if nothing is set
+            const savedTheme = localStorage.getItem('selected-theme') || 'default';
+            applyTheme(savedTheme);
+
+            // Default to dark mode if nothing is set, matching Code 1's initial state
+            const isDarkMode = localStorage.getItem('dark-mode') !== 'false'; // 'null' or 'true' means dark
+            darkModeToggle.checked = isDarkMode;
+            applyDarkMode(isDarkMode);
+
+            createIcons(); // Ensure all icons are rendered after initial setup
+            
+            // Initial AI greeting message (moved to startNewChat)
+            startNewChat(false); // Do not play greeting sound on load
+        });
+
+        darkModeToggle.addEventListener('change', () => {
+            applyDarkMode(darkModeToggle.checked);
+        });
+
+        // Event listener for theme selector dropdown button
+        themeSelectorBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            themeDropdown.classList.toggle('hidden');
+            createIcons(); // Ensure icons within dropdown are rendered
+        });
+
+        // Event listeners for individual theme options
+        themeOptions.forEach(button => {
+            button.addEventListener('click', (event) => {
+                const themeName = event.currentTarget.dataset.theme;
+                applyTheme(themeName);
+                themeDropdown.classList.add('hidden'); // Hide dropdown after selection
+                chatInput.focus();
+            });
+        });
+
+        // Close dropdowns when clicking anywhere else on the document
+        document.addEventListener('click', (event) => {
+            if (!chatActionsDropdown.contains(event.target) && !addChatAttachmentBtn.contains(event.target)) {
+                chatActionsDropdown.classList.add('hidden');
+            }
+            // Also close the theme dropdown
+            if (!themeDropdown.contains(event.target) && !themeSelectorBtn.contains(event.target)) {
+                themeDropdown.classList.add('hidden');
             }
         });
 
@@ -1123,9 +1551,9 @@
             loadingMessage.classList.add('p-4', 'text-center', 'text-gray-500', 'text-sm');
             loadingMessage.innerHTML = `
                 <div class="loader-container h-8">
-                    <div class="loader-dot bg-gray-500"></div>
-                    <div class="loader-dot bg-gray-500"></div>
-                    <div class="loader-dot bg-gray-500"></div>
+                    <div class="loader-dot"></div>
+                    <div class="loader-dot"></div>
+                    <div class="loader-dot"></div>
                 </div>
                 <span class="mt-2 block">AI is typing...</span>
             `;
@@ -1183,13 +1611,6 @@
             event.stopPropagation(); // Prevent document click from immediately closing it
             chatActionsDropdown.classList.toggle('hidden');
             createIcons(); // Ensure icons within dropdown are rendered
-        });
-
-        // Close dropdown when clicking anywhere else on the document
-        document.addEventListener('click', (event) => {
-            if (!chatActionsDropdown.contains(event.target) && !addChatAttachmentBtn.contains(event.target)) {
-                chatActionsDropdown.classList.add('hidden');
-            }
         });
 
         // --- NEW: Unified File Handling Logic (Drag & Drop, Paste, Manual Upload) ---
@@ -1483,12 +1904,35 @@
             }
         }
 
-        // Initial AI greeting message when the page loads
-        window.addEventListener('load', () => {
-            appendChatMessage('ai', 'Hello! How can I help you today?');
-            chatHistory.push({ role: 'model', parts: [{ text: 'Hello! How can I help you today?' }] });
+        // --- NEW CHAT FUNCTIONALITY (from Code 2) ---
+        function startNewChat(playGreetingSound = true) {
+            chatHistory = []; // Clear conversation history
+            chatAttachments = []; // Clear attachments
+            chatHistoryDiv.innerHTML = ''; // Clear UI messages
+            chatInput.value = ''; // Clear input field
+            chatAttachmentsPreviewContainer.innerHTML = ''; // Clear attachment previews
+            chatAttachmentsPreviewContainer.classList.add('hidden'); // Hide attachment container
+            chatImageUpload.value = ''; // Clear file input
+            messageTextCache.clear(); // Clear cached message content
+            chatErrorMessageDiv.classList.add('hidden'); // Hide any errors
+            chatErrorMessageDiv.classList.remove('flex');
+
+            // Add the initial AI greeting message
+            const greetingMessage = 'Hello! How can I help you today?';
+            chatHistory.push({ role: 'model', parts: [{ text: greetingMessage }] });
+            appendChatMessage('ai', greetingMessage);
             chatInput.focus();
-        });
+
+            // Optionally dictate the greeting message
+            if (playGreetingSound && window.speechSynthesis) {
+                const utterance = new SpeechSynthesisUtterance(greetingMessage);
+                utterance.lang = 'en-US';
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Event listener for the "New Chat" button
+        newChatBtn.addEventListener('click', () => startNewChat());
     </script>
 </body>
 </html>

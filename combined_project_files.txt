@@ -1,3 +1,5 @@
+code 1 : 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -568,6 +570,17 @@
             border: 2px dashed var(--accent-primary-dark);
             box-shadow: 0 0 20px var(--accent-primary-dark), 0 0 30px var(--accent-primary-dark) inset;
         }
+        
+        /* New CSS for chat input drag-over */
+        .chat-input-drag-over {
+            border-color: var(--accent-primary) !important;
+            box-shadow: 0 0 0 2px var(--accent-primary); /* Subtle glow effect */
+        }
+        body.dark .chat-input-drag-over {
+            border-color: var(--accent-primary-dark) !important;
+            box-shadow: 0 0 0 2px var(--accent-primary-dark);
+        }
+
 
         /* PDF Export template styles (hidden from direct view) - Retained for dependency consistency, but not actively used for chat export */
         #pdf-export-content {
@@ -1011,17 +1024,8 @@
         chatImageUpload.addEventListener('change', async (event) => {
             const files = Array.from(event.target.files);
             if (files.length > 0) {
-                for (const file of files) {
-                    try {
-                        const { mimeType, data } = await fileToBase64(file);
-                        chatAttachments.push({ file, mimeType, data, name: file.name });
-                    } catch (error) {
-                        showChatError(`Failed to read chat file ${file.name}.`);
-                        console.error('Chat file read error:', error);
-                    }
-                }
-                displayChatAttachments();
-                chatInput.focus();
+                // Reuse the new unified file handler
+                await handleDroppedOrPastedFiles(files); 
             }
             chatActionsDropdown.classList.add('hidden'); // Hide dropdown after selection
         });
@@ -1190,7 +1194,68 @@
             }
         });
 
-        // Drag and Drop for Chat Window
+        // --- NEW: Unified File Handling Logic (Drag & Drop, Paste, Manual Upload) ---
+        async function handleDroppedOrPastedFiles(files) {
+            chatErrorMessageDiv.classList.add('hidden'); // Hide any previous errors
+            chatErrorMessageDiv.classList.remove('flex');
+
+            if (files.length > 0) {
+                for (const file of files) {
+                    const allowedTypes = [
+                        'image/', 'text/', 'application/pdf',
+                        'application/json', 'text/csv', 'application/xml', 'text/markdown'
+                    ];
+                    const isAllowed = allowedTypes.some(type => file.type.startsWith(type)) || file.name.endsWith('.md');
+
+                    if (isAllowed) {
+                        try {
+                            const { mimeType, data } = await fileToBase64(file);
+                            chatAttachments.push({ file, mimeType, data, name: file.name });
+                        } catch (error) {
+                            showChatError(`Failed to read file ${file.name}.`);
+                            console.error('File read error:', error);
+                        }
+                    } else {
+                        showChatError(`File type not supported: ${file.name} (${file.type}).`);
+                    }
+                }
+                displayChatAttachments();
+                chatInput.focus();
+            }
+        }
+
+        // --- NEW: Drag and Drop for Chat Input Box ---
+        chatInput.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation(); // Prevent mainChatContainer's dragover from also triggering
+            e.currentTarget.classList.add('chat-input-drag-over');
+        });
+
+        chatInput.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            e.currentTarget.classList.remove('chat-input-drag-over');
+        });
+
+        chatInput.addEventListener('drop', async (e) => {
+            e.preventDefault();
+            e.stopPropagation(); // Prevent mainChatContainer's drop from also triggering
+            e.currentTarget.classList.remove('chat-input-drag-over');
+            await handleDroppedOrPastedFiles(Array.from(e.dataTransfer.files));
+        });
+
+        // --- NEW: Paste Files into Chat Input Box ---
+        chatInput.addEventListener('paste', async (e) => {
+            const files = Array.from(e.clipboardData.files);
+            if (files.length > 0) {
+                e.preventDefault(); // Prevent default text paste behavior if files are detected
+                e.stopPropagation();
+                await handleDroppedOrPastedFiles(files);
+            }
+            // If no files are present, allow default text paste to occur
+        });
+
+        // --- Existing Drag and Drop for Main Chat Container (General Fallback) ---
         mainChatContainer.addEventListener('dragover', (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -1207,36 +1272,10 @@
             e.preventDefault();
             e.stopPropagation();
             mainChatContainer.classList.remove('drag-over-active');
-            chatErrorMessageDiv.classList.add('hidden'); // Hide any previous errors
-            chatErrorMessageDiv.classList.remove('flex'); // Ensure it's not flex when starting a new operation
-
-
-            const files = Array.from(e.dataTransfer.files);
-            if (files.length > 0) {
-                for (const file of files) {
-                    // Basic file type validation for chat (allow images, text, pdf, csv, json, xml, md)
-                    const allowedTypes = [
-                        'image/', 'text/', 'application/pdf',
-                        'application/json', 'text/csv', 'application/xml', 'text/markdown'
-                    ];
-                    const isAllowed = allowedTypes.some(type => file.type.startsWith(type)) || file.name.endsWith('.md');
-
-                    if (isAllowed) {
-                        try {
-                            const { mimeType, data } = await fileToBase64(file);
-                            chatAttachments.push({ file, mimeType, data, name: file.name });
-                        } catch (error) {
-                            showChatError(`Failed to read chat file ${file.name}.`);
-                            console.error('Chat file read error:', error);
-                        }
-                    } else {
-                        showChatError(`File type not supported for chat: ${file.name} (${file.type}).`);
-                    }
-                }
-                displayChatAttachments();
-                chatInput.focus();
-            }
+            // This will only trigger if the drop happened *outside* the chat input due to stopPropagation on chatInput
+            await handleDroppedOrPastedFiles(Array.from(e.dataTransfer.files));
         });
+
 
         // Event delegation for copy code buttons within chat history
         chatHistoryDiv.addEventListener('click', (event) => {
@@ -1456,8 +1495,1748 @@
 </body>
 </html>
 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------
 
-i want to : 
+code 2 :
 
-let the users paste files on the text input box and take them as attachments.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mystic Vision AI Mini</title>
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <!-- Favicon -->
+    <link rel="icon" href="logo.png" type="image/x-icon">
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter for modern typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Marked.js CDN for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- jsPDF for PDF generation (retained for consistency in dependencies, though chat itself doesn't export to PDF) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- html2canvas to convert HTML to image for PDF (retained for consistency in dependencies) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Lucide Icons for a modern, futuristic feel -->
+    <script src="https://cdn.jsdelivr.net/npm/lucide-dynamic@latest/dist/lucide.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* --- Custom Styles for Standalone AI Chatbot (Adapted from Dream11 Predictor Chat) --- */
+        
+        /* Ensure HTML and Body take full height and prevent main scrollbar */
+        html, body {
+            height: 100%;
+            overflow: hidden; /* Prevent body scrollbar, main-chat-container handles it */
+        }
+
+        /* Basic font and transition settings for the whole page */
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.6s ease, color 0.6s ease;
+            display: flex; /* Make body a flex container */
+            flex-direction: column; /* Arrange children vertically */
+            margin: 0;
+            /* Default fallback colors if no theme/dark mode is set */
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+
+        /* Defining a vibrant color palette using CSS variables */
+        :root {
+            /* Default Theme (Light Mode) */
+            --bg-color-light: #f3f4f6;
+            --card-bg-light: #ffffff;
+            --text-color-light: #1f2937;
+            --border-color-light: #e5e7eb;
+            --user-msg-bg-light: #e0f2fe; /* Light blue */
+            --user-msg-text-light: #1e40af; /* Dark blue */
+            --ai-msg-bg-light: #f3f4f6; /* Light gray */
+            --ai-msg-text-light: #374151; /* Dark gray */
+            --chat-input-bg-light: #ffffff;
+            --chat-input-border-light: #d1d5db;
+            --chat-input-text-light: #1f2937;
+            --input-btn-bg-light: #e5e7eb;
+            --input-btn-text-light: #4b5563;
+            --header-bg-light: #f9fafb;
+
+            /* Default Theme (Dark Mode) */
+            --bg-color-dark: #0a0a0f;
+            --card-bg-dark: #13131a;
+            --text-color-dark: #e5e7eb;
+            --border-color-dark: #2d3748;
+            --user-msg-bg-dark: #1a237e; /* Darker blue */
+            --user-msg-text-dark: #e0e7ff; /* Lighter blue */
+            --ai-msg-bg-dark: #2d3748; /* Darker gray */
+            --ai-msg-text-dark: #f9fafb; /* Lighter gray */
+            --chat-input-bg-dark: #1f2937;
+            --chat-input-border-dark: #374151;
+            --chat-input-text-dark: #e5e7eb;
+            --input-btn-bg-dark: #374151;
+            --input-btn-text-dark: #d1d5db;
+            --header-bg-dark: #1f2937;
+            
+            /* Accent colors (Default Theme) */
+            --accent-primary: #6366f1; /* Indigo-500 */
+            --accent-primary-dark: #818cf8; /* Indigo-400 for dark mode */
+            --accent-secondary: #22d3ee; /* Cyan-400 */
+            --accent-secondary-dark: #67e8f9; /* Cyan-300 for dark mode */
+            --accent-error: #ef4444; /* Red-500 */
+            --accent-success: #22c55e; /* Green-500 */
+        }
+        
+        /* THEME DEFINITIONS */
+        /* Each theme class defines its own set of variables for both light and dark modes */
+
+        /* Default Theme */
+        body.theme-default.light {
+            background-color: var(--bg-color-light);
+            color: var(--text-color-light);
+        }
+        body.theme-default.dark {
+            background-color: var(--bg-color-dark);
+            color: var(--text-color-dark);
+        }
+
+        /* Badass Black Theme */
+        body.theme-badass-black {
+            --accent-primary: #ef4444; /* Red-500 */
+            --accent-primary-dark: #f87171; /* Red-400 */
+            --accent-secondary: #eab308; /* Yellow-500 */
+            --accent-secondary-dark: #facc15; /* Yellow-400 */
+            --accent-error: #dc2626; /* Red-600 */
+            --accent-success: #16a34a; /* Green-600 */
+        }
+        body.theme-badass-black.light { /* Still very dark for "light" mode */
+            --bg-color-light: #171717;
+            --card-bg-light: #262626;
+            --text-color-light: #f5f5f5;
+            --border-color-light: #404040;
+            --user-msg-bg-light: #440000;
+            --user-msg-text-light: #fca5a5;
+            --ai-msg-bg-light: #333333;
+            --ai-msg-text-light: #e5e5e5;
+            --chat-input-bg-light: #262626;
+            --chat-input-border-light: #404040;
+            --chat-input-text-light: #f5f5f5;
+            --input-btn-bg-light: #404040;
+            --input-btn-text-light: #d4d4d8;
+            --header-bg-light: #171717;
+        }
+        body.theme-badass-black.dark { /* Even darker */
+            --bg-color-dark: #0a0a0a;
+            --card-bg-dark: #1c1c1c;
+            --text-color-dark: #e5e5e5;
+            --border-color-dark: #333333;
+            --user-msg-bg-dark: #800000;
+            --user-msg-text-dark: #fecaca;
+            --ai-msg-bg-dark: #222222;
+            --ai-msg-text-dark: #f5f5f5;
+            --chat-input-bg-dark: #1c1c1c;
+            --chat-input-border-dark: #333333;
+            --chat-input-text-dark: #e5e5e5;
+            --input-btn-bg-dark: #333333;
+            --input-btn-text-dark: #d4d4d8;
+            --header-bg-dark: #0a0a0a;
+        }
+
+        /* Golden Glory Theme */
+        body.theme-golden-glory {
+            --accent-primary: #d97706; /* Amber-700 */
+            --accent-primary-dark: #fcd34d; /* Amber-300 */
+            --accent-secondary: #fcd34d; /* Amber-300 */
+            --accent-secondary-dark: #fbbf24; /* Amber-400 */
+            --accent-error: #ef4444; /* Red-500 */
+            --accent-success: #22c55e; /* Green-500 */
+        }
+        body.theme-golden-glory.light {
+            --bg-color-light: #fef3c7; /* Amber-100 */
+            --card-bg-light: #ffffff;
+            --text-color-light: #451a03; /* Amber-950 */
+            --border-color-light: #fcd34d; /* Amber-300 */
+            --user-msg-bg-light: #fde68a; /* Amber-200 */
+            --user-msg-text-light: #78350f; /* Amber-800 */
+            --ai-msg-bg-light: #fffbeb; /* Amber-50 */
+            --ai-msg-text-light: #451a03; /* Amber-950 */
+            --chat-input-bg-light: #ffffff;
+            --chat-input-border-light: #fcd34d;
+            --chat-input-text-light: #451a03;
+            --input-btn-bg-light: #fcd34d;
+            --input-btn-text-light: #78350f;
+            --header-bg-light: #fef9c3; /* Amber-50 */
+        }
+        body.theme-golden-glory.dark {
+            --bg-color-dark: #1e1b07; /* Amber-950 */
+            --card-bg-dark: #2e2609;
+            --text-color-dark: #fef3c7; /* Amber-100 */
+            --border-color-dark: #92400e; /* Amber-800 */
+            --user-msg-bg-dark: #78350f; /* Amber-800 */
+            --user-msg-text-dark: #fde68a; /* Amber-200 */
+            --ai-msg-bg-dark: #3e310a;
+            --ai-msg-text-dark: #fcd34d; /* Amber-300 */
+            --chat-input-bg-dark: #2e2609;
+            --chat-input-border-dark: #92400e;
+            --chat-input-text-dark: #fef3c7;
+            --input-btn-bg-dark: #92400e;
+            --input-btn-text-dark: #fde68a;
+            --header-bg-dark: #1e1b07;
+        }
+
+        /* Minimal Criminal Theme */
+        body.theme-minimal-criminal {
+            --accent-primary: #737373; /* Gray-500 */
+            --accent-primary-dark: #a3a3a3; /* Gray-400 */
+            --accent-secondary: #a3a3a3; /* Gray-400 */
+            --accent-secondary-dark: #d4d4d4; /* Gray-300 */
+            --accent-error: #ef4444; /* Red-500 */
+            --accent-success: #22c55e; /* Green-500 */
+        }
+        body.theme-minimal-criminal.light {
+            --bg-color-light: #f8f8f8;
+            --card-bg-light: #ffffff;
+            --text-color-light: #333333;
+            --border-color-light: #e0e0e0;
+            --user-msg-bg-light: #e6e6e6;
+            --user-msg-text-light: #4d4d4d;
+            --ai-msg-bg-light: #f0f0f0;
+            --ai-msg-text-light: #333333;
+            --chat-input-bg-light: #ffffff;
+            --chat-input-border-light: #e0e0e0;
+            --chat-input-text-light: #333333;
+            --input-btn-bg-light: #e0e0e0;
+            --input-btn-text-light: #4d4d4d;
+            --header-bg-light: #f5f5f5;
+        }
+        body.theme-minimal-criminal.dark {
+            --bg-color-dark: #1a1a1a;
+            --card-bg-dark: #2a2a2a;
+            --text-color-dark: #e0e0e0;
+            --border-color-dark: #4a4a4a;
+            --user-msg-bg-dark: #3a3a3a;
+            --user-msg-text-dark: #d4d4d4;
+            --ai-msg-bg-dark: #2f2f2f;
+            --ai-msg-text-dark: #e0e0e0;
+            --chat-input-bg-dark: #2a2a2a;
+            --chat-input-border-dark: #4a4a4a;
+            --chat-input-text-dark: #e0e0e0;
+            --input-btn-bg-dark: #4a4a4a;
+            --input-btn-text-dark: #d4d4d4;
+            --header-bg-dark: #1a1a1a;
+        }
+
+        /* La Futura Theme */
+        body.theme-la-futura {
+            --accent-primary: #6d28d9; /* Violet-700 */
+            --accent-primary-dark: #a78bfa; /* Violet-400 */
+            --accent-secondary: #0ea5e9; /* Sky-500 */
+            --accent-secondary-dark: #38bdf8; /* Sky-400 */
+            --accent-error: #ef4444; /* Red-500 */
+            --accent-success: #22c55e; /* Green-500 */
+        }
+        body.theme-la-futura.light {
+            --bg-color-light: #e0f2fe; /* Sky-100 */
+            --card-bg-light: #ffffff;
+            --text-color-light: #1e3a8a; /* Blue-900 */
+            --border-color-light: #93c5fd; /* Blue-300 */
+            --user-msg-bg-light: #c7d2fe; /* Indigo-200 */
+            --user-msg-text-light: #312e81; /* Indigo-900 */
+            --ai-msg-bg-light: #eff6ff; /* Blue-50 */
+            --ai-msg-text-light: #1e3a8a; /* Blue-900 */
+            --chat-input-bg-light: #ffffff;
+            --chat-input-border-light: #93c5fd;
+            --chat-input-text-light: #1e3a8a;
+            --input-btn-bg-light: #dbeafe; /* Blue-100 */
+            --input-btn-text-light: #3b82f6; /* Blue-500 */
+            --header-bg-light: #bfdbfe; /* Blue-200 */
+        }
+        body.theme-la-futura.dark {
+            --bg-color-dark: #0f172a; /* Slate-900 */
+            --card-bg-dark: #1e293b; /* Slate-800 */
+            --text-color-dark: #e2e8f0; /* Slate-200 */
+            --border-color-dark: #334155; /* Slate-700 */
+            --user-msg-bg-dark: #4c1d95; /* Violet-900 */
+            --user-msg-text-dark: #e0e7ff; /* Indigo-100 */
+            --ai-msg-bg-dark: #1a2230;
+            --ai-msg-text-dark: #a78bfa; /* Violet-400 */
+            --chat-input-bg-dark: #1e293b;
+            --chat-input-border-dark: #334155;
+            --chat-input-text-dark: #e2e8f0;
+            --input-btn-bg-dark: #334155;
+            --input-btn-text-dark: #94a3b8; /* Slate-400 */
+            --header-bg-dark: #0f172a;
+        }
+
+        /* God's Plan Theme */
+        body.theme-gods-plan {
+            --accent-primary: #10b981; /* Emerald-500 */
+            --accent-primary-dark: #34d399; /* Emerald-400 */
+            --accent-secondary: #3b82f6; /* Blue-500 */
+            --accent-secondary-dark: #60a5fa; /* Blue-400 */
+            --accent-error: #ef4444; /* Red-500 */
+            --accent-success: #22c55e; /* Green-500 */
+        }
+        body.theme-gods-plan.light {
+            --bg-color-light: #ecfdf5; /* Emerald-50 */
+            --card-bg-light: #ffffff;
+            --text-color-light: #064e3b; /* Emerald-900 */
+            --border-color-light: #a7f3d0; /* Emerald-200 */
+            --user-msg-bg-light: #d1fae5; /* Emerald-100 */
+            --user-msg-text-light: #047857; /* Emerald-700 */
+            --ai-msg-bg-light: #f0fdf4; /* Green-50 */
+            --ai-msg-text-light: #064e3b; /* Emerald-900 */
+            --chat-input-bg-light: #ffffff;
+            --chat-input-border-light: #a7f3d0;
+            --chat-input-text-light: #064e3b;
+            --input-btn-bg-light: #d1fae5;
+            --input-btn-text-light: #047857;
+            --header-bg-light: #d1fae5;
+        }
+        body.theme-gods-plan.dark {
+            --bg-color-dark: #062e24; /* Emerald-950 */
+            --card-bg-dark: #0a3d34;
+            --text-color-dark: #d1fae5; /* Emerald-100 */
+            --border-color-dark: #0f5d47; /* Emerald-800 */
+            --user-msg-bg-dark: #059669; /* Emerald-600 */
+            --user-msg-text-dark: #d1fae5; /* Emerald-100 */
+            --ai-msg-bg-dark: #0a3d34;
+            --ai-msg-text-dark: #a7f3d0; /* Emerald-200 */
+            --chat-input-bg-dark: #0a3d34;
+            --chat-input-border-dark: #0f5d47;
+            --chat-input-text-dark: #d1fae5;
+            --input-btn-bg-dark: #0f5d47;
+            --input-btn-text-dark: #a7f3d0;
+            --header-bg-dark: #062e24;
+        }
+
+        /* The Ecstacy Theme */
+        body.theme-the-ecstacy {
+            --accent-primary: #a855f7; /* Violet-500 */
+            --accent-primary-dark: #c084fc; /* Violet-400 */
+            --accent-secondary: #f472b6; /* Pink-400 */
+            --accent-secondary-dark: #f87171; /* Red-400 */
+            --accent-error: #ef4444; /* Red-500 */
+            --accent-success: #22c55e; /* Green-500 */
+        }
+        body.theme-the-ecstacy.light {
+            --bg-color-light: #f3e8ff; /* Violet-100 */
+            --card-bg-light: #ffffff;
+            --text-color-light: #581c87; /* Violet-900 */
+            --border-color-light: #d8b4fe; /* Violet-300 */
+            --user-msg-bg-light: #e9d5ff; /* Violet-200 */
+            --user-msg-text-light: #7e22ce; /* Violet-700 */
+            --ai-msg-bg-light: #faf5ff; /* Violet-50 */
+            --ai-msg-text-light: #581c87; /* Violet-900 */
+            --chat-input-bg-light: #ffffff;
+            --chat-input-border-light: #d8b4fe;
+            --chat-input-text-light: #581c87;
+            --input-btn-bg-light: #e9d5ff;
+            --input-btn-text-light: #a855f7;
+            --header-bg-light: #f3e8ff;
+        }
+        body.theme-the-ecstacy.dark {
+            --bg-color-dark: #170d2b; /* Violet-950 */
+            --card-bg-dark: #2a1c43;
+            --text-color-dark: #f3e8ff; /* Violet-100 */
+            --border-color-dark: #4c1d95; /* Violet-900 */
+            --user-msg-bg-dark: #6b21a8; /* Violet-700 */
+            --user-msg-text-dark: #f3e8ff; /* Violet-100 */
+            --ai-msg-bg-dark: #2a1c43;
+            --ai-msg-text-dark: #d8b4fe; /* Violet-300 */
+            --chat-input-bg-dark: #2a1c43;
+            --chat-input-border-dark: #4c1d95;
+            --chat-input-text-dark: #f3e8ff;
+            --input-btn-bg-dark: #4c1d95;
+            --input-btn-text-dark: #e9d5ff;
+            --header-bg-dark: #170d2b;
+        }
+
+        /* Generic Dark Mode Overrides (applies regardless of theme, takes precedence) */
+        /* These should now refer to the theme-specific dark variables */
+        body.dark {
+            background-color: var(--bg-color-dark);
+            color: var(--text-color-dark);
+        }
+
+        body.light {
+             background-color: var(--bg-color-light);
+             color: var(--text-color-light);
+        }
+
+        /* Header specific overrides */
+        .header-section {
+            background-color: var(--header-bg-light);
+            border-color: var(--border-color-light);
+        }
+        body.dark .header-section {
+            background-color: var(--header-bg-dark);
+            border-color: var(--border-color-dark);
+        }
+        /* Explicitly set H1 color based on theme */
+        .header-section h1 {
+            color: var(--text-color-light);
+        }
+        body.dark .header-section h1 {
+            color: var(--text-color-dark);
+        }
+        /* Explicitly set colors for the Light/Dark toggle labels, they use text-gray-500 */
+        .header-section .text-gray-500 {
+            color: #6b7280; /* Tailwind gray-500 equivalent for light mode consistency */
+        }
+        body.dark .header-section .text-gray-500 {
+            color: #9ca3af; /* Tailwind gray-400 equivalent for dark mode consistency */
+        }
+
+        /* Action buttons in header (Theme Selector, New Chat) */
+        #theme-selector-btn, #new-chat-btn {
+            background-color: var(--input-btn-bg-light);
+            color: var(--input-btn-text-light); /* For the Lucide icon */
+        }
+        #theme-selector-btn:hover, #new-chat-btn:hover {
+            background-color: color-mix(in srgb, var(--input-btn-bg-light) 80%, black 10%);
+        }
+        body.dark #theme-selector-btn, body.dark #new-chat-btn {
+            background-color: var(--input-btn-bg-dark);
+            color: var(--input-btn-text-dark); /* For the Lucide icon */
+        }
+        body.dark #theme-selector-btn:hover, body.dark #new-chat-btn:hover {
+            background-color: color-mix(in srgb, var(--input-btn-bg-dark) 80%, white 10%);
+        }
+
+
+        /* Tailwind overrides for dark mode to ensure consistency */
+        /* These classes should now use the theme-specific variables */
+        
+        body.light .text-gray-800, body.light .text-gray-900 { color: var(--text-color-light); }
+        body.dark .text-gray-800, body.dark .text-gray-900 { color: var(--text-color-dark); }
+        /* Removed .text-gray-500 from here as it's now handled specifically for header labels */
+
+        /* General element styling that depends on theme variables */
+        #main-chat-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-color: var(--border-color-light);
+        }
+        body.dark #main-chat-container {
+            background-color: var(--card-bg-dark); /* Use card-bg-dark for container */
+            border-color: var(--border-color-dark);
+        }
+
+        /* Custom scrollbar for a sleek look */
+        #chat-history::-webkit-scrollbar { width: 10px; }
+        #chat-history::-webkit-scrollbar-track { background: var(--card-bg-light); border-radius: 5px; }
+        #chat-history::-webkit-scrollbar-thumb { background: #888; border-radius: 5px; border: 2px solid var(--card-bg-light); }
+        #chat-history::-webkit-scrollbar-thumb:hover { background: #555; }
+        body.dark #chat-history::-webkit-scrollbar-track { background: var(--card-bg-dark); }
+        body.dark #chat-history::-webkit-scrollbar-thumb { background: #6b7280; border-color: var(--card-bg-dark); }
+        body.dark #chat-history::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+        
+        /* Modern loading animation */
+        .loader-dot { background-color: var(--accent-primary); }
+        
+        /* New chat message styles */
+        .chat-message.user {
+            background-color: var(--user-msg-bg-light);
+            color: var(--user-msg-text-light);
+            /* Simplified gradient to use accent-primary */
+            background-image: linear-gradient(to bottom right, var(--user-msg-bg-light), var(--accent-primary));
+        }
+        body.dark .chat-message.user {
+            background-color: var(--user-msg-bg-dark);
+            color: var(--user-msg-text-dark);
+            /* Simplified gradient to use accent-primary-dark */
+            background-image: linear-gradient(to bottom right, var(--user-msg-bg-dark), var(--accent-primary-dark));
+        }
+
+        .chat-message.ai {
+            background-color: var(--ai-msg-bg-light);
+            color: var(--ai-msg-text-light);
+            /* Simplified gradient to use accent-secondary */
+            background-image: linear-gradient(to bottom left, var(--ai-msg-bg-light), var(--accent-secondary));
+        }
+        body.dark .chat-message.ai {
+            background-color: var(--ai-msg-bg-dark);
+            color: var(--ai-msg-text-dark);
+            /* Simplified gradient to use accent-secondary-dark */
+            background-image: linear-gradient(to bottom left, var(--ai-msg-bg-dark), var(--accent-secondary-dark));
+        }
+
+        /* Styling for chat attachments */
+        .chat-attachment-preview-item {
+            background-color: var(--input-btn-bg-light);
+            color: var(--input-btn-text-light);
+        }
+        body.dark .chat-attachment-preview-item {
+            background-color: var(--input-btn-bg-dark);
+            color: var(--input-btn-text-dark);
+        }
+        .chat-attachment-preview-item .remove-attachment-btn {
+            color: var(--accent-primary);
+        }
+        body.dark .chat-attachment-preview-item .remove-attachment-btn {
+            color: var(--accent-primary-dark);
+        }
+        .chat-attachment-preview-item .remove-attachment-btn:hover {
+            background-color: color-mix(in srgb, var(--accent-primary) 20%, transparent);
+        }
+        body.dark .chat-attachment-preview-item .remove-attachment-btn:hover {
+            background-color: color-mix(in srgb, var(--accent-primary-dark) 20%, transparent);
+        }
+
+        /* Styling for the copy message */
+        #copy-message {
+            background-color: var(--accent-success);
+        }
+
+        /* --- New/Enhanced Styles for Chat AI Responses & Code Blocks --- */
+        
+        .chat-message.ai .message-content strong { color: var(--accent-primary); }
+        body.dark .chat-message.ai .message-content strong { color: var(--accent-primary-dark); }
+        .chat-message.ai .message-content blockquote { border-left: 4px solid var(--accent-secondary); color: var(--text-color-light); }
+        body.dark .chat-message.ai .message-content blockquote { border-left: 4px solid var(--accent-secondary-dark); color: var(--text-color-dark); }
+
+        /* Code block specific styling */
+        .code-block-container {
+            background-color: var(--bg-color-dark); /* Usually dark for code blocks */
+            color: var(--text-color-dark);
+            border: 1px solid var(--border-color-dark);
+        }
+        .code-block-header {
+            background-color: var(--input-btn-bg-dark);
+            color: var(--input-btn-text-dark);
+            border-bottom: 1px solid color-mix(in srgb, var(--border-color-dark) 70%, transparent);
+        }
+        .code-block-copy-button {
+            color: var(--input-btn-text-dark);
+        }
+        .code-block-copy-button:hover {
+            background-color: color-mix(in srgb, var(--input-btn-bg-dark) 80%, var(--accent-primary-dark) 20%);
+            color: var(--text-color-dark);
+        }
+
+        /* Smallest font size for inline code blocks if any */
+        .chat-message.ai .message-content code:not(pre > code) {
+            background-color: color-mix(in srgb, var(--accent-primary) 20%, transparent);
+            color: var(--accent-primary);
+        }
+        body.dark .chat-message.ai .message-content code:not(pre > code) {
+            background-color: color-mix(in srgb, var(--accent-primary-dark) 20%, transparent);
+            color: var(--accent-primary-dark);
+        }
+
+        /* Ensure links are distinguishable */
+        .chat-message.ai .message-content a {
+            color: var(--accent-primary);
+        }
+        .chat-message.ai .message-content a:hover {
+            color: color-mix(in srgb, var(--accent-primary) 80%, black 20%);
+        }
+        body.dark .chat-message.ai .message-content a {
+            color: var(--accent-primary-dark);
+        }
+        body.dark .chat-message.ai .message-content a:hover {
+            color: color-mix(in srgb, var(--accent-primary-dark) 80%, white 20%);
+        }
+
+        /* Styles for message action buttons (copy/dictate) */
+        .message-actions {
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+        body.dark .message-actions {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .message-actions button .lucide { color: var(--input-btn-text-light); }
+        body.dark .message-actions button .lucide { color: var(--input-btn-text-dark); }
+        .message-actions button:hover .lucide { color: var(--accent-primary); }
+        body.dark .message-actions button:hover .lucide { color: var(--accent-primary-dark); }
+        .message-actions button:hover { background-color: rgba(0, 0, 0, 0.1); }
+        body.dark .message-actions button:hover { background-color: rgba(255, 255, 255, 0.1); }
+
+        /* New style for speech recognition button when active */
+        .voice-input-active {
+            background-color: var(--accent-error) !important;
+            animation: pulse-red 1s infinite cubic-bezier(0.4, 0, 0.6, 1);
+        }
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-error) 70%, transparent); }
+            50% { box-shadow: 0 0 0 10px color-mix(in srgb, var(--accent-error) 0%, transparent); }
+        }
+
+        /* Chat action buttons dropdown & Theme dropdown */
+        .actions-dropdown { /* General class for any dropdowns like chat-actions or theme-selector */
+            position: absolute;
+            bottom: calc(100% + 8px);
+            right: 0;
+            background-color: var(--card-bg-light);
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            transform-origin: bottom right;
+            transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+            z-index: 20;
+            border: 1px solid var(--border-color-light);
+            min-width: 140px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        body.dark .actions-dropdown {
+            background-color: var(--card-bg-dark);
+            border-color: var(--border-color-dark);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        .actions-dropdown.hidden {
+            opacity: 0;
+            transform: scale(0.9);
+            pointer-events: none;
+        }
+        .actions-dropdown button,
+        .actions-dropdown label {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            color: var(--text-color-light);
+        }
+        body.dark .actions-dropdown button,
+        body.dark .actions-dropdown label {
+            color: var(--text-color-dark);
+        }
+        .actions-dropdown button:hover,
+        .actions-dropdown label:hover {
+            background-color: var(--bg-color-light);
+        }
+        body.dark .actions-dropdown button:hover,
+        body.dark .actions-dropdown label:hover {
+            background-color: color-mix(in srgb, var(--card-bg-dark) 80%, var(--accent-primary-dark) 5%);
+        }
+        .actions-dropdown button .lucide,
+        .actions-dropdown label .lucide {
+            margin-right: 0.5rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            flex-shrink: 0;
+            color: var(--accent-primary);
+        }
+        body.dark .actions-dropdown button .lucide,
+        body.dark .actions-dropdown label .lucide {
+            color: var(--accent-primary-dark);
+        }
+
+        /* Drag and Drop visual feedback for chat window */
+        #main-chat-container.drag-over-active {
+            border: 2px dashed var(--accent-primary);
+            box-shadow: 0 0 20px var(--accent-primary), 0 0 30px var(--accent-primary) inset;
+        }
+        body.dark #main-chat-container.drag-over-active {
+            border: 2px dashed var(--accent-primary-dark);
+            box-shadow: 0 0 20px var(--accent-primary-dark), 0 0 30px var(--accent-primary-dark) inset;
+        }
+        
+        /* New CSS for chat input drag-over */
+        .chat-input {
+            background-color: var(--chat-input-bg-light);
+            border-color: var(--chat-input-border-light);
+            color: var(--chat-input-text-light);
+            outline: none; /* Remove default browser outline */
+        }
+        .chat-input:focus {
+            border-color: var(--accent-primary) !important; /* Use accent for border on focus */
+            box-shadow: 0 0 0 2px var(--accent-primary) !important; /* Use accent for ring on focus */
+        }
+        body.dark .chat-input {
+            background-color: var(--chat-input-bg-dark);
+            border-color: var(--chat-input-border-dark);
+            color: var(--chat-input-text-dark);
+        }
+        body.dark .chat-input:focus {
+            border-color: var(--accent-primary-dark) !important;
+            box-shadow: 0 0 0 2px var(--accent-primary-dark) !important;
+        }
+        .chat-input-drag-over {
+            border-color: var(--accent-primary) !important;
+            box-shadow: 0 0 0 2px var(--accent-primary);
+        }
+        body.dark .chat-input-drag-over {
+            border-color: var(--accent-primary-dark) !important;
+            box-shadow: 0 0 0 2px var(--accent-primary-dark);
+        }
+
+        /* Input control buttons */
+        #add-chat-attachment-btn {
+            background-color: var(--input-btn-bg-light);
+            color: var(--input-btn-text-light);
+        }
+        #add-chat-attachment-btn:hover {
+            background-color: color-mix(in srgb, var(--input-btn-bg-light) 80%, black 10%);
+        }
+
+        #send-chat-btn {
+            background-color: var(--accent-primary);
+            color: white;
+        }
+        #send-chat-btn:disabled {
+            background-color: color-mix(in srgb, var(--accent-primary) 50%, transparent);
+            cursor: not-allowed;
+        }
+
+        body.dark #add-chat-attachment-btn {
+            background-color: var(--input-btn-bg-dark);
+            color: var(--input-btn-text-dark);
+        }
+        body.dark #add-chat-attachment-btn:hover {
+            background-color: color-mix(in srgb, var(--input-btn-bg-dark) 80%, white 10%);
+        }
+        body.dark #send-chat-btn {
+            background-color: var(--accent-primary-dark);
+            color: white;
+        }
+        body.dark #send-chat-btn:disabled {
+            background-color: color-mix(in srgb, var(--accent-primary-dark) 50%, transparent);
+        }
+        
+        #add-chat-attachment-btn .lucide, #send-chat-btn .lucide {
+            color: inherit; /* inherit color from button */
+        }
+
+
+        /* Styles for the chat-specific error message */
+        #chat-error-message {
+            margin-bottom: 1rem;
+            background-color: color-mix(in srgb, var(--accent-error) 20%, white);
+            border: 1px solid color-mix(in srgb, var(--accent-error) 50%, transparent);
+            color: color-mix(in srgb, var(--accent-error) 80%, black);
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
+            align-items: center; /* These will apply when display is not 'none' */
+            gap: 0.5rem;          /* These will apply when display is not 'none' */
+        }
+        body.dark #chat-error-message {
+            background-color: color-mix(in srgb, var(--accent-error) 20%, black);
+            border-color: color-mix(in srgb, var(--accent-error) 50%, transparent);
+            color: color-mix(in srgb, var(--accent-error) 60%, white);
+        }
+
+        /* Dark mode toggle colors */
+        .slider { background-color: #d1d5db; }
+        .dark .slider { background-color: #4b5563; }
+        input:checked + .slider { background-color: var(--accent-primary); }
+
+        /* Ensure PDF export content is always hidden */
+        #pdf-export-content {
+            display: none !important; 
+        }
+    </style>
+</head>
+<body class="antialiased theme-default light">
+
+    <!-- Main Chat Container (takes full screen) -->
+    <div id="main-chat-container">
+        <!-- Header for the chat -->
+        <div class="header-section p-4 md:p-6 flex justify-between items-center border-b flex-shrink-0">
+            <!-- Removed text-gray-800 to allow CSS variables to control color -->
+            <h1 class="text-2xl sm:text-3xl font-bold">Mystic Vision AI Mini</h1>
+            <div class="flex items-center space-x-4 relative">
+                <!-- Theme Selector -->
+                <div class="relative">
+                    <!-- Removed all bg/text-gray classes from the button, now styled via CSS variables -->
+                    <button id="theme-selector-btn" aria-label="Select Theme" class="flex items-center justify-center w-10 h-10 rounded-full shadow-sm transition-all duration-300 flex-shrink-0">
+                        <span data-lucide="palette" class="w-5 h-5"></span>
+                    </button>
+                    <div id="theme-dropdown" class="actions-dropdown hidden left-0 right-auto" style="bottom: auto; top: calc(100% + 8px);">
+                        <button class="theme-option w-full justify-start text-left" data-theme="default">
+                            <span data-lucide="sun" class="w-5 h-5"></span> Default
+                        </button>
+                        <button class="theme-option w-full justify-start text-left" data-theme="badass-black">
+                            <span data-lucide="moon" class="w-5 h-5"></span> Badass Black
+                        </button>
+                        <button class="theme-option w-full justify-start text-left" data-theme="golden-glory">
+                            <span data-lucide="sparkles" class="w-5 h-5"></span> Golden Glory
+                        </button>
+                        <button class="theme-option w-full justify-start text-left" data-theme="minimal-criminal">
+                            <span data-lucide="square" class="w-5 h-5"></span> Minimal Criminal
+                        </button>
+                        <button class="theme-option w-full justify-start text-left" data-theme="la-futura">
+                            <span data-lucide="zap" class="w-5 h-5"></span> La Futura
+                        </button>
+                        <button class="theme-option w-full justify-start text-left" data-theme="gods-plan">
+                            <span data-lucide="leaf" class="w-5 h-5"></span> God's Plan
+                        </button>
+                        <button class="theme-option w-full justify-start text-left" data-theme="the-ecstacy">
+                            <span data-lucide="star" class="w-5 h-5"></span> The Ecstacy
+                        </button>
+                    </div>
+                </div>
+
+                <!-- New Chat Button -->
+                <!-- Removed all bg/text-gray classes from the button, now styled via CSS variables -->
+                <button id="new-chat-btn" aria-label="Start New Chat" class="flex items-center justify-center w-10 h-10 rounded-full shadow-sm transition-all duration-300 flex-shrink-0">
+                    <span data-lucide="message-square-plus" class="w-5 h-5"></span>
+                </button>
+                
+                <!-- Dark Mode Toggle -->
+                <!-- Kept text-gray-500 because we override it specifically in CSS for header labels -->
+                <span class="text-gray-500 text-sm hidden sm:inline">Light</span>
+                <label class="switch relative inline-block w-14 h-8">
+                    <input type="checkbox" id="dark-mode-toggle" class="opacity-0 w-0 h-0">
+                    <span class="slider absolute cursor-pointer top-0 left-0 right-0 bottom-0 rounded-full before:absolute before:content-[''] before:h-6 before:w-6 before:left-1 before:bottom-1 before:rounded-full"></span>
+                </label>
+                <!-- Kept text-gray-500 because we override it specifically in CSS for header labels -->
+                <span class="text-gray-500 text-sm hidden sm:inline">Dark</span>
+            </div>
+        </div>
+        
+        <!-- Chat history div with a minimum height and scroll -->
+        <div id="chat-history" class="p-4 overflow-y-auto flex-1 flex flex-col">
+            <!-- Dynamic error message for chat -->
+            <div id="chat-error-message" class="hidden" role="alert">
+                <span data-lucide="alert-circle" class="w-5 h-5 flex-shrink-0"></span>
+                <span id="chat-error-text"></span>
+            </div>
+            <!-- Chat messages will be appended here by JS -->
+        </div>
+        
+        <!-- Chat input section with attachment, voice and send button -->
+        <div class="p-4 border-t relative flex-shrink-0">
+            <!-- Attachment preview -->
+            <div id="chat-attachments-preview-container" class="mb-2 flex flex-wrap items-center gap-2 hidden">
+                <!-- Attachments previews will be dynamically added here -->
+            </div>
+
+            <!-- Dropdown for attachment/voice buttons -->
+            <div id="chat-actions-dropdown" class="actions-dropdown hidden">
+                <button id="voice-input-btn" class="w-full justify-start text-left">
+                    <span data-lucide="mic" class="w-5 h-5"></span> Voice Input
+                </button>
+                <label for="chat-image-upload" class="w-full justify-start text-left">
+                    <span data-lucide="paperclip" class="w-5 h-5"></span> Attach File
+                </label>
+                <input type="file" id="chat-image-upload" accept="image/*, .txt, .pdf, .csv, .json, .xml, .md" class="hidden" multiple>
+            </div>
+
+            <div class="flex gap-2 items-end">
+                <!-- Removed focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 for full CSS control -->
+                <input type="text" id="chat-input" class="chat-input flex-1 p-3 rounded-full border transition-colors shadow-sm" placeholder="Ask a question or type a command...">
+                
+                <!-- Removed bg-gray-200 text-gray-600 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 -->
+                <button id="add-chat-attachment-btn" aria-label="Add attachment or voice input" class="flex items-center justify-center w-12 h-12 rounded-full shadow-lg cursor-pointer transition-all duration-300 flex-shrink-0">
+                    <span data-lucide="plus" class="w-5 h-5"></span>
+                </button>
+
+                <!-- Removed bg-indigo-600 text-white focus:outline-none focus:ring-4 focus:ring-indigo-300 -->
+                <button id="send-chat-btn" aria-label="Send Message" class="flex items-center justify-center w-12 h-12 rounded-full shadow-lg transition-all duration-300 disabled:cursor-not-allowed flex-shrink-0">
+                    <span data-lucide="send" class="w-5 h-5"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Temporary message for clipboard copy -->
+    <div id="copy-message">Text copied to clipboard!</div>
+
+    <!-- Hidden div for PDF export template (retained for dependency consistency, not actively used by chat) -->
+    <div id="pdf-export-content">
+        <div class="pdf-header">
+            <span data-lucide="message-square" class="w-8 h-8"></span>
+            <h1>AI Chat History</h1>
+            <p>Generated on <span id="pdf-date"></span></p>
+        </div>
+        <div class="pdf-body">
+            <!-- Chat history will be inserted here if PDF export for chat were implemented -->
+        </div>
+        <div class="pdf-footer">
+            Powered by Gemini AI | Mystic Vision AI Mini
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        // Register Service Worker for PWA capabilities
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+
+        // JavaScript for chat functionality
+        
+        // This function call is from the Lucide Icon library to replace all `<span>` tags with the corresponding SVG icons
+        const createIcons = () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        };
+
+        window.addEventListener('load', () => {
+             createIcons();
+        });
+
+        // Chat elements
+        const mainChatContainer = document.getElementById('main-chat-container');
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const chatHistoryDiv = document.getElementById('chat-history');
+        const chatInput = document.getElementById('chat-input');
+        const sendChatBtn = document.getElementById('send-chat-btn');
+        const chatImageUpload = document.getElementById('chat-image-upload');
+        const chatAttachmentsPreviewContainer = document.getElementById('chat-attachments-preview-container'); 
+        const voiceInputBtn = document.getElementById('voice-input-btn');
+        const addChatAttachmentBtn = document.getElementById('add-chat-attachment-btn');
+        const chatActionsDropdown = document.getElementById('chat-actions-dropdown');
+        const chatErrorMessageDiv = document.getElementById('chat-error-message');
+        const chatErrorText = document.getElementById('chat-error-text');
+        
+        // New elements for theme and new chat
+        const newChatBtn = document.getElementById('new-chat-btn');
+        const themeSelectorBtn = document.getElementById('theme-selector-btn');
+        const themeDropdown = document.getElementById('theme-dropdown');
+        const themeOptions = document.querySelectorAll('.theme-option');
+        
+        // Copy message element
+        const copyMessage = document.getElementById('copy-message');
+
+        let chatAttachments = []; // Array to store {file: File, mimeType: string, data: string} for chat
+        let chatHistory = []; // Conversation history for the Gemini API
+        
+        // Web Speech API related variables for text-to-speech
+        let currentUtterance = null;
+        let isSpeaking = false;
+        let messageTextCache = new Map(); // Store message content for copy/dictate
+
+        // Speech Recognition variables
+        let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition = null;
+        let isVoiceInputActive = false;
+        let finalTranscript = ''; // Stores the accumulated final transcript for speech input
+
+        // --- GEMINI API Key ---
+        // !! IMPORTANT: REPLACE WITH YOUR ACTUAL GEMINI API KEY !!
+        // !! DO NOT USE THIS METHOD IN PRODUCTION. USE A SERVER-SIDE PROXY. !!
+        // The key below is a placeholder and WILL NOT WORK.
+        // Get your API key from Google AI Studio: https://makersuite.google.com/
+        const GEMINI_API_KEY = 'AIzaSyCzx6ReMk8ohPJcCjGwHHzu7SvFccJqAbA'; // <--- REPLACE THIS WITH YOUR ACTUAL KEY
+
+        /**
+         * Displays a chat-specific error message.
+         * @param {string} message The error message to display.
+         */
+        function showChatError(message) {
+            chatErrorText.textContent = message;
+            chatErrorMessageDiv.classList.remove('hidden');
+            chatErrorMessageDiv.classList.add('flex'); // Explicitly add flex to make it visible
+            // Hide after 5 seconds
+            setTimeout(() => {
+                chatErrorMessageDiv.classList.add('hidden');
+                chatErrorMessageDiv.classList.remove('flex'); // Explicitly remove flex when hiding
+                chatErrorText.textContent = '';
+            }, 5000);
+        }
+
+        // Initialize SpeechRecognition if available
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.continuous = true; // Keep listening for multiple phrases
+            recognition.interimResults = true; // Show results while speaking
+            recognition.lang = 'en-US';
+
+            recognition.onstart = () => {
+                isVoiceInputActive = true;
+                voiceInputBtn.classList.add('voice-input-active');
+                updateButtonIcon(voiceInputBtn, 'mic-off', 'w-5 h-5'); // Change icon to indicate listening in dropdown
+                chatInput.placeholder = 'Listening... Speak now.';
+                finalTranscript = ''; // Clear previous transcript for a new session
+                chatInput.value = ''; // Clear input field
+                chatActionsDropdown.classList.add('hidden'); // Hide dropdown when voice input starts
+                chatErrorMessageDiv.classList.add('hidden'); // Hide any previous errors
+                chatErrorMessageDiv.classList.remove('flex'); // Ensure it's not flex when starting a new operation
+            };
+
+            recognition.onresult = (event) => {
+                let interimTranscript = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript + ' '; // Add space for readability
+                    } else {
+                        interimTranscript += event.results[i][0].transcript;
+                    }
+                }
+                chatInput.value = finalTranscript + interimTranscript; // Update input with current recognition
+                chatInput.scrollLeft = chatInput.scrollWidth; // Scroll to end
+            };
+
+            recognition.onend = () => {
+                isVoiceInputActive = false;
+                voiceInputBtn.classList.remove('voice-input-active');
+                updateButtonIcon(voiceInputBtn, 'mic', 'w-5 h-5'); // Reset icon to mic in dropdown
+                chatInput.placeholder = 'Ask a question or type a command...';
+
+                // If there's a final transcript, populate the input field.
+                if (finalTranscript.trim() !== '') {
+                    chatInput.value = finalTranscript.trim(); // Ensure final transcript is in the input
+                } else if (chatInput.value.trim() === '') {
+                    // If recognition ended with no final transcript and input is empty, clear it
+                    chatInput.value = ''; 
+                }
+            };
+
+            recognition.onerror = (event) => {
+                isVoiceInputActive = false; // Important: reset state on error
+                voiceInputBtn.classList.remove('voice-input-active');
+                updateButtonIcon(voiceInputBtn, 'mic', 'w-5 h-5'); // Reset icon
+                chatInput.placeholder = 'Ask a question or type a command...';
+                chatActionsDropdown.classList.add('hidden'); // Hide dropdown on error too
+
+                console.error('Speech recognition error:', event.error);
+                let errorMessage = `Speech recognition error: ${event.error}`;
+                if (event.error === 'not-allowed') {
+                    errorMessage = 'Microphone access denied. Please allow microphone access in your browser settings.';
+                } else if (event.error === 'no-speech') {
+                    console.log('No speech detected, recognition ended.');
+                    if (finalTranscript.trim() === '') {
+                        chatInput.value = '';
+                    }
+                } else if (event.error === 'network') {
+                    errorMessage = 'Speech recognition network error. This often means a firewall, proxy, or browser extension is blocking access to Google\'s speech services. Please try disabling extensions or testing in incognito mode.';
+                }
+                showChatError(errorMessage);
+            };
+            
+            // Optional: Listen for audio start/end for more granular control/feedback
+            recognition.onaudiostart = () => {
+                // console.log('Audio capturing started.');
+            };
+
+            recognition.onaudioend = () => {
+                // console.log('Audio capturing ended.');
+            };
+
+        } else {
+            console.warn('Web Speech API (SpeechRecognition) not supported in this browser. Voice input button will be hidden.');
+            voiceInputBtn.style.display = 'none'; // Hide the voice input button if not supported
+        }
+
+        // --- Theme and Dark Mode Logic ---
+        const ALL_THEME_CLASSES = ['theme-default', 'theme-badass-black', 'theme-golden-glory', 'theme-minimal-criminal', 'theme-la-futura', 'theme-gods-plan', 'theme-the-ecstacy'];
+
+        function applyTheme(themeName) {
+            // Remove all existing theme classes
+            document.body.classList.remove(...ALL_THEME_CLASSES);
+            // Add the new theme class
+            document.body.classList.add(`theme-${themeName}`);
+            localStorage.setItem('selected-theme', themeName);
+        }
+
+        function applyDarkMode(isDark) {
+            if (isDark) {
+                document.body.classList.remove('light');
+                document.body.classList.add('dark');
+            } else {
+                document.body.classList.remove('dark');
+                document.body.classList.add('light');
+            }
+            localStorage.setItem('dark-mode', isDark);
+        }
+
+        // Initialize theme and dark mode on load
+        window.addEventListener('load', () => {
+            // Default to 'default' theme if nothing is set
+            const savedTheme = localStorage.getItem('selected-theme') || 'default';
+            applyTheme(savedTheme);
+
+            // Default to dark mode if nothing is set for dark mode, matching original request
+            const isDarkMode = localStorage.getItem('dark-mode') !== 'false'; // 'null' or 'true' means dark
+            darkModeToggle.checked = isDarkMode;
+            applyDarkMode(isDarkMode);
+
+            createIcons(); // Ensure all icons are rendered after initial setup
+            
+            // Initial AI greeting message
+            startNewChat(false); // Do not play greeting sound on load
+        });
+
+        darkModeToggle.addEventListener('change', () => {
+            applyDarkMode(darkModeToggle.checked);
+        });
+
+        // Event listener for theme selector dropdown button
+        themeSelectorBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            themeDropdown.classList.toggle('hidden');
+            // Ensure icons within dropdown are rendered
+            createIcons();
+        });
+
+        // Event listeners for individual theme options
+        themeOptions.forEach(button => {
+            button.addEventListener('click', (event) => {
+                const themeName = event.currentTarget.dataset.theme;
+                applyTheme(themeName);
+                themeDropdown.classList.add('hidden'); // Hide dropdown after selection
+                chatInput.focus();
+            });
+        });
+
+        // Close dropdowns when clicking anywhere else on the document
+        document.addEventListener('click', (event) => {
+            if (!chatActionsDropdown.contains(event.target) && !addChatAttachmentBtn.contains(event.target)) {
+                chatActionsDropdown.classList.add('hidden');
+            }
+            if (!themeDropdown.contains(event.target) && !themeSelectorBtn.contains(event.target)) {
+                themeDropdown.classList.add('hidden');
+            }
+        });
+
+
+        // Function to convert a file to a Base64 string and return its MIME type and data
+        const fileToBase64 = (file) => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve({
+                    mimeType: file.type || 'application/octet-stream', // Fallback MIME type
+                    data: reader.result.split(',')[1]
+                });
+                reader.onerror = error => reject(error);
+                reader.readAsDataURL(file);
+            });
+        };
+
+        // Function to get Lucide icon name based on MIME type
+        function getFileIcon(mimeType) {
+            if (mimeType.startsWith('image/')) return 'image';
+            if (mimeType === 'application/pdf') return 'file-text';
+            if (mimeType.includes('text/')) return 'file-text';
+            if (mimeType.includes('csv') || mimeType.includes('excel')) return 'file-spreadsheet';
+            if (mimeType.includes('json') || mimeType.includes('xml') || mimeType.includes('code') || mimeType.includes('markdown')) return 'file-code';
+            return 'file';
+        }
+        
+        // --- Marked.js Custom Renderer for Code Blocks ---
+        const renderer = {
+            code(code, lang) {
+                let actualCodeContent;
+                if (typeof code === 'object' && code !== null && typeof code.text === 'string') {
+                    actualCodeContent = code.text;
+                } else if (typeof code !== 'string') {
+                    actualCodeContent = String(code);
+                } else {
+                    actualCodeContent = code;
+                }
+
+                const languageDisplay = lang ? `<span class="text-xs font-semibold uppercase text-gray-400">${lang}</span>` : '';
+                const uniqueId = `code-block-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                
+                const escapedCode = actualCodeContent.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+                return `
+                    <div class="code-block-container">
+                        <div class="code-block-header">
+                            ${languageDisplay}
+                            <button class="code-block-copy-button" data-copy-target="${uniqueId}">
+                                <span data-lucide="clipboard" class="w-4 h-4"></span>
+                                Copy code
+                            </button>
+                        </div>
+                        <pre><code id="${uniqueId}">${escapedCode}</code></pre>
+                    </div>
+                `;
+            }
+        };
+
+        marked.use({ renderer });
+
+        /**
+         * Helper function to update a Lucide icon displayed within a button.
+         * Removes the existing SVG and adds a new span for Lucide to convert.
+         * @param {HTMLElement} buttonElement The button element containing the icon.
+         * @param {string} newIconName The Lucide icon name (e.g., 'check', 'clipboard').
+         * @param {string} [classList] Optional additional classes for the new span. Defaults to 'w-4 h-4' for action buttons.
+         */
+        function updateButtonIcon(buttonElement, newIconName, classList = 'w-4 h-4') {
+            // Remove existing Lucide SVG (it will have the 'lucide' class)
+            let currentIconSvg = buttonElement.querySelector('.lucide');
+            if (currentIconSvg) {
+                currentIconSvg.remove();
+            }
+
+            // Create a new span element
+            const newIconSpan = document.createElement('span');
+            newIconSpan.setAttribute('data-lucide', newIconName);
+            newIconSpan.className = classList; // Apply styling classes
+
+            // Append the new span to the button
+            buttonElement.appendChild(newIconSpan);
+           
+            createIcons(); // Trigger Lucide to convert the new span to SVG
+        }
+
+
+        // Function to append a message to the chat history
+        function appendChatMessage(role, text, attachments = []) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('chat-message', role);
+            
+            // Unique ID for the message to reference its content
+            const messageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            messageDiv.dataset.messageId = messageId;
+            
+            let contentHTML = '';
+            let rawMessageContentForCache = text; // To store plain text for copy/dictate
+
+            if (role === 'user') {
+                contentHTML += text; // User text is plain HTML
+                if (attachments.length > 0) {
+                    contentHTML += `<div class="mt-2 flex flex-wrap gap-2">`;
+                    attachments.forEach(attachment => {
+                        if (attachment.mimeType.startsWith('image/')) {
+                            contentHTML += `<img src="data:${attachment.mimeType};base64,${attachment.data}" alt="${attachment.name || 'User attachment'}" class="chat-image w-24 h-24 object-cover">`;
+                        } else {
+                            // For non-image files, display an icon and file name
+                            contentHTML += `
+                                <div class="flex items-center space-x-1 p-2 bg-gray-100 dark:bg-gray-600 rounded-md text-sm">
+                                    <span data-lucide="${getFileIcon(attachment.mimeType)}" class="w-4 h-4 flex-shrink-0"></span>
+                                    <span class="truncate max-w-[120px]">${attachment.name || 'File'}</span>
+                                </div>
+                            `;
+                        }
+                    });
+                    contentHTML += `</div>`;
+                    rawMessageContentForCache += `\n[Attachments: ${attachments.map(a => a.name).join(', ')}]`;
+                }
+            } else { // AI message
+                contentHTML = `<div class="message-content">${marked.parse(text)}</div>`;
+            }
+            
+            // Set the raw text in cache, accounting for actual content for dictation
+            messageTextCache.set(messageId, rawMessageContentForCache); 
+
+            // Add action buttons
+            const actionsHTML = `
+                <div class="message-actions">
+                    <button class="copy-message-btn" title="Copy message" data-message-id="${messageId}">
+                        <span data-lucide="clipboard" class="w-4 h-4"></span>
+                    </button>
+                    <button class="dictate-message-btn" title="Dictate message" data-message-id="${messageId}">
+                        <span data-lucide="volume-2" class="w-4 h-4"></span>
+                    </button>
+                </div>
+            `;
+            
+            messageDiv.innerHTML = contentHTML + actionsHTML;
+            chatHistoryDiv.appendChild(messageDiv);
+            
+            // Animate message pop-in
+            setTimeout(() => {
+                messageDiv.style.transform = 'scale(1)';
+            }, 10);
+            
+            chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
+            
+            // Call createIcons() after adding new content to the chat history
+            createIcons();
+        }
+        
+        // Event listener for chat image/file upload
+        chatImageUpload.addEventListener('change', async (event) => {
+            const files = Array.from(event.target.files);
+            if (files.length > 0) {
+                // Reuse the new unified file handler
+                await handleDroppedOrPastedFiles(files); 
+            }
+            chatActionsDropdown.classList.add('hidden'); // Hide dropdown after selection
+        });
+
+        // Function to display chat attachments
+        function displayChatAttachments() {
+            chatAttachmentsPreviewContainer.innerHTML = '';
+            if (chatAttachments.length > 0) {
+                chatAttachmentsPreviewContainer.classList.remove('hidden');
+                chatAttachments.forEach((attachment, index) => {
+                    const attachmentDiv = document.createElement('div');
+                    attachmentDiv.classList.add('chat-attachment-preview-item');
+                    attachmentDiv.dataset.index = index;
+
+                    let previewContent = '';
+                    if (attachment.mimeType.startsWith('image/')) {
+                        previewContent = `<img src="data:${attachment.mimeType};base64,${attachment.data}" alt="${attachment.name}" class="w-8 h-8 object-cover rounded-md">`;
+                    } else {
+                        previewContent = `<span data-lucide="${getFileIcon(attachment.mimeType)}" class="w-5 h-5 flex-shrink-0"></span>`;
+                    }
+
+                    attachmentDiv.innerHTML = `
+                        ${previewContent}
+                        <span class="truncate max-w-[100px]">${attachment.name}</span>
+                        <button class="remove-attachment-btn">
+                            <span data-lucide="x" class="w-4 h-4"></span>
+                        </button>
+                    `;
+                    chatAttachmentsPreviewContainer.appendChild(attachmentDiv);
+                });
+                createIcons(); // Re-render icons for new attachments
+            } else {
+                chatAttachmentsPreviewContainer.classList.add('hidden');
+            }
+        }
+
+        // Event listener for removing individual chat attachments (using event delegation)
+        chatAttachmentsPreviewContainer.addEventListener('click', (event) => {
+            const removeBtn = event.target.closest('.remove-attachment-btn');
+            if (removeBtn) {
+                const attachmentDiv = removeBtn.closest('[data-index]');
+                if (attachmentDiv) {
+                    const index = parseInt(attachmentDiv.dataset.index);
+                    chatAttachments.splice(index, 1); // Remove from array
+                    displayChatAttachments(); // Re-render preview
+                    chatInput.focus();
+                }
+            }
+        });
+        
+        // Event listener for sending chat messages
+        sendChatBtn.addEventListener('click', async () => {
+            const userMessage = chatInput.value.trim();
+            if (!userMessage && chatAttachments.length === 0) {
+                return;
+            }
+            
+            // Stop speech recognition if active before sending
+            if (isVoiceInputActive && recognition) {
+                recognition.stop();
+            }
+
+            // Hide dropdown if open
+            chatActionsDropdown.classList.add('hidden');
+            chatErrorMessageDiv.classList.add('hidden'); // Hide any previous errors
+            chatErrorMessageDiv.classList.remove('flex'); // Ensure it's not flex when starting a new operation
+
+            // Build the parts for the user message
+            const userParts = [];
+            if (userMessage) {
+                userParts.push({ text: userMessage });
+            }
+            for (const attachment of chatAttachments) {
+                userParts.push({
+                    inlineData: {
+                        mimeType: attachment.mimeType,
+                        data: attachment.data
+                    }
+                });
+            }
+
+            // Append user message and attachments to chat history and UI
+            chatHistory.push({ role: 'user', parts: userParts });
+            appendChatMessage('user', userMessage, chatAttachments);
+            
+            // Clear input and attachment after sending
+            chatInput.value = '';
+            chatAttachments = [];
+            chatImageUpload.value = ''; // Clear file input
+            displayChatAttachments(); // Clear attachment previews
+            
+            sendChatBtn.disabled = true;
+            
+            // Show loading indicator
+            const loadingMessage = document.createElement('div');
+            loadingMessage.id = 'chat-loading';
+            loadingMessage.classList.add('p-4', 'text-center', 'text-gray-500', 'text-sm');
+            loadingMessage.innerHTML = `
+                <div class="loader-container h-8">
+                    <div class="loader-dot"></div>
+                    <div class="loader-dot"></div>
+                    <div class="loader-dot"></div>
+                </div>
+                <span class="mt-2 block">AI is typing...</span>
+            `;
+            chatHistoryDiv.appendChild(loadingMessage);
+            chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
+            
+            try {
+                // Call API with full chat history
+                const payload = {
+                    contents: chatHistory,
+                };
+                
+                const responseText = await callGeminiAPI(payload);
+                
+                // Append AI response to chat history and UI
+                chatHistory.push({ role: 'model', parts: [{ text: responseText }] });
+                appendChatMessage('ai', responseText);
+                
+            } catch (error) {
+                console.error('Chat API call failed:', error);
+                showChatError(`An error occurred in the chat: ${error.message}`);
+            } finally {
+                sendChatBtn.disabled = false;
+                const loadingDiv = document.getElementById('chat-loading');
+                if (loadingDiv) {
+                    loadingDiv.remove();
+                }
+                chatInput.focus();
+            }
+        });
+        
+        // Add event listener for the 'Enter' key on the chat input
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendChatBtn.click();
+            }
+        });
+
+        // Event listener for voice input button (now inside dropdown)
+        voiceInputBtn.addEventListener('click', () => {
+            if (recognition) {
+                if (isVoiceInputActive) {
+                    recognition.stop(); // Manually stop recognition
+                } else {
+                    finalTranscript = ''; // Reset transcript when starting a new session
+                    recognition.start();
+                }
+            } else {
+                showChatError('Speech recognition is not supported in this browser.');
+            }
+        });
+
+        // Event listener for the new "Add" button to toggle dropdown
+        addChatAttachmentBtn.addEventListener('click', (event) => {
+            event.stopPropagation(); // Prevent document click from immediately closing it
+            chatActionsDropdown.classList.toggle('hidden');
+            createIcons(); // Ensure icons within dropdown are rendered
+        });
+
+        // --- NEW: Unified File Handling Logic (Drag & Drop, Paste, Manual Upload) ---
+        async function handleDroppedOrPastedFiles(files) {
+            chatErrorMessageDiv.classList.add('hidden'); // Hide any previous errors
+            chatErrorMessageDiv.classList.remove('flex');
+
+            if (files.length > 0) {
+                for (const file of files) {
+                    const allowedTypes = [
+                        'image/', 'text/', 'application/pdf',
+                        'application/json', 'text/csv', 'application/xml', 'text/markdown'
+                    ];
+                    const isAllowed = allowedTypes.some(type => file.type.startsWith(type)) || file.name.endsWith('.md');
+
+                    if (isAllowed) {
+                        try {
+                            const { mimeType, data } = await fileToBase64(file);
+                            chatAttachments.push({ file, mimeType, data, name: file.name });
+                        } catch (error) {
+                            showChatError(`Failed to read file ${file.name}.`);
+                            console.error('File read error:', error);
+                        }
+                    } else {
+                        showChatError(`File type not supported: ${file.name} (${file.type}).`);
+                    }
+                }
+                displayChatAttachments();
+                chatInput.focus();
+            }
+        }
+
+        // --- NEW: Drag and Drop for Chat Input Box ---
+        chatInput.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation(); // Prevent mainChatContainer's dragover from also triggering
+            e.currentTarget.classList.add('chat-input-drag-over');
+        });
+
+        chatInput.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            e.currentTarget.classList.remove('chat-input-drag-over');
+        });
+
+        chatInput.addEventListener('drop', async (e) => {
+            e.preventDefault();
+            e.stopPropagation(); // Prevent mainChatContainer's drop from also triggering
+            e.currentTarget.classList.remove('chat-input-drag-over');
+            await handleDroppedOrPastedFiles(Array.from(e.dataTransfer.files));
+        });
+
+        // --- NEW: Paste Files into Chat Input Box ---
+        chatInput.addEventListener('paste', async (e) => {
+            const files = Array.from(e.clipboardData.files);
+            if (files.length > 0) {
+                e.preventDefault(); // Prevent default text paste behavior if files are detected
+                e.stopPropagation();
+                await handleDroppedOrPastedFiles(files);
+            }
+            // If no files are present, allow default text paste to occur
+        });
+
+        // --- Existing Drag and Drop for Main Chat Container (General Fallback) ---
+        mainChatContainer.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            mainChatContainer.classList.add('drag-over-active');
+        });
+
+        mainChatContainer.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            mainChatContainer.classList.remove('drag-over-active');
+        });
+
+        mainChatContainer.addEventListener('drop', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            mainChatContainer.classList.remove('drag-over-active');
+            // This will only trigger if the drop happened *outside* the chat input due to stopPropagation on chatInput
+            await handleDroppedOrPastedFiles(Array.from(e.dataTransfer.files));
+        });
+
+
+        // Event delegation for copy code buttons within chat history
+        chatHistoryDiv.addEventListener('click', (event) => {
+            // Handle code block copy button
+            const codeCopyButton = event.target.closest('.code-block-copy-button');
+            if (codeCopyButton) {
+                const targetId = codeCopyButton.dataset.copyTarget;
+                const codeElement = document.getElementById(targetId);
+                if (codeElement) {
+                    const codeToCopy = codeElement.textContent;
+                    // For code block copy button, its own icon changes
+                    updateButtonIcon(codeCopyButton, 'check', 'w-4 h-4'); // Explicitly pass classList for code buttons
+                    copyToClipboard(codeToCopy); 
+                    setTimeout(() => { // Reset icon after 2 seconds
+                        updateButtonIcon(codeCopyButton, 'clipboard', 'w-4 h-4'); // Explicitly pass classList
+                    }, 2000);
+                    return; // Prevent further bubbling for this button
+                }
+            }
+
+            // Handle chat message copy button
+            const chatCopyButton = event.target.closest('.copy-message-btn');
+            if (chatCopyButton) {
+                const messageId = chatCopyButton.dataset.messageId;
+                const messageContent = messageTextCache.get(messageId);
+                if (messageContent) {
+                    // For chat message copy button, its own icon changes
+                    updateButtonIcon(chatCopyButton, 'check');
+                    copyToClipboard(messageContent); 
+                    setTimeout(() => { // Reset icon after 2 seconds
+                        updateButtonIcon(chatCopyButton, 'clipboard');
+                    }, 2000);
+                } else {
+                    showChatError('Message content not found for copying.');
+                }
+                return; // Prevent further bubbling
+            }
+
+            // Handle dictate message button
+            const dictateButton = event.target.closest('.dictate-message-btn');
+            if (dictateButton) {
+                const messageId = dictateButton.dataset.messageId;
+                const messageContent = messageTextCache.get(messageId);
+                if (messageContent) {
+                    toggleSpeech(messageContent, dictateButton);
+                } else {
+                    showChatError('Message content not found for dictation.');
+                }
+                return; // Prevent further bubbling
+            }
+        });
+
+        // Helper function to copy text to clipboard
+        function copyToClipboard(text) { 
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text)
+                    .then(() => {
+                        showCopyMessage();
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy: ', err);
+                        showChatError('Failed to copy text. Please copy manually.');
+                    });
+            } else {
+                // Fallback for older browsers
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = text;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                try {
+                    document.execCommand('copy');
+                    showCopyMessage();
+                } catch (err) {
+                    console.error('Failed to copy (fallback):', err);
+                    showChatError('Failed to copy text. Please copy manually.');
+                }
+                document.body.removeChild(tempTextArea);
+            }
+        }
+
+        // Helper function for text-to-speech
+        function toggleSpeech(text, buttonElement) {
+            if (!window.speechSynthesis) {
+                showChatError('Speech synthesis not supported in this browser.');
+                return;
+            }
+
+            // Check if this specific message is currently being spoken
+            if (isSpeaking && currentUtterance && currentUtterance.text === text) {
+                // If the same message is currently being spoken, toggle pause/resume
+                if (window.speechSynthesis.paused) {
+                    window.speechSynthesis.resume();
+                    updateButtonIcon(buttonElement, 'pause');
+                } else {
+                    window.speechSynthesis.pause();
+                    updateButtonIcon(buttonElement, 'volume-2');
+                }
+            } else {
+                // If a different message is speaking, or nothing is speaking, start new speech
+                startSpeech(text, buttonElement);
+            }
+        }
+
+        function startSpeech(text, buttonElement) {
+            // Cancel any existing speech first
+            if (window.speechSynthesis.speaking || window.speechSynthesis.paused) {
+                window.speechSynthesis.cancel();
+            }
+
+            // Reset all other dictate buttons to play state
+            document.querySelectorAll('.dictate-message-btn').forEach(btn => {
+                if (btn !== buttonElement) { // Don't reset the button that initiated the current speech
+                    updateButtonIcon(btn, 'volume-2'); 
+                }
+            });
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US'; // Set language
+
+            utterance.onstart = () => {
+                isSpeaking = true;
+                currentUtterance = utterance;
+                updateButtonIcon(buttonElement, 'pause');
+            };
+            utterance.onend = () => {
+                isSpeaking = false;
+                currentUtterance = null;
+                updateButtonIcon(buttonElement, 'volume-2');
+            };
+            utterance.onerror = (event) => {
+                console.error('Speech synthesis error:', event.error);
+                showChatError('Failed to dictate message. Check console for details.');
+                isSpeaking = false;
+                currentUtterance = null;
+                updateButtonIcon(buttonElement, 'volume-2');
+            };
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Function to show a temporary message for clipboard copy
+        function showCopyMessage() {
+            copyMessage.classList.add('show');
+            setTimeout(() => {
+                copyMessage.classList.remove('show');
+            }, 3000);
+        }
+
+        // Generic API call function with exponential backoff
+        async function callGeminiAPI(payload) {
+            if (GEMINI_API_KEY === "" || !GEMINI_API_KEY || GEMINI_API_KEY === "AIzaSyCzx6ReMk8ohPJcCjGwHHzu7SvFccJqAbA") { 
+                throw new Error("API Key is not set or is the default placeholder. Please replace 'AIzaSyCzx6ReMk8ohPJcCjGwHHzu7SvFccJqAbA' in the script with your actual Gemini API key.");
+            }
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${GEMINI_API_KEY}`;
+
+            let response;
+            let result;
+            let success = false;
+            let retryCount = 0;
+            const maxRetries = 3;
+            let delay = 1000; // 1 second initial delay
+
+            while (retryCount < maxRetries && !success) {
+                try {
+                    response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.status === 429) { // Too many requests
+                        if (retryCount < maxRetries - 1) {
+                            console.warn(`API rate limit exceeded. Retrying in ${delay / 1000}s...`);
+                            await new Promise(res => setTimeout(res, delay));
+                            delay *= 2; // Exponential backoff
+                            retryCount++;
+                        } else {
+                            throw new Error('API rate limit exceeded. Please try again later.');
+                        }
+                    } else if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(`API error: ${response.status} ${response.statusText} - ${errorData.error?.message || 'Unknown error'}`);
+                    } else {
+                        result = await response.json();
+                        success = true;
+                    }
+                } catch (err) {
+                    if (retryCount < maxRetries - 1) {
+                        console.warn(`Fetch error: ${err.message}. Retrying in ${delay / 1000}s...`);
+                        await new Promise(res => setTimeout(res, delay));
+                        delay *= 2;
+                        retryCount++;
+                    } else {
+                        throw err; // Re-throw the last error after max retries
+                    }
+                }
+            }
+            
+            if (result && result.candidates && result.candidates.length > 0 &&
+                result.candidates[0].content && result.candidates[0].content.parts &&
+                result.candidates[0].content.parts.length > 0) {
+                // Return the text content from the response
+                return result.candidates[0].content.parts[0].text;
+            } else {
+                throw new Error('Failed to get a valid response from the AI. No candidates found or content is empty.');
+            }
+        }
+
+        // --- NEW CHAT FUNCTIONALITY ---
+        function startNewChat(playGreetingSound = true) {
+            chatHistory = []; // Clear conversation history
+            chatAttachments = []; // Clear attachments
+            chatHistoryDiv.innerHTML = ''; // Clear UI messages
+            chatInput.value = ''; // Clear input field
+            chatAttachmentsPreviewContainer.innerHTML = ''; // Clear attachment previews
+            chatAttachmentsPreviewContainer.classList.add('hidden'); // Hide attachment container
+            chatImageUpload.value = ''; // Clear file input
+            messageTextCache.clear(); // Clear cached message content
+            chatErrorMessageDiv.classList.add('hidden'); // Hide any errors
+            chatErrorMessageDiv.classList.remove('flex');
+
+            // Add the initial AI greeting message
+            const greetingMessage = 'Hello! How can I help you today?';
+            chatHistory.push({ role: 'model', parts: [{ text: greetingMessage }] });
+            appendChatMessage('ai', greetingMessage);
+            chatInput.focus();
+
+            // Optionally dictate the greeting message
+            if (playGreetingSound && window.speechSynthesis) {
+                const utterance = new SpeechSynthesisUtterance(greetingMessage);
+                utterance.lang = 'en-US';
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Event listener for the "New Chat" button
+        newChatBtn.addEventListener('click', () => startNewChat());
+    </script>
+</body>
+</html>
+
+---------------------------------------------------------------------
+
+i want to :
+
+take it back to how it was in code 1 and keep everyhting as it were on code 1 but i want the new features of code 2 in it as well(the new chat and themes features).
