@@ -568,6 +568,17 @@
             border: 2px dashed var(--accent-primary-dark);
             box-shadow: 0 0 20px var(--accent-primary-dark), 0 0 30px var(--accent-primary-dark) inset;
         }
+        
+        /* New CSS for chat input drag-over */
+        .chat-input-drag-over {
+            border-color: var(--accent-primary) !important;
+            box-shadow: 0 0 0 2px var(--accent-primary); /* Subtle glow effect */
+        }
+        body.dark .chat-input-drag-over {
+            border-color: var(--accent-primary-dark) !important;
+            box-shadow: 0 0 0 2px var(--accent-primary-dark);
+        }
+
 
         /* PDF Export template styles (hidden from direct view) - Retained for dependency consistency, but not actively used for chat export */
         #pdf-export-content {
@@ -1011,17 +1022,8 @@
         chatImageUpload.addEventListener('change', async (event) => {
             const files = Array.from(event.target.files);
             if (files.length > 0) {
-                for (const file of files) {
-                    try {
-                        const { mimeType, data } = await fileToBase64(file);
-                        chatAttachments.push({ file, mimeType, data, name: file.name });
-                    } catch (error) {
-                        showChatError(`Failed to read chat file ${file.name}.`);
-                        console.error('Chat file read error:', error);
-                    }
-                }
-                displayChatAttachments();
-                chatInput.focus();
+                // Reuse the new unified file handler
+                await handleDroppedOrPastedFiles(files); 
             }
             chatActionsDropdown.classList.add('hidden'); // Hide dropdown after selection
         });
@@ -1190,7 +1192,68 @@
             }
         });
 
-        // Drag and Drop for Chat Window
+        // --- NEW: Unified File Handling Logic (Drag & Drop, Paste, Manual Upload) ---
+        async function handleDroppedOrPastedFiles(files) {
+            chatErrorMessageDiv.classList.add('hidden'); // Hide any previous errors
+            chatErrorMessageDiv.classList.remove('flex');
+
+            if (files.length > 0) {
+                for (const file of files) {
+                    const allowedTypes = [
+                        'image/', 'text/', 'application/pdf',
+                        'application/json', 'text/csv', 'application/xml', 'text/markdown'
+                    ];
+                    const isAllowed = allowedTypes.some(type => file.type.startsWith(type)) || file.name.endsWith('.md');
+
+                    if (isAllowed) {
+                        try {
+                            const { mimeType, data } = await fileToBase64(file);
+                            chatAttachments.push({ file, mimeType, data, name: file.name });
+                        } catch (error) {
+                            showChatError(`Failed to read file ${file.name}.`);
+                            console.error('File read error:', error);
+                        }
+                    } else {
+                        showChatError(`File type not supported: ${file.name} (${file.type}).`);
+                    }
+                }
+                displayChatAttachments();
+                chatInput.focus();
+            }
+        }
+
+        // --- NEW: Drag and Drop for Chat Input Box ---
+        chatInput.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation(); // Prevent mainChatContainer's dragover from also triggering
+            e.currentTarget.classList.add('chat-input-drag-over');
+        });
+
+        chatInput.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            e.currentTarget.classList.remove('chat-input-drag-over');
+        });
+
+        chatInput.addEventListener('drop', async (e) => {
+            e.preventDefault();
+            e.stopPropagation(); // Prevent mainChatContainer's drop from also triggering
+            e.currentTarget.classList.remove('chat-input-drag-over');
+            await handleDroppedOrPastedFiles(Array.from(e.dataTransfer.files));
+        });
+
+        // --- NEW: Paste Files into Chat Input Box ---
+        chatInput.addEventListener('paste', async (e) => {
+            const files = Array.from(e.clipboardData.files);
+            if (files.length > 0) {
+                e.preventDefault(); // Prevent default text paste behavior if files are detected
+                e.stopPropagation();
+                await handleDroppedOrPastedFiles(files);
+            }
+            // If no files are present, allow default text paste to occur
+        });
+
+        // --- Existing Drag and Drop for Main Chat Container (General Fallback) ---
         mainChatContainer.addEventListener('dragover', (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -1207,36 +1270,10 @@
             e.preventDefault();
             e.stopPropagation();
             mainChatContainer.classList.remove('drag-over-active');
-            chatErrorMessageDiv.classList.add('hidden'); // Hide any previous errors
-            chatErrorMessageDiv.classList.remove('flex'); // Ensure it's not flex when starting a new operation
-
-
-            const files = Array.from(e.dataTransfer.files);
-            if (files.length > 0) {
-                for (const file of files) {
-                    // Basic file type validation for chat (allow images, text, pdf, csv, json, xml, md)
-                    const allowedTypes = [
-                        'image/', 'text/', 'application/pdf',
-                        'application/json', 'text/csv', 'application/xml', 'text/markdown'
-                    ];
-                    const isAllowed = allowedTypes.some(type => file.type.startsWith(type)) || file.name.endsWith('.md');
-
-                    if (isAllowed) {
-                        try {
-                            const { mimeType, data } = await fileToBase64(file);
-                            chatAttachments.push({ file, mimeType, data, name: file.name });
-                        } catch (error) {
-                            showChatError(`Failed to read chat file ${file.name}.`);
-                            console.error('Chat file read error:', error);
-                        }
-                    } else {
-                        showChatError(`File type not supported for chat: ${file.name} (${file.type}).`);
-                    }
-                }
-                displayChatAttachments();
-                chatInput.focus();
-            }
+            // This will only trigger if the drop happened *outside* the chat input due to stopPropagation on chatInput
+            await handleDroppedOrPastedFiles(Array.from(e.dataTransfer.files));
         });
+
 
         // Event delegation for copy code buttons within chat history
         chatHistoryDiv.addEventListener('click', (event) => {
