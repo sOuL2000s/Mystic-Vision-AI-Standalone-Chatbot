@@ -303,6 +303,59 @@
             height: 1em;
         }
 
+        /* Version Switcher */
+        .version-switcher-container {
+            margin-top: 15px; /* Space below tagline */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2; /* Below absolute elements, above header glow */
+        }
+        .version-select {
+            background-color: var(--tertiary-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-family: var(--font-family-primary);
+            cursor: pointer;
+            outline: none;
+            appearance: none; /* Remove default dropdown arrow */
+            /* Custom arrow using Lucide icon SVG */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23${encodeURIComponent('E6E6FA')}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='lucide lucide-chevron-down'%3E%3Cpath d='m6 9 6 6 6-6'%3E%3C/path%3E%3C/svg%3E"); /* Default dark mode color */
+            background-repeat: no-repeat;
+            background-position: right 12px center; /* Adjust position */
+            background-size: 16px; /* Adjust size */
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.6s ease, background-image 0.6s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
+        }
+
+        /* Adjust custom arrow color for light mode */
+        body.light .version-select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23${encodeURIComponent('1A0033')}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='lucide lucide-chevron-down'%3E%3Cpath d='m6 9 6 6 6-6'%3E%3C/path%3E%3C/svg%3E"); /* Light mode color */
+        }
+        
+        .version-select:hover {
+            background-color: var(--secondary-bg);
+            border-color: var(--accent-color);
+        }
+        .version-select option {
+            background-color: var(--secondary-bg); /* Option background */
+            color: var(--text-color);
+        }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
         /* Chat History */
         .chat-history {
             flex-grow: 1;
@@ -840,6 +893,16 @@
                 width: 0.7em;
                 height: 0.7em;
             }
+            
+            .version-switcher-container {
+                margin-top: 10px; /* Adjust margin for mobile */
+            }
+            .version-select {
+                padding: 6px 10px;
+                font-size: 0.75em;
+                background-position: right 8px center; /* Adjust position */
+                background-size: 14px; /* Adjust size */
+            }
 
             .chat-history {
                 padding: 10px;
@@ -945,6 +1008,16 @@
                     Mystic Vision AI
                 </h1>
                 <p class="tagline">Experience the beyond</p>
+                <!-- Version Switcher Added Here -->
+                <div class="version-switcher-container">
+                    <label for="version-select" class="sr-only">Select Version</label>
+                    <select id="version-select" class="version-select">
+                        <option value="https://mystic-vision-ai-standalone-chatbot.netlify.app/">Main Version</option>
+                        <option value="https://mystic-vision-ai-lite.netlify.app/">Lite Version</option>
+                        <option value="https://mystic-vision-ai-basic.netlify.app/">Basic Version</option>
+                        <option value="https://mystic-vision-ai-mini.netlify.app/">Mini Version</option>
+                    </select>
+                </div>
             </div>
         </header>
         <div class="chat-history" id="chatHistory">
@@ -2826,6 +2899,8 @@
         let voiceInputBtn;
         let suggestionsContainer;
         let suggestionsList;
+        // New: Version Select element
+        let versionSelect; 
 
         // --- Lucide Icon Helper ---
         const createIcons = () => {
@@ -2873,11 +2948,11 @@
 
         // --- Markdown.js Custom Renderer for Code Blocks ---
         const renderer = {
-            code(token) { 
-                const actualCodeContent = token.text; 
-                const lang = token.lang;             
+            code(code, lang) { 
+                const actualCodeContent = code; 
+                const language = lang;             
 
-                const languageDisplay = lang ? `<span class="text-xs font-semibold uppercase text-gray-400">${lang}</span>` : '';
+                const languageDisplay = language ? `<span class="text-xs font-semibold uppercase text-gray-400">${language}</span>` : '';
                 const uniqueId = `code-block-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
                 
                 const escapedCode = actualCodeContent.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
@@ -3291,6 +3366,8 @@
             voiceInputBtn = document.getElementById('voice-input-btn');
             suggestionsContainer = document.getElementById('suggestions-container');
             suggestionsList = document.getElementById('suggestions-list');
+            // New: Assign versionSelect element
+            versionSelect = document.getElementById('version-select'); 
 
             createIcons();
             userInput.style.height = userInput.scrollHeight + 'px';
@@ -3310,6 +3387,23 @@
                     console.log('ServiceWorker registration failed: ', registrationError);
                 });
             }
+
+            // --- Version Switcher Logic ---
+            const currentUrl = window.location.href.split('?')[0].split('#')[0].replace(/\/$/, ''); // Clean current URL
+            Array.from(versionSelect.options).forEach(option => {
+                const optionUrl = option.value.split('?')[0].split('#')[0].replace(/\/$/, '');
+                if (optionUrl === currentUrl) {
+                    option.selected = true;
+                }
+            });
+
+            versionSelect.addEventListener('change', (event) => {
+                const selectedUrl = event.target.value;
+                if (selectedUrl && selectedUrl !== currentUrl) {
+                    window.location.href = selectedUrl;
+                }
+            });
+
 
             // Start a new chat on load to display initial message
             startNewChat();

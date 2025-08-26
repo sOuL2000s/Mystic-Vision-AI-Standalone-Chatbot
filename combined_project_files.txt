@@ -12,16 +12,12 @@
     <!-- Lucide Icons for a modern, futuristic feel -->
     <script src="https://cdn.jsdelivr.net/npm/lucide-dynamic@latest/dist/lucide.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Prism.js for code syntax highlighting -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
-    <!-- jsPDF CDN for PDF export -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json">
     <style>
         /* General Styles - Mystic Vision Theme */
         :root {
-            /* Default Dark Mode Palette: Cosmic Purple */
+            /* Dark Mode Palette (Default) */
             --primary-bg: #0A0A28; /* Even deeper dark blue-purple, almost black */
             --secondary-bg: #15153A; /* Darker purple-blue - container background */
             --tertiary-bg: #22224F; /* Medium dark purple-blue - header/input area/button base */
@@ -60,16 +56,10 @@
             --autocomplete-hover-bg: var(--tertiary-bg);
             --autocomplete-selected-bg: var(--accent-color);
             --autocomplete-selected-text: white;
-
-            /* Cosmic Animation Colors */
-            --cosmic-glow-color-1: #C070FF; /* Vibrant mystical purple */
-            --cosmic-glow-color-2: #7B2FEE; /* Deeper mystical purple */
-            --cosmic-star-color: #E6E6FA; /* Light lavender for stars */
-            --user-avatar-bg: #4A4A80; /* Background for generic user avatar */
         }
 
-        /* Starlight Lavender Theme */
-        body.starlight-lavender { 
+        /* Light Mode Palette (Overrides default variables when body has 'light' class) */
+        body.light {
             --primary-bg: #F0F4FF; /* Very pale blue-lavender */
             --secondary-bg: #FFFFFF; /* Pure white for container/card background */
             --tertiary-bg: #E0E8FF; /* Pale light blue-purple for header/input area/button base */
@@ -100,212 +90,7 @@
             --autocomplete-hover-bg: var(--tertiary-bg);
             --autocomplete-selected-bg: var(--accent-color);
             --autocomplete-selected-text: white;
-
-            /* Cosmic Animation Colors Light Mode */
-            --cosmic-glow-color-1: #8C2BFF; 
-            --cosmic-glow-color-2: #6A1DCC;
-            --cosmic-star-color: #333;
-            --user-avatar-bg: #C0C8D8; /* Lighter background for generic user avatar */
         }
-
-        /* NEW: Emerald Galaxy Theme */
-        body.emerald-galaxy {
-            --primary-bg: #031A20; /* Very dark teal/green-blue */
-            --secondary-bg: #0B2B33; /* Darker teal-blue */
-            --tertiary-bg: #15454F; /* Medium dark teal */
-            --text-color: #E0FFFF; /* Pale aqua/cyan */
-            --accent-color: #00FFC0; /* Vibrant emerald green */
-            --border-color: #2D6C77; /* Slightly darker teal border */
-            --user-bubble: #255C65; /* Darker green-blue bubble */
-            --ai-bubble: #0F3A40; /* Even darker green-blue bubble */
-            --input-bg: #052028;
-            --button-hover-bg: #00D0A0; /* Slightly darker emerald */
-            --shadow-color: rgba(0, 0, 0, 0.6);
-            --code-bg: #0A252E;
-            --code-text: #E0FFFF;
-            --code-border: #2D6C77;
-            --code-header-bg: #15454F;
-            --code-header-border: #255C65;
-            --inline-code-bg: rgba(0, 255, 192, 0.2);
-            --inline-code-color: var(--accent-color);
-            --message-action-bg: rgba(3, 26, 32, 0.7);
-            --message-action-user-bg: rgba(37, 92, 101, 0.7);
-            --message-action-icon: #BFDFFF;
-            --message-action-icon-hover: var(--text-color);
-            --user-avatar-bg: #1B3F47;
-            --cosmic-glow-color-1: #00FFC0;
-            --cosmic-glow-color-2: #00A080; 
-            --cosmic-star-color: #E0FFFF;
-        }
-
-        /* NEW: Crimson Nebula Theme */
-        body.crimson-nebula {
-            --primary-bg: #1A0515; /* Very dark deep red-purple */
-            --secondary-bg: #2B0A20; /* Darker red-purple */
-            --tertiary-bg: #4F153A; /* Medium dark red-purple */
-            --text-color: #FFEFF5; /* Pale pink/red-white */
-            --accent-color: #FF4080; /* Vibrant deep rose/magenta */
-            --border-color: #772D57; /* Slightly darker border */
-            --user-bubble: #5C254F; /* Darker red-purple bubble */
-            --ai-bubble: #3A0F2B; /* Even darker red-purple bubble */
-            --input-bg: #20051A;
-            --button-hover-bg: #FF60A0; /* Slightly brighter accent */
-            --shadow-color: rgba(0, 0, 0, 0.6);
-            --code-bg: #250A1F;
-            --code-text: #FFEFF5;
-            --code-border: #772D57;
-            --code-header-bg: #4F153A;
-            --code-header-border: #5C254F;
-            --inline-code-bg: rgba(255, 64, 128, 0.2);
-            --inline-code-color: var(--accent-color);
-            --message-action-bg: rgba(26, 5, 21, 0.7);
-            --message-action-user-bg: rgba(92, 37, 79, 0.7);
-            --message-action-icon: #FFE0F0;
-            --message-action-icon-hover: var(--text-color);
-            --user-avatar-bg: #3F1B35;
-            --cosmic-glow-color-1: #FF4080;
-            --cosmic-glow-color-2: #FF0060;
-            --cosmic-star-color: #FFEFF5;
-        }
-
-        /* IMPROVED: Golden Aurora Theme */
-        body.golden-aurora {
-            --primary-bg: #060B12; /* Even deeper, almost black-blue, base of the night sky */
-            --secondary-bg: #0F161E; /* Darker blue-grey for main container */
-            --tertiary-bg: #1A2533; /* Medium dark blue for header/input/sidebar section backgrounds */
-            --text-color: #F8F8F8; /* Crisp off-white for main text for better readability */
-            --accent-color: #FFD700; /* Pure, strong gold - keep this as the primary gold focus */
-            --border-color: #2F3E50; /* Subtler, deeper blue border */
-            --user-bubble: #28374A; /* A rich, slightly muted dark blue for user messages */
-            --ai-bubble: #121C27; /* A very dark, muted blue for AI messages, distinct but harmonious */
-            --input-bg: #080D14; /* Very dark for input field, blends with primary */
-            --button-hover-bg: #FFC000; /* Slightly brighter golden-orange for hover */
-            --shadow-color: rgba(0, 0, 0, 0.7); /* Deeper shadows for better separation */
-            --code-bg: #0F161E; /* Same as secondary background for code blocks, consistency */
-            --code-text: #E0FFFF; /* Pale aqua for code text for good readability on dark background */
-            --code-border: #2F3E50; /* Same as main border */
-            --code-header-bg: #1A2533; /* Same as tertiary */
-            --code-header-border: #28374A; /* Same as user bubble */
-            --inline-code-bg: rgba(255, 215, 0, 0.25); /* Slightly more opaque golden glow */
-            --inline-code-color: #FFECB3; /* Lighter gold for inline code, stands out more */
-            --message-action-bg: rgba(6, 11, 18, 0.7); /* More transparent dark for actions */
-            --message-action-user-bg: rgba(40, 55, 74, 0.7); /* More transparent user action background */
-            --message-action-icon: #BECDE0; /* Slightly bluer, lighter icon color */
-            --message-action-icon-hover: var(--text-color);
-            --user-avatar-bg: #2B3D55; /* Slightly desaturated dark blue for generic user avatar */
-            /* Cosmic Animation Colors - Focus on golden and complementary warm tones */
-            --cosmic-glow-color-1: #FFD700; /* Primary strong gold */
-            --cosmic-glow-color-2: #FFA500; /* Complementary vibrant orange for aurora effect */
-            --cosmic-star-color: #F8F8F8; /* Bright white for stars */
-        }
-        /* NEW: Cosmic Gold Theme (Royal Edition) */
-        body.cosmic-gold {
-            /* Deeper, more profound blacks */
-            --primary-bg: #000000; /* True black of the cosmos */
-            --secondary-bg: #0A0A10; /* Very deep dark blue-black */
-            --tertiary-bg: #151520; /* Darker charcoal */
-
-            /* Royal Gold & Text on Gold */
-            --text-color: #FFFAF0; /* Soft, warm off-white/cream remains */
-            --accent-color: #CCAA00; /* A rich, royal gold - less yellow, more profound */
-            --text-on-accent: #000000; /* Essential: Black font for elements with gold background */
-
-            /* Borders & Shadows */
-            --border-color: #554422; /* Darker bronze/gold to complement the royal accent */
-            --shadow-color: rgba(0, 0, 0, 0.8); /* Deeper shadows for more contrast */
-
-            /* Bubbles & Input Fields */
-            --user-bubble: #252530; /* Darker charcoal for user messages */
-            --ai-bubble: #101018; /* Very dark blue-grey for AI messages, almost black */
-            --input-bg: #030305; /* Extremely dark for input, a subtle whisper of difference from true black */
-
-            /* Button Interactions */
-            --button-hover-bg: #E0B500; /* A lighter, rich gold for button hover states */
-
-            /* Code Blocks */
-            --code-bg: #08080B; /* Darker code background */
-            --code-text: var(--text-color);
-            --code-border: var(--border-color);
-            --code-header-bg: var(--tertiary-bg);
-            --code-header-border: var(--user-bubble);
-
-            /* Inline Code - Now with black text on royal gold */
-            --inline-code-bg: var(--accent-color); /* Solid royal gold background */
-            --inline-code-color: var(--text-on-accent); /* Black text on the gold */
-
-            /* Message Actions */
-            --message-action-bg: rgba(0, 0, 0, 0.7); /* Adjusted to new primary background */
-            --message-action-user-bg: rgba(25, 25, 30, 0.7); /* Adjusted to new user bubble background */
-            --message-action-icon: #C0C0C0;
-            --message-action-icon-hover: var(--text-color);
-
-            /* Avatars & Cosmic Glows */
-            --user-avatar-bg: #222222; /* Darker grey for generic user avatar */
-            --cosmic-glow-color-1: #CCAA00; /* Uses the new royal gold for glow */
-            --cosmic-glow-color-2: #D08000; /* Slightly more burnt orange for the secondary glow */
-            --cosmic-star-color: var(--text-color);
-        }
-
-        /* NEW Theme: Neon Glitch */
-        body.neon-glitch {
-            --primary-bg: #02010A; /* Very dark blue-black */
-            --secondary-bg: #0F0A20; /* Dark blue-purple */
-            --tertiary-bg: #1A1030; /* Deeper purple */
-            --text-color: #E0FFFF; /* Electric light blue */
-            --accent-color: #00E0FF; /* Bright cyan/aqua neon */
-            --border-color: #2A1F45; /* Darker purple-blue */
-            --user-bubble: #301A50; /* Deep purple for user */
-            --ai-bubble: #15082A; /* Even darker purple for AI */
-            --input-bg: #0A0515;
-            --button-hover-bg: #00B0CC; /* Slightly darker neon */
-            --shadow-color: rgba(0, 0, 0, 0.7);
-            --code-bg: #080415;
-            --code-text: #B0FFFF;
-            --code-border: #2A1F45;
-            --code-header-bg: #1A1030;
-            --code-header-border: #301A50;
-            --inline-code-bg: rgba(0, 224, 255, 0.25);
-            --inline-code-color: var(--accent-color);
-            --message-action-bg: rgba(2, 1, 10, 0.7);
-            --message-action-user-bg: rgba(48, 26, 80, 0.7);
-            --message-action-icon: #B0FFFF;
-            --message-action-icon-hover: #E0FFFF;
-            --user-avatar-bg: #20103A;
-            --cosmic-glow-color-1: #00E0FF; /* Neon blue glow */
-            --cosmic-glow-color-2: #FF00FF; /* Neon pink glow */
-            --cosmic-star-color: #E0FFFF;
-        }
-
-        /* NEW Theme: Ancient Papyrus */
-        body.ancient-papyrus {
-            --primary-bg: #FDF6E3; /* Light cream/parchment background */
-            --secondary-bg: #FFF8EB; /* Whiter cream for containers */
-            --tertiary-bg: #E8E0C9; /* Slightly darker cream for headers/inputs */
-            --text-color: #4A3A2B; /* Dark brown/sepia text */
-            --accent-color: #A0522D; /* Earthy terracotta/sienna */
-            --border-color: #D3C7B0; /* Muted brown border */
-            --user-bubble: #F0E8D7; /* Light tan user bubble */
-            --ai-bubble: #FCF5E0; /* Very pale cream AI bubble */
-            --input-bg: #FBF4E0;
-            --button-hover-bg: #8B4513; /* Darker earthy brown */
-            --shadow-color: rgba(0, 0, 0, 0.1); /* Very light shadow */
-            --code-bg: #E8E0C9;
-            --code-text: #4A3A2B;
-            --code-border: #D3C7B0;
-            --code-header-bg: #DCCFA7;
-            --code-header-border: #C8B99D;
-            --inline-code-bg: rgba(160, 82, 45, 0.1);
-            --inline-code-color: var(--accent-color);
-            --message-action-bg: rgba(255, 255, 255, 0.7);
-            --message-action-user-bg: rgba(240, 232, 215, 0.7);
-            --message-action-icon: #666;
-            --message-action-icon-hover: var(--text-color);
-            --user-avatar-bg: #B0A080;
-            --cosmic-glow-color-1: #D2B48C; /* Tan/parchment glow */
-            --cosmic-glow-color-2: #B8860B; /* Golden brown glow */
-            --cosmic-star-color: #4A3A2B; /* Dark specks as 'stars' */
-        }
-
 
         /* Base Body Styles - MODIFIED for full screen */
         body {
@@ -322,41 +107,17 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             transition: background 0.6s ease, color 0.6s ease;
-            position: relative; /* Needed for cosmic background pseudo-element */
         }
 
-        /* Cosmic Body Background */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            /* Subtle nebula effect with radial gradients */
-            background: radial-gradient(circle at 15% 50%, var(--cosmic-glow-color-1) 0%, transparent 40%),
-                        radial-gradient(circle at 85% 20%, var(--cosmic-glow-color-2) 0%, transparent 35%),
-                        radial-gradient(circle at 40% 90%, var(--cosmic-glow-color-1) 0%, transparent 30%);
-            background-size: 200% 200%; /* Make gradients larger to animate */
-            animation: cosmicNebula 20s infinite alternate ease-in-out;
-            z-index: -1; /* Behind everything */
-            pointer-events: none; /* Don't block clicks */
-            transition: background 0.6s ease;
-        }
-
-        @keyframes cosmicNebula {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 100% 100%; }
-        }
-
-        /* Chatbot Container (Main Application) - Now a flex container */
+        /* Chatbot Container (Main Application) - MODIFIED for full screen */
         .chatbot-container {
             background-color: var(--secondary-bg);
             border-radius: 0; /* Remove border-radius for full screen */
             box-shadow: none; /* Remove shadow for full screen */
             width: 100%; /* Occupy full parent width */
             height: 100%; /* Occupy full parent height */
-            display: flex; /* Make it a flex container for sidebar + main content */
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
             border: none; /* Remove border for full screen */
             animation: fadeIn 0.8s ease-out;
@@ -369,206 +130,14 @@
             to { opacity: 1; }
         }
 
-        /* NEW: Chat Sidebar */
-        .chat-sidebar {
-            width: 280px; /* Default open width for desktop */
-            flex-shrink: 0; /* Prevents sidebar from shrinking */
-            background-color: var(--tertiary-bg);
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            padding: 20px 15px;
-            transition: width 0.3s ease-in-out, transform 0.3s ease-in-out, background-color 0.6s ease, border-color 0.6s ease;
-            z-index: 20; /* Ensure sidebar is above main content if needed */
-            box-shadow: 2px 0 10px rgba(0,0,0,0.3); /* Subtle shadow */
-            overflow-y: auto; /* Enable scrolling for sidebar content */
-        }
-        .chat-sidebar::-webkit-scrollbar {
-            width: 6px;
-        }
-        .chat-sidebar::-webkit-scrollbar-track {
-            background: var(--primary-bg); 
-            border-radius: 10px;
-        }
-        .chat-sidebar::-webkit-scrollbar-thumb {
-            background-color: var(--accent-color); 
-            border-radius: 10px;
-            border: 1px solid var(--primary-bg); 
-        }
-
-        .chat-sidebar .sidebar-header {
-            display: flex;
-            flex-wrap: wrap; /* Allows items to wrap if space is constrained */
-            align-items: center;
-            justify-content: space-between; /* Pushes items to ends */
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .chat-sidebar .sidebar-header h3 {
-            margin: 0 10px; /* Adjust margin for spacing from buttons */
-            flex-grow: 1; /* Allows title to take available space */
-            text-align: center; /* Center the title visually */
-            color: var(--accent-color);
-            font-family: var(--font-family-secondary);
-            font-size: 1.2em;
-        }
-        /* New Chat Button (now within sidebar) */
-        #newChatBtn {
-            position: static; /* No longer absolutely positioned */
-            margin-right: 0; /* Remove old margin to let justify-content handle spacing */
-            background-color: var(--accent-color);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            font-family: var(--font-family-primary);
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            z-index: 3; 
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        #newChatBtn:hover {
-            background-color: var(--button-hover-bg);
-            transform: translateY(-1px);
-        }
-        #newChatBtn:active {
-            transform: translateY(0);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-        }
-        #newChatBtn .lucide {
-            width: 0.9em;
-            height: 0.9em;
-        }
-
-        /* Toggle Sidebar Button (inside sidebar, 'X' icon for mobile close) */
-        #toggleSidebarBtn {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            cursor: pointer;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: none; /* Hidden by default, shown on mobile when sidebar open */
-            align-items: center;
-            justify-content: center;
-            transition: background-color 0.2s ease;
-        }
-        #toggleSidebarBtn:hover {
-            background-color: rgba(255,255,255,0.1);
-        }
-
-        /* NEW Sidebar Section Styling */
-        .sidebar-section {
-            margin-bottom: 1rem;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            background-color: var(--secondary-bg);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: background-color 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease;
-        }
-        .sidebar-section h4 {
-            margin-top: 0;
-            margin-bottom: 0.75rem;
-            color: var(--accent-color);
-            font-family: var(--font-family-secondary);
-            font-size: 1.1em;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 0.5rem;
-            transition: color 0.6s ease, border-color 0.6s ease;
-        }
-        .sidebar-section input[type="password"], /* Keep this as it styles other inputs */
-        .sidebar-section textarea,
-        .sidebar-section select {
-            background-color: var(--input-bg);
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-            padding: 0.5rem 0.75rem;
-            border-radius: 0.375rem;
-            font-family: var(--font-family-primary);
-            font-size: 0.9em;
-            resize: vertical;
-            transition: border-color 0.3s ease, background-color 0.3s ease, color 0.6s ease;
-        }
-        .sidebar-section input[type="password"]:focus,
-        .sidebar-section textarea:focus,
-        .sidebar-section select:focus {
-            border-color: var(--accent-color);
-            background-color: color-mix(in srgb, var(--primary-bg) 90%, var(--tertiary-bg) 10%);
-            outline: none;
-        }
-        /* Style for regular buttons within sidebar sections */
-        .sidebar-section button {
-            background-color: var(--accent-color); /* Default button color */
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem;
-            font-size: 0.9em;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            display: flex; /* For icons */
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem; /* Space between text and icon */
-        }
-        .sidebar-section button:hover {
-            background-color: var(--button-hover-bg);
-            transform: translateY(-1px);
-        }
-        .sidebar-section button:active {
-            transform: translateY(0);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-        }
-        /* Special style for 'Clear' type buttons (e.g., Clear System Prompt) */
-        .sidebar-section button.text-red-400 {
-            background: none;
-            box-shadow: none;
-            color: var(--accent-error);
-            padding: 0;
-            font-weight: normal;
-            text-align: left;
-            display: inline-block;
-            gap: 0; /* No gap for plain text buttons */
-        }
-        .sidebar-section button.text-red-400:hover {
-            text-decoration: underline;
-            background: none;
-            transform: none;
-        }
-        /* Ensure the existing settings-toggles-container correctly pushes to the bottom */
-        .settings-toggles-container {
-            margin-top: auto; /* Pushes this element to the bottom, taking all available space above it */
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-color); /* Visual separator from content above */
-        }
-
-        /* NEW: Main Chat Content */
-        .chat-main-content {
-            flex-grow: 1; /* Takes remaining space */
-            display: flex;
-            flex-direction: column;
-            overflow: hidden; /* Important for chat history scroll */
-            transition: width 0.3s ease-in-out;
-        }
-
-        /* Header - Adjusted for sleekness */
+        /* Header - Adjusted for full screen */
         .chatbot-header {
             background-color: var(--tertiary-bg);
-            padding: 15px; /* Reduced padding */
-            border-bottom: 1px solid var(--border-color); /* Thinner border */
+            padding: 20px;
+            border-bottom: 2px solid var(--border-color);
             text-align: center;
-            border-top-left-radius: 0; 
-            border-top-right-radius: 0; 
+            border-top-left-radius: 0; /* Adjust for full screen */
+            border-top-right-radius: 0; /* Adjust for full screen */
             position: relative;
             overflow: hidden;
             z-index: 10; 
@@ -585,33 +154,33 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 3px; /* Reduced gap */
+            gap: 5px;
         }
 
         .chatbot-header h1 {
             margin: 0;
-            font-size: 1.8em; /* Smaller font size */
+            font-size: 2em; 
             color: var(--accent-color);
             font-family: var(--font-family-secondary);
             font-weight: 600;
             letter-spacing: 1px;
-            text-shadow: 0 0 10px var(--cosmic-glow-color-1), 0 0 20px var(--cosmic-glow-color-2);
+            text-shadow: 0 0 10px rgba(192, 112, 255, 0.6);
             transition: color 0.6s ease, text-shadow 0.6s ease;
             display: flex;
             align-items: center;
             gap: 10px;
         }
         .chatbot-header .logo {
-            height: 1.8em; /* Smaller logo */
+            height: 2.5em; 
             width: auto;
             object-fit: contain;
-            filter: drop-shadow(0 0 5px var(--cosmic-glow-color-1));
+            filter: drop-shadow(0 0 5px rgba(192, 112, 255, 0.5));
             transition: filter 0.6s ease;
         }
 
         .chatbot-header .tagline {
             font-family: var(--font-family-secondary);
-            font-size: 0.8em; /* Smaller tagline */
+            font-size: 0.9em;
             color: var(--text-color);
             opacity: 0.7;
             margin: 0;
@@ -626,9 +195,9 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle at center, var(--cosmic-glow-color-1) 0%, transparent 70%);
+            background: radial-gradient(circle at center, rgba(192, 112, 255, 0.15) 0%, transparent 70%);
             transform: rotate(45deg);
-            animation: headerGlow 8s infinite alternate ease-in-out, pulseGlow 4s infinite alternate ease-in-out;
+            animation: headerGlow 8s infinite alternate ease-in-out;
             z-index: 1;
             transition: background 0.6s ease;
         }
@@ -638,69 +207,29 @@
             50% { transform: scale(1.1) rotate(180deg); opacity: 0.8; }
             100% { transform: scale(0.8) rotate(360deg); opacity: 0.6; }
         }
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 15px var(--cosmic-glow-color-1); }
-            100% { box-shadow: 0 0 25px var(--cosmic-glow-color-2); }
-        }
 
-        /* NEW: Container for both Dark Mode and Simulate Typing toggles */
-        .settings-toggles-container {
-            display: flex;
-            flex-direction: column; /* Stack them vertically */
-            gap: 8px; /* Space between toggles */
-            /*z-index: 3;*/
-        }
-        .theme-selector-container label, .response-mode-container span { 
-            color: var(--text-color); 
-            transition: color 0.6s ease;
-            font-size: 0.8em; /* Smaller text */
-            vertical-align: middle;
-            line-height: 1; 
-        }
-        .theme-selector-container select {
-            background-color: var(--input-bg);
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 0.8em;
-            transition: background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease;
-            cursor: pointer;
-            -webkit-appearance: none; /* Remove default dropdown arrow for custom styling */
-            -moz-appearance: none;
-            appearance: none;
-            /*background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23${encodeURIComponent(getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1))}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>');*/
-            background-repeat: no-repeat;
-            background-position: right 8px center;
-            padding-right: 28px; /* Make space for the custom arrow */
-        }
-        .theme-selector-container select:hover {
-            background-color: var(--secondary-bg);
-        }
-
-        .dark-mode-container, .response-mode-container { /* Apply common styles here */
+        /* Dark Mode Toggle Switch */
+        .dark-mode-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
             display: flex;
             align-items: center;
-            gap: 6px; /* Reduced gap */
+            gap: 8px;
+            z-index: 3;
             font-family: var(--font-family-primary);
-            font-size: 0.8em; /* Smaller text */
         }
-        .dark-mode-container span, .response-mode-container span {
+        .dark-mode-container span {
             color: var(--text-color); 
             transition: color 0.6s ease;
-            font-size: 0.8em; /* Smaller text */
-            /* NEW: Vertical alignment for text next to the toggle */
-            vertical-align: middle;
-            line-height: 1; /* Helps with precise vertical alignment */
         }
 
-        /* Adjust switch size for both toggles */
         .switch { 
             position: relative;
             display: inline-block;
-            width: 48px; /* Slightly smaller */
-            height: 26px; /* Slightly smaller */
-            border-radius: 13px; /* Adjusted */
+            width: 56px; 
+            height: 30px; 
+            border-radius: 15px;
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
             border: 1px solid rgba(255,255,255,0.1); 
             transition: background-color 0.6s ease, border-color 0.6s ease;
@@ -709,8 +238,6 @@
             opacity: 0;
             width: 0;
             height: 0;
-            /* NEW/REINFORCED: Ensure the native checkbox is hidden */
-            display: none; 
         }
         .slider { 
             position: absolute;
@@ -719,59 +246,62 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #4b5563; /* Grey for unchecked state */
-            border-radius: 13px; /* Adjusted */
+            background-color: #4b5563; 
+            border-radius: 15px; 
             transition: .4s;
         }
         .slider:before {
             position: absolute;
             content: "";
-            height: 20px; /* Smaller */
-            width: 20px; /* Smaller */
-            left: 3px; /* Adjusted */
-            bottom: 3px; /* Adjusted */
+            height: 22px; 
+            width: 22px; 
+            left: 4px;
+            bottom: 4px;
             background-color: white; 
             border-radius: 50%;
             transition: .4s;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
         input:checked + .slider {
-            background-color: var(--accent-color); /* Purple for checked state */
+            background-color: var(--accent-color); 
         }
         input:checked + .slider:before {
-            transform: translateX(22px); /* Adjusted */
+            transform: translateX(26px); 
         }
 
-
-        /* NEW: Mobile Sidebar Toggle (Hamburger icon in main header) */
-        #mobileToggleSidebarBtn {
+        /* New Chat Button */
+        #newChatBtn {
             position: absolute;
-            top: 15px;
-            left: 15px;
-            background-color: var(--tertiary-bg);
-            color: var(--text-color);
-            padding: 10px;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: none; /* Hidden by default, shown on mobile */
-            align-items: center;
-            justify-content: center;
-            border: none;
+            top: 20px;
+            left: 20px;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-family: var(--font-family-primary);
+            font-weight: 600;
             cursor: pointer;
+            border: none;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             transition: background-color 0.3s ease, transform 0.2s ease;
-            z-index: 15; /* Ensure it's above other header elements */
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
-        #mobileToggleSidebarBtn:hover {
-            background-color: var(--secondary-bg);
+        #newChatBtn:hover {
+            background-color: var(--button-hover-bg);
             transform: translateY(-1px);
         }
-        #mobileToggleSidebarBtn:active {
+        #newChatBtn:active {
             transform: translateY(0);
             box-shadow: 0 1px 3px rgba(0,0,0,0.2);
         }
-
+        #newChatBtn .lucide {
+            width: 1em;
+            height: 1em;
+        }
 
         /* Chat History */
         .chat-history {
@@ -805,105 +335,37 @@
         /* Message Bubbles */
         .chat-message {
             max-width: 80%;
-            line-height: 1.5;
-            word-wrap: break-word;
-            animation: cosmicRiseIn 0.5s ease-out; /* NEW: Cosmic Rise In */
-            position: relative; 
-            font-size: 0.95rem; 
-            display: flex; /* Make messages a flex container for avatar */
-            align-items: flex-start; /* Align items to the top */
-        }
-        .chat-message.editing {
-            border: 2px dashed var(--accent-color);
-            opacity: 0.8;
-            box-shadow: 0 0 10px rgba(192, 112, 255, 0.5);
-        }
-
-        /* NEW: Cosmic Rise In Animation */
-        @keyframes cosmicRiseIn {
-            from { opacity: 0; transform: translateY(20px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        /* NEW: Avatar Styling */
-        .chat-avatar {
-            width: 40px; /* Avatar size */
-            height: 40px;
-            border-radius: 50%; /* Circular avatar */
-            object-fit: cover;
-            flex-shrink: 0; /* Prevent avatar from shrinking */
-            margin: 0 10px; /* Space between avatar and bubble */
-            border: 2px solid var(--border-color); /* Subtle border */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-            transition: border-color 0.6s ease, box-shadow 0.6s ease;
-        }
-
-        /* NEW: Generic Lucide Avatar Icon Styling */
-        .lucide-avatar-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: var(--user-avatar-bg); /* Themed background */
-            color: var(--accent-color); /* Accent color for the icon */
-            flex-shrink: 0;
-            margin: 0 10px;
-            border: 2px solid var(--border-color);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-            transition: background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease;
-        }
-        .lucide-avatar-icon .lucide {
-            width: 1.5em; /* Larger icon inside avatar circle */
-            height: 1.5em;
-            stroke-width: 1.5; /* Make the icon a bit bolder */
-        }
-
-        /* NEW: Message Bubble Content Wrapper */
-        .message-bubble-content {
-            padding: 12px 18px; /* This is where the actual bubble padding goes */
+            padding: 12px 18px;
             border-radius: 20px;
             line-height: 1.5;
             word-wrap: break-word;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            flex-grow: 1; /* Allow content to take available space */
-            position: relative; /* For actions inside */
-            padding-bottom: 2.5rem; /* Ensure space for actions */
+            animation: slideIn 0.3s ease-out;
+            position: relative; 
+            padding-bottom: 2.5rem; 
+            font-size: 0.95rem; 
             transition: background-color 0.6s ease, color 0.6s ease, background-image 0.6s ease, box-shadow 0.6s ease;
-            min-width: 0;
-            overflow: auto;
-            /* FIX: Ensure minimum height for action buttons */
-            min-height: 4.5rem; /* Sufficient height for text + action buttons at the bottom */
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .chat-message.user {
-            margin-left: auto; /* Pushes user message to the right */
-            flex-direction: row-reverse; /* Avatar on the right for user */
-        }
-        .chat-message.user .message-bubble-content {
             background-color: var(--user-bubble);
             color: var(--text-color);
+            margin-left: auto; /* Pushes user message to the right */
             border-bottom-right-radius: 5px; 
             background-image: linear-gradient(to bottom right, var(--user-bubble), color-mix(in srgb, var(--user-bubble) 90%, black 10%)); /* Dynamic darker shade */
         }
 
         .chat-message.ai {
-            margin-right: auto; /* Pushes AI message to the left */
-            flex-direction: row; /* Avatar on the left for AI */
-        }
-        .chat-message.ai .message-bubble-content {
             background-color: var(--ai-bubble);
             color: var(--text-color);
+            margin-right: auto; /* Pushes AI message to the left */
             border-bottom-left-radius: 5px; 
             background-image: linear-gradient(to bottom left, var(--ai-bubble), color-mix(in srgb, var(--ai-bubble) 90%, black 10%)); /* Dynamic darker shade */
-        }
-
-        /* Light Mode Adjustments for Avatars */
-        body.starlight-lavender .chat-avatar,
-        body.starlight-lavender .lucide-avatar-icon {
-            border-color: #A0B0C0; /* Lighter border in light mode */
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         /* Markdown Styling within AI messages */
@@ -963,7 +425,7 @@
             border-radius: 0.75rem; 
             margin-top: 1rem;
             margin-bottom: 1rem;
-            overflow-y: hidden; 
+            overflow: hidden; 
             border: 1px solid var(--code-border); 
             box-shadow: 0 4px 8px rgba(0,0,0,0.3);
             transition: background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease;
@@ -1026,9 +488,9 @@
             color: var(--button-hover-bg); 
         }
 
-        /* Message Action Buttons (Copy/Dictate/Edit/Regenerate) */
+        /* Message Action Buttons (Copy/Dictate) */
         .message-actions {
-            position: fixed;
+            position: absolute;
             bottom: 0.5rem;
             right: 1rem;
             display: flex;
@@ -1041,7 +503,6 @@
             z-index: 10;
             background-color: var(--message-action-bg);
         }
-        /* Make actions visible when the entire message (including avatar) is hovered */
         .chat-message:hover .message-actions {
             opacity: 1; 
         }
@@ -1165,16 +626,8 @@
         #sendButton:active {
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
-        /* NEW: Stop button */
-        #stopButton {
-            background-color: var(--accent-error);
-            color: white;
-        }
-        #stopButton:hover {
-            background-color: color-mix(in srgb, var(--accent-error) 80%, black 20%);
-        }
 
-        /* Loading Indicator - NEW: Cosmic Loader */
+        /* Loading Indicator */
         .loader-container {
             display: flex;
             justify-content: center;
@@ -1183,29 +636,27 @@
             height: 100%;
         }
         .loader-dot {
-            width: 15px; /* Slightly larger */
-            height: 15px;
-            margin: 0 6px; /* More space */
+            width: 12px;
+            height: 12px;
+            margin: 0 4px;
             background-color: var(--accent-color);
-            box-shadow: 0 0 10px var(--accent-color), 0 0 20px rgba(192, 112, 255, 0.5); /* Glow effect */
             border-radius: 50%;
             display: inline-block;
-            animation: cosmicBounce 1.8s infinite ease-in-out both; /* Slower, more ethereal bounce */
-            transition: background-color 0.6s ease, box-shadow 0.6s ease;
+            animation: bounce 1.4s infinite ease-in-out both;
+            transition: background-color 0.6s ease;
         }
-        .loader-dot:nth-child(1) { animation-delay: -0.6s; }
-        .loader-dot:nth-child(2) { animation-delay: -0.3s; }
+        .loader-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loader-dot:nth-child(2) { animation-delay: -0.16s; }
         .loader-dot:nth-child(3) { animation-delay: 0s; }
         
-        @keyframes cosmicBounce {
-            0%, 100% {
-                transform: translateY(0) scale(1);
-                opacity: 0.8;
+        @keyframes bounce {
+            0%, 80%, 100% {
+                transform: scale(0);
+                opacity: 0.5;
             }
-            50% {
-                transform: translateY(-10px) scale(1.2); /* Float up and enlarge slightly */
+            40% {
+                transform: scale(1.0);
                 opacity: 1;
-                background-color: var(--cosmic-glow-color-1); /* Change color at peak */
             }
         }
         /* Voice input active state */
@@ -1297,7 +748,7 @@
             margin-bottom: 10px; /* Space between input and suggestions */
             background-color: var(--autocomplete-bg);
             border: 1px solid var(--autocomplete-border);
-            border-radius: 10-px;
+            border-radius: 10px;
             box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
             max-height: 200px;
             overflow-y: auto;
@@ -1334,105 +785,62 @@
                 margin: 0;
             }
 
-            /* Mobile Sidebar */
-            .chat-sidebar {
-                position: fixed; /* Fixed position for mobile sidebar */
-                top: 0;
-                left: 0;
-                bottom: 0;
-                width: min(80vw, 320px); /* Adjust width for mobile, max 320px or 80vw */
-                transform: translateX(-100%); /* Hidden by default */
-                transition: transform 0.3s ease-in-out;
-                box-shadow: none; /* No shadow by default */
-                padding: 15px;
-                background-color: var(--tertiary-bg); /* Ensure background is set for overlay */
-            }
-            .chat-sidebar.active-mobile-sidebar {
-                transform: translateX(0); /* Show on active */
-                box-shadow: 2px 0 10px rgba(0,0,0,0.3); /* Add shadow when open */
-            }
-
-            .chat-main-content {
-                width: 100%; /* Main content always full width on mobile */
-            }
-
-            /* Mobile Header Adjustments */
             .chatbot-header {
-                padding: 10px; 
-                padding-left: 50px; /* Make space for hamburger */
-                justify-content: center; /* Center content when hamburger is present */
+                padding: 12px; 
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 5px;
             }
             .chatbot-header h1 {
-                font-size: 1.5em;
-                margin-top: 0; /* Remove top margin */
+                font-size: 1.6em;
+                margin-top: 10px;
             }
             .chatbot-header .logo {
-                height: 1.6em;
+                height: 1.8em;
             }
             .chatbot-header .tagline {
-                font-size: 0.7em;
-                margin-bottom: 0;
+                font-size: 0.75em;
+                margin-bottom: 5px;
             }
 
-            /* Mobile specific toggle button (hamburger in main header) */
-            #mobileToggleSidebarBtn {
-                display: flex; /* Show on mobile */
-            }
-            /* Toggle button inside sidebar (X icon) */
-            #toggleSidebarBtn {
-                display: flex; /* Always show inside sidebar header on mobile */
-            }
-
-
-            /* Mobile adjustments for settings container */
-            /*.settings-toggles-container {
-                top: 8px; /* Closer to top */
-                /*right: 8px; /* Closer to right */
-                /*gap: 4px; /* Even less space */
-            /*}*/
-            
-            .theme-selector-container label, .response-mode-container span {
+            .dark-mode-container {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                gap: 5px;
                 font-size: 0.7em;
             }
-            .theme-selector-container select {
-                font-size: 0.7em;
-                padding: 3px 6px;
-                padding-right: 24px;
-                background-position: right 6px center;
-                background-size: 16px;
-            }
-
             .switch {
-                width: 36px;
-                height: 20px;
-                border-radius: 10px;
-            }
-            .switch .slider {
-                border-radius: 10px;
+                width: 40px;
+                height: 22px;
+                border-radius: 11px;
             }
             .switch .slider:before {
-                height: 14px;
-                width: 14px;
+                height: 16px;
+                width: 16px;
                 left: 3px;
                 bottom: 3px;
             }
             input:checked + .slider:before {
-                transform: translateX(16px);
+                transform: translateX(18px);
             }
 
-            /* Sidebar New Chat Button (smaller for mobile sidebar) */
             #newChatBtn {
-                padding: 5px 9px;
-                font-size: 0.65em;
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                padding: 6px 10px;
+                font-size: 0.7em;
                 gap: 3px;
             }
             #newChatBtn .lucide {
-                width: 0.6em;
-                height: 0.6em;
+                width: 0.7em;
+                height: 0.7em;
             }
 
-
-            /* Chat Message Mobile Adjustments */
             .chat-history {
                 padding: 10px;
                 gap: 8px;
@@ -1440,22 +848,10 @@
 
             .chat-message {
                 max-width: 95%; /* Wider bubbles for smaller screens */
-            }
-            .chat-avatar, .lucide-avatar-icon {
-                width: 32px;
-                height: 32px;
-                margin: 0 6px;
-            }
-            .lucide-avatar-icon .lucide {
-                width: 1.2em;
-                height: 1.2em;
-            }
-            .message-bubble-content {
                 padding: 10px 14px;
-                padding-bottom: 2rem;
                 border-radius: 16px;
+                padding-bottom: 2rem;
                 font-size: 0.9rem; /* Slightly larger for readability */
-                min-height: 4rem; /* Adjusted for mobile */
             }
 
             .message-actions {
@@ -1526,255 +922,95 @@
                 font-size: 0.85em;
             }
         }
-
-        /* Desktop specific styles (min-width: 769px) */
-        @media (min-width: 769px) {
-            #mobileToggleSidebarBtn {
-                display: none; /* Hide hamburger on desktop */
-            }
-            #toggleSidebarBtn {
-                display: none; /* Hide 'X' button on desktop (only needed for mobile sidebar close) */
-            }
-        }
     </style>
 </head>
-<body class="antialiased cosmic-purple">
+<body class="antialiased dark">
     <div class="chatbot-container">
-        <!-- Sidebar for previous chats -->
-        <aside class="chat-sidebar" id="chatSidebar">
-            <div class="sidebar-header">
-                <button id="newChatBtn" title="Start a New Chat">
-                    <span data-lucide="sparkles" class="w-4 h-4"></span>
-                    New Chat
-                </button>
-                <h3 class="font-semibold text-lg">App Settings</h3>
-                <!-- Button to toggle sidebar visibility on mobile/smaller screens -->
-                <button id="toggleSidebarBtn" title="Close Sidebar">
-                    <span data-lucide="x" class="w-5 h-5"></span>
-                </button>
-            </div>
-
-            <!-- AI Model Selector -->
-            <div class="sidebar-section">
-                <h4 class="font-semibold text-accent-color mb-2">AI Model</h4>
-                <select id="model-select" class="w-full">
-                    <!-- Ensure these match actual Gemini API model names and are valid for your key -->
-                    <option value="gemini-1.5-flash-latest">Gemini 1.5 Flash (Latest)</option>
-                    <option value="gemini-1.5-pro-latest">Gemini 1.5 Pro (Latest)</option>
-                    <option value="gemini-2.5-flash-preview-05-20">Gemini 2.5 Flash (Preview 05-20)</option>
-                    <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
-                    <option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
-                    <option value="gemini-2.5-flash-lite">Gemini 2.5 Flash Lite</option>
-                    <option value="gemini-2.5-flash-lite-06-17">Gemini 2.5 Flash Lite (06-17)</option>
-                    <option value="gemini-2.0-flash-preview-image-generation">Gemini 2.0 Flash (Image Gen Preview)</option>
-                    <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
-                    <option value="gemini-2.0-flash-001">Gemini 2.0 Flash (001)</option>
-                    <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash (Experimental)</option>
-                </select>
-            </div>
-
-            <!-- System Prompt / Persona Customization -->
-            <div class="sidebar-section">
-                <h4 class="font-semibold text-accent-color mb-2">AI Persona (System Prompt)</h4>
-                <select id="systemPromptSelect" class="w-full">
-                    <option value="">None (Default)</option>
-                    <option value="You are a helpful coding assistant who explains concepts in detail.">Coding Assistant</option>
-                    <option value="You are a sarcastic but insightful philosopher.">Sarcastic Philosopher</option>
-                    <option value="You are a whimsical storyteller for children.">Whimsical Storyteller</option>
-                    <option value="You are a strict grammar checker.">Strict Grammar Checker</option>
-                    <option value="You are a supportive life coach.">Supportive Life Coach</option>
-                    <option value="You are a knowledgeable historian.">Knowledgeable Historian</option>
-                    <option value="You are a curious explorer of the cosmos.">Cosmic Explorer</option>
-                    <option value="You are an ancient oracle speaking in riddles.">Ancient Oracle</option>
-                    <option value="You are a cheerful wellness guide.">Cheerful Wellness Guide</option>
-                    <option value="You are a fantasy role-playing game dungeon master.">RPG Dungeon Master</option>
-                    <option value="You are a creative chef providing unique recipes and cooking tips.">Creative Chef</option>
-                    <option value="You are a personal fitness trainer offering workout plans and motivation.">Personal Fitness Trainer</option>
-                    <option value="You are an expert travel guide providing detailed itineraries and cultural insights.">Expert Travel Guide</option>
-                    <option value="You are a botanical expert, identifying plants and offering gardening advice.">Botanical Expert</option>
-                    <option value="You are a cybersecurity analyst explaining online threats and safety.">Cybersecurity Analyst</option>
-                    <option value="You are a witty stand-up comedian.">Witty Comedian</option>
-                    <option value="You are a precise technical writer, explaining complex topics clearly.">Precise Technical Writer</option>
-                    <option value="You are a compassionate therapist, providing understanding and coping strategies.">Compassionate Therapist</option>
-                    <option value="You are a financial advisor, offering practical advice on money management.">Financial Advisor</option>
-                    <option value="You are a literary critic, analyzing texts and discussing themes.">Literary Critic</option>
-                    <option value="You are a legal aid assistant providing general information (but not legal advice).">Legal Aid Assistant</option>
-                    <option value="You are a dream interpreter.">Dream Interpreter</option>
-                    <option value="You are a professional negotiator.">Professional Negotiator</option>
-                    <option value="You are a minimalist living coach.">Minimalist Coach</option>
-                    <option value="You are an ethical hacker explaining common vulnerabilities.">Ethical Hacker</option>
-                    <option value="You are a dedicated researcher citing sources where possible.">Dedicated Researcher</option>
-                </select>
-                <button id="clearSystemPromptBtn" class="text-red-400 mt-2">Clear Persona</button>
-            </div>
-
-            <!-- Export Current Chat Section -->
-            <div class="sidebar-section">
-                <h4 class="font-semibold text-accent-color mb-2">Export Current Chat</h4>
-                <div class="flex flex-col gap-2">
-                    <button id="exportTxtBtn">
-                        <span data-lucide="file-text" class="w-4 h-4"></span> Export as TXT
-                    </button>
-                    <button id="exportPdfBtn">
-                        <span data-lucide="file-text" class="w-4 h-4"></span> Export as PDF
-                    </button>
-                    <!-- Changed from exportDocBtn to exportMdBtn -->
-                    <button id="exportMdBtn">
-                        <span data-lucide="file-code" class="w-4 h-4"></span> Export as MD
-                    </button>
-                </div>
-            </div>
-
-            <!-- Clear Current Chat Button -->
-            <div class="sidebar-section">
-                <h4 class="font-semibold text-accent-color mb-2">Current Session Actions</h4>
-                <button id="clearChatBtn" class="w-full bg-accent-error text-white py-2 px-4 rounded-md font-semibold hover:bg-red-600 transition-colors flex items-center justify-center gap-2">
-                    <span data-lucide="delete" class="w-4 h-4"></span>
-                    Clear Current Chat
-                </button>
-            </div>
-            
-            <!-- NEW: Settings Toggles Container -->
-            <div class="settings-toggles-container">
-                <!-- NEW: Theme Selector -->
-                <div class="theme-selector-container">
-                    <label for="theme-select" class="font-primary text-sm">Theme:</label>
-                    <select id="theme-select" class="p-1 rounded-md text-xs">
-                        <option value="cosmic-purple">Cosmic Purple</option>
-                        <option value="starlight-lavender">Starlight Lavender</option>
-                        <option value="emerald-galaxy">Emerald Galaxy</option>
-                        <option value="crimson-nebula">Crimson Nebula</option>
-                        <option value="golden-aurora">Golden Aurora</option>
-                        <option value="cosmic-gold">Cosmic Gold</option>
-                        <option value="neon-glitch">Neon Glitch</option>
-                        <option value="ancient-papyrus">Ancient Papyrus</option>
-                    </select>
-                </div>
-
-                <!-- Keep the Simulate Typing Toggle -->
-                <div class="response-mode-container">
-                    <span>Instant</span>
-                    <label class="switch">
-                        <input type="checkbox" id="simulate-typing-toggle" checked>
-                        <span class="slider"></span>
-                    </label>
-                    <span>Simulate Typing</span>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Main Chat Content -->
-        <main class="chat-main-content">
-            <header class="chatbot-header">
-                <!-- Hamburger/Sidebar toggle for mobile. -->
-                <button id="mobileToggleSidebarBtn" title="Open Sidebar">
-                    <span data-lucide="menu" class="w-5 h-5"></span>
-                </button>
-
-                <div class="header-content">
-                    <h1>
-                        <img src="logo.png" alt="Mystic Vision AI Logo" class="logo">
-                        Mystic Vision AI
-                    </h1>
-                    <p class="tagline">Experience the beyond</p>
-                </div>
-            </header>
-            <div class="chat-history" id="chatHistory">
-                <!-- Initial AI message will be added by JS -->
-            </div>
-            <div class="chat-input" id="chatInputArea">
-                <!-- Autocomplete Suggestions Container -->
-                <div id="suggestions-container" class="hidden">
-                    <ul id="suggestions-list"></ul>
-                </div>
-
-                <!-- Attachment preview -->
-                <div id="chat-attachments-preview-container" class="mb-2 flex flex-wrap items-center gap-2 hidden absolute left-4 right-4" style="bottom: 100%; transform: translateY(-10px);">
-                    <!-- Attachments previews will be dynamically added here -->
-                </div>
-
-                <!-- Voice Input Button -->
-                <button id="voice-input-btn" class="icon-button" aria-label="Voice Input">
-                    <span data-lucide="mic" class="w-5 h-5"></span>
-                </button>
-
-                <!-- Attach File Button (uses a label to link to the hidden file input) -->
-                <label for="chat-image-upload" id="attach-file-btn" class="icon-button cursor-pointer" aria-label="Attach File">
-                    <span data-lucide="paperclip" class="w-5 h-5"></span>
+        <header class="chatbot-header">
+            <button id="newChatBtn" title="Start a New Chat">
+                <span data-lucide="sparkles" class="w-4 h-4"></span>
+                New Chat
+            </button>
+            <div class="dark-mode-container">
+                <span>Light</span>
+                <label class="switch">
+                    <input type="checkbox" id="dark-mode-toggle">
+                    <span class="slider"></span>
                 </label>
-                <input type="file" id="chat-image-upload" accept="image/*, .txt, .pdf, .csv, .json, .xml, .md" class="hidden" multiple>
-
-                <textarea id="userInput" placeholder="Type your message..." rows="1"></textarea>
-                
-                <!-- Send Button -->
-                <button id="sendButton" class="icon-button">
-                    <span data-lucide="send" class="w-5 h-5"></span>
-                </button>
-
-                <!-- Stop Button (initially hidden) -->
-                <button id="stopButton" class="icon-button hidden" title="Stop generating response">
-                    <span data-lucide="square" class="w-5 h-5"></span>
-                </button>
+                <span>Dark</span>
             </div>
-        </main>
+            <div class="header-content">
+                <h1>
+                    <img src="logo.png" alt="Mystic Vision AI Logo" class="logo">
+                    Mystic Vision AI
+                </h1>
+                <p class="tagline">Experience the beyond</p>
+            </div>
+        </header>
+        <div class="chat-history" id="chatHistory">
+            <!-- Initial AI message will be added by JS -->
+        </div>
+        <div class="chat-input" id="chatInputArea">
+            <!-- Autocomplete Suggestions Container -->
+            <div id="suggestions-container" class="hidden">
+                <ul id="suggestions-list"></ul>
+            </div>
+
+            <!-- Attachment preview -->
+            <!-- Adjusted positioning to be absolute relative to chat-input with a calculated bottom -->
+            <div id="chat-attachments-preview-container" class="mb-2 flex flex-wrap items-center gap-2 hidden absolute left-4 right-4" style="bottom: 100%; transform: translateY(-10px);">
+                <!-- Attachments previews will be dynamically added here -->
+            </div>
+
+            <!-- Voice Input Button -->
+            <button id="voice-input-btn" class="icon-button" aria-label="Voice Input">
+                <span data-lucide="mic" class="w-5 h-5"></span>
+            </button>
+
+            <!-- Attach File Button (uses a label to link to the hidden file input) -->
+            <label for="chat-image-upload" id="attach-file-btn" class="icon-button cursor-pointer" aria-label="Attach File">
+                <span data-lucide="paperclip" class="w-5 h-5"></span>
+            </label>
+            <input type="file" id="chat-image-upload" accept="image/*, .txt, .pdf, .csv, .json, .xml, .md" class="hidden" multiple>
+
+            <textarea id="userInput" placeholder="Type your message..." rows="1"></textarea>
+            
+            <!-- Send Button -->
+            <button id="sendButton" class="icon-button">
+                <span data-lucide="send" class="w-5 h-5"></span>
+            </button>
+        </div>
     </div>
 
     <!-- Temporary message for clipboard copy -->
     <div id="copy-message">Text copied to clipboard!</div>
-
-    <!-- Prism.js components for common languages -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
-    <!-- Add more Prism.js language components as needed -->
 
     <script>
         // !! IMPORTANT: REPLACE WITH YOUR ACTUAL GEMINI API KEY !!
         // !! DO NOT USE THIS METHOD IN PRODUCTION. USE A SERVER-SIDE PROXY. !!
         // The key below is a placeholder and WILL NOT WORK.
         const GEMINI_API_KEY = 'AIzaSyCzx6ReMk8ohPJcCjGwHHzu7SvFccJqAbA'; // <--- REPLACE THIS WITH YOUR ACTUAL KEY
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${GEMINI_API_KEY}`;
 
         // --- Global State Variables and Constants ---
-        let conversationHistory = []; // Current chat's history (roles & parts)
-        const CURRENT_CHAT_STORAGE_KEY = 'mv-current-session-chat'; // Fixed key for the single active chat
-        
+        let conversationHistory = []; // Will be initialized with the first AI message
         let chatAttachments = []; 
-        const messageTextCache = new Map(); // Stores raw text for copy/dictate before Markdown parsing
+        const messageTextCache = new Map(); 
         let currentUtterance = null;
         let isSpeaking = false;
-        let currentTypingInterval = null; // For simulated typing animation
-        let isGeneratingResponse = false; // To control send/stop buttons
-        
         let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         let recognition = null;
         let isVoiceInputActive = false;
         let finalTranscript = ''; 
         let selectedSuggestionIndex = -1;
 
-        // NEW: Simulate Typing Mode state
-        let isSimulateTypingEnabled = true; // Default to simulate typing
-
-        // NEW: AI Model and System Prompt State
-        let currentModel = localStorage.getItem('selected-gemini-model') || 'gemini-2.5-flash-preview-05-20'; // Default model
-        // Changed from systemPrompt to systemInstruction for clarity and direct API mapping
-        let systemInstruction = localStorage.getItem('system-instruction') || ''; // Stores user-defined system instruction
-
         const initialAIMessage = {
             role: 'model',
             parts: [{ text: 'Greetings, seeker! I am Mystic Vision, an AI designed to help you glimpse the beyond. What wisdom do you seek?' }],
         };
 
-        // Avatars
-        const USER_AVATAR_ICON = 'user'; 
-        const AI_AVATAR_URL = 'logo.png'; 
-
         const autocompleteSuggestions = [
-            // Your extensive list of autocomplete suggestions
+            // General/Utility
             "What is the capital of France?",
             "Explain quantum physics simply.",
             "How does a combustion engine work?",
@@ -1807,7 +1043,7 @@
             "Write a fairy tale with a modern twist.",
             "Brainstorm names for a new tech startup.",
             "Suggest topics for a blog about travel.",
-            "Write an exciting opening paragraph for an horrific adventure story.",
+            "Write an exciting opening paragraph for an adventure story.",
             "Compose a haiku about autumn.",
             "Develop a plot for a sci-fi film.",
             "Write a humorous obituary.",
@@ -1955,7 +1191,7 @@
             "Tell me about different personality types.",
             "What is positive psychology?",
             "How to practice self-care?",
-            "What are common symptoms of flu?",
+            "What are the signs of burnout?",
             "How to improve focus and concentration?",
             "What is the Pomodoro Technique?",
             "Explain the Eisenhower Matrix.",
@@ -2090,7 +1326,7 @@
             "What are good preschool activities?",
             "How to teach preschoolers letters and numbers?",
             "Tips for improving fine motor skills in preschoolers.",
-            "What is gross motor skills?",
+            "What are gross motor skills?",
             "How to encourage independent play in preschoolers?",
             "Explain cooperative play.",
             "What is dramatic play?",
@@ -2603,6 +1839,389 @@
             "Explain diversity recruitment strategies.",
             "What is equity in the workplace?",
             "How to create belonging at work?",
+            "Tips for culturally competent leadership.",
+            "What is global citizenship?",
+            "How to understand different cultures?",
+            "Explain cross-cultural communication.",
+            "What are global etiquette rules?",
+            "How to manage international teams?",
+            "Tips for working abroad.",
+            "What is expat life?",
+            "How to adjust to a new country?",
+            "Explain cultural shock.",
+            "What are common travel scams?",
+            "How to stay safe while traveling?",
+            "Tips for responsible tourism.",
+            "What is ecotourism?",
+            "How to minimize environmental impact while traveling?",
+            "Explain sustainable tourism practices.",
+            "What are voluntourism opportunities?",
+            "How to choose an ethical volunteer program?",
+            "Tips for learning about local traditions.",
+            "What are intangible cultural heritage?",
+            "How to protect historical sites?",
+            "Explain heritage tourism.",
+            "What is pilgrimage tourism?",
+            "How to respect sacred places?",
+            "Tips for adventure travel.",
+            "What are extreme sports?",
+            "How to prepare for a hiking trip?",
+            "Explain backpacking essentials.",
+            "What is glamping?",
+            "How to choose camping gear?",
+            "Tips for wildlife viewing.",
+            "What are safari ethics?",
+            "How to photograph nature responsibly?",
+            "Explain astrophotography.",
+            "What is urban exploration?",
+            "How to practice street photography?",
+            "Tips for portrait photography.",
+            "What are landscape photography techniques?",
+            "How to use natural light in photography?",
+            "Explain composition rules in photography.",
+            "What is post-processing in photography?",
+            "How to edit photos in Lightroom?",
+            "Tips for using Photoshop.",
+            "What are video editing software options?",
+            "How to create a short film?",
+            "Explain documentary filmmaking.",
+            "What is animation?",
+            "How to draw cartoons?",
+            "Tips for digital art creation.",
+            "What are graphic design principles?",
+            "How to create a logo?",
+            "Explain typography basics.",
+            "What are color theory principles?",
+            "How to design a website?",
+            "Tips for UX/UI design.",
+            "What is user research?",
+            "How to conduct usability testing?",
+            "Explain wireframing and prototyping.",
+            "What are front-end development technologies?",
+            "How to learn React.js?",
+            "Tips for back-end development.",
+            "What is Python for data science?",
+            "How to use R for statistical analysis?",
+            "Explain machine learning algorithms.",
+            "What is deep learning?",
+            "How to build a neural network?",
+            "Tips for natural language processing (NLP).",
+            "What is computer vision?",
+            "How to apply AI in healthcare?",
+            "Explain AI in finance.",
+            "What are applications of AI in education?",
+            "How to use AI in marketing?",
+            "Tips for AI-powered customer service.",
+            "What is AI ethics?",
+            "How to ensure AI transparency?",
+            "Explain AI bias.",
+            "What are ethical guidelines for AI?",
+            "How to develop responsible AI systems?",
+            "Tips for AI governance frameworks.",
+            "What is the future of AI?",
+            "How will AI change society?",
+            "Explain the concept of superintelligence.",
+            "What are risks of advanced AI?",
+            "How to prepare for an AI-driven future?",
+            "Tips for human-AI collaboration.",
+            "What is the singularity?",
+            "How to balance technological progress with human values?",
+            "Explain the role of philosophy in AI.",
+            "What is consciousness?",
+            "How does the brain work?",
+            "Tips for understanding neuroscience.",
+            "What are mental models?",
+            "How to improve cognitive function?",
+            "Explain neurofeedback.",
+            "What are brainwave states?",
+            "How to enhance creativity through brain training?",
+            "Tips for improving memory recall.",
+            "What is mnemonics?",
+            "How to learn faster?",
+            "Explain spaced repetition.",
+            "What are active recall techniques?",
+            "Tips for note-taking strategies.",
+            "What is Cornell Notes system?",
+            "How to use mind maps for learning?",
+            "Explain Feynman technique.",
+            "What are different learning theories?",
+            "How to apply constructivism in education?",
+            "Tips for project-based learning.",
+            "What is inquiry-based science?",
+            "How to teach coding to kids?",
+            "Explain robotics for education.",
+            "What are benefits of AI in education?",
+            "How to use virtual reality for learning?",
+            "Tips for augmented reality in classrooms.",
+            "What is gamified learning?",
+            "How to design educational games?",
+            "Explain serious games for training.",
+            "What are simulations in education?",
+            "How to use digital storytelling in the classroom?",
+            "Tips for creating educational videos.",
+            "What are podcasts for learning?",
+            "How to use social media for educational purposes responsibly?",
+            "Explain online collaboration tools for students.",
+            "What are virtual field trips?",
+            "How to leverage open educational resources (OER)?",
+            "Tips for copyright and fair use in education.",
+            "What is academic integrity?",
+            "How to prevent plagiarism among students?",
+            "Explain ethical research practices.",
+            "What are student data privacy concerns?",
+            "How to protect student information?",
+            "Tips for responsible use of AI by students.",
+            "What is AI literacy?",
+            "How to teach students about AI?",
+            "Explain the societal impact of AI for young learners.",
+            "What are career opportunities in AI?",
+            "How to prepare students for an AI-driven workforce?",
+            "Tips for developing future-ready skills.",
+            "What is emotional intelligence for students?",
+            "How to teach empathy and compassion?",
+            "Explain conflict resolution skills for children.",
+            "What are positive communication techniques for students?",
+            "How to build resilience in young learners?",
+            "Tips for fostering a growth mindset in the classroom.",
+            "What is self-regulation for students?",
+            "How to manage stress in school?",
+            "Explain mindfulness practices for students.",
+            "What are positive psychology principles in education?",
+            "How to promote happiness and well-being in schools?",
+            "Tips for character education.",
+            "What are values education approaches?",
+            "How to teach ethics to children?",
+            "Explain civic responsibility for students.",
+            "What is global awareness in education?",
+            "How to foster intercultural understanding?",
+            "Tips for promoting human rights education.",
+            "What are peace education strategies?",
+            "How to teach about sustainable development goals?",
+            "Explain environmental stewardship for kids.",
+            "What is climate literacy?",
+            "How to engage students in environmental action?",
+            "Tips for community service learning projects.",
+            "What are benefits of volunteering for students?",
+            "How to promote leadership skills in school?",
+            "Explain entrepreneurship education for youth.",
+            "What are financial literacy programs for students?",
+            "How to teach personal finance skills?",
+            "Tips for career counseling for teenagers.",
+            "What are vocational education pathways?",
+            "How to prepare for higher education?",
+            "Explain college application essays.",
+            "What are scholarship opportunities?",
+            "How to choose the right college major?",
+            "Tips for career planning.",
+            "What is lifelong learning?",
+            "How to continuously develop new skills?",
+            "Explain reskilling and upskilling.",
+            "What are future skills for the workplace?",
+            "How to adapt to changing job markets?",
+            "Tips for career transitions.",
+            "What is personal development?",
+            "How to set personal goals?",
+            "Explain habits and routines for success.",
+            "What are productivity hacks?",
+            "How to manage time effectively?",
+            "Tips for overcoming procrastination.",
+            "What is self-discipline?",
+            "How to build motivation?",
+            "Explain the power of positive thinking.",
+            "What are visualization techniques?",
+            "How to use affirmations for personal growth?",
+            "Tips for gratitude practice.",
+            "What is mindfulness in daily life?",
+            "How to reduce stress and anxiety?",
+            "Explain relaxation techniques.",
+            "What are breathing exercises?",
+            "How to practice meditation for beginners?",
+            "Tips for improving sleep quality.",
+            "What are healthy eating habits?",
+            "How to maintain a balanced diet?",
+            "Explain the benefits of regular exercise.",
+            "What is a holistic approach to health?",
+            "How to boost your immune system?",
+            "Tips for managing chronic conditions.",
+            "What is preventive healthcare?",
+            "How to find a good doctor?",
+            "Explain patient advocacy.",
+            "What are health insurance options?",
+            "How to understand medical billing?",
+            "Tips for navigating the healthcare system.",
+            "What is mental well-being?",
+            "How to identify signs of mental health issues?",
+            "Explain therapy options.",
+            "What are support groups?",
+            "How to help someone with depression?",
+            "Tips for suicide prevention.",
+            "What is substance abuse awareness?",
+            "How to seek help for addiction?",
+            "Explain recovery process.",
+            "What are signs of an unhealthy relationship?",
+            "How to set healthy boundaries?",
+            "Tips for effective communication in relationships.",
+            "What is conflict resolution in personal relationships?",
+            "How to build trust in relationships?",
+            "Explain healthy dating practices.",
+            "What are signs of domestic violence?",
+            "How to seek help for abuse?",
+            "Tips for building self-esteem.",
+            "What is self-love?",
+            "How to practice self-compassion?",
+            "Explain body positivity.",
+            "What is imposter syndrome?",
+            "How to overcome self-doubt?",
+            "Tips for building confidence.",
+            "What is resilience in adults?",
+            "How to cope with stress and adversity?",
+            "Explain post-traumatic growth.",
+            "What are different types of intelligence?",
+            "How to improve emotional intelligence?",
+            "Tips for developing social skills.",
+            "What is empathy vs. sympathy?",
+            "How to be a better listener?",
+            "Explain assertive communication.",
+            "What is non-violent communication?",
+            "How to give and receive feedback effectively?",
+            "Tips for public speaking anxiety.",
+            "What is charisma?",
+            "How to build rapport quickly?",
+            "Explain negotiation skills.",
+            "What are conflict management styles?",
+            "How to mediate a dispute?",
+            "Tips for teamwork and collaboration.",
+            "What is effective leadership?",
+            "How to motivate others?",
+            "Explain delegation strategies.",
+            "What is coaching and mentoring?",
+            "How to inspire creativity in a team?",
+            "Tips for managing diverse teams.",
+            "What is cross-cultural competence?",
+            "How to resolve cultural misunderstandings?",
+            "Explain global awareness for professionals.",
+            "What are international business etiquette rules?",
+            "How to adapt to new work environments?",
+            "Tips for career planning and development.",
+            "What is a personal mission statement?",
+            "How to identify your strengths and weaknesses?",
+            "Explain career mapping.",
+            "What are job search strategies?",
+            "How to write a compelling resume?",
+            "Tips for successful job interviews.",
+            "What is networking for career advancement?",
+            "How to use LinkedIn effectively?",
+            "Explain personal branding for professionals.",
+            "What is salary negotiation?",
+            "How to manage career transitions?",
+            "Tips for entrepreneurship for beginners.",
+            "What is a business model canvas?",
+            "How to validate a business idea?",
+            "Explain lean startup methodology.",
+            "What are minimum viable products (MVPs)?",
+            "How to secure startup funding?",
+            "Tips for pitching to investors.",
+            "What is venture capital funding?",
+            "How to build a startup team?",
+            "Explain intellectual property protection.",
+            "What are legal considerations for startups?",
+            "How to create a marketing strategy for a small business?",
+            "Tips for social media marketing for businesses.",
+            "What is content marketing for startups?",
+            "How to measure marketing campaign effectiveness?",
+            "Explain customer acquisition strategies.",
+            "What is customer retention?",
+            "How to provide excellent customer service?",
+            "Tips for building customer loyalty.",
+            "What is public relations for businesses?",
+            "How to manage negative publicity?",
+            "Explain crisis communication for companies.",
+            "What are ethical business practices?",
+            "How to implement corporate social responsibility?",
+            "Tips for sustainable business models.",
+            "What is green business?",
+            "How to reduce environmental impact in business?",
+            "Explain circular economy principles for companies.",
+            "What are certifications for sustainable businesses?",
+            "How to measure environmental performance?",
+            "Tips for supply chain sustainability.",
+            "What is ethical sourcing?",
+            "How to ensure fair labor practices?",
+            "Explain responsible consumption and production.",
+            "What are UN Sustainable Development Goals for business?",
+            "How to report on sustainability efforts?",
+            "Tips for engaging employees in sustainability.",
+            "What is corporate governance?",
+            "How to ensure board diversity?",
+            "Explain shareholder activism.",
+            "What are regulations for publicly traded companies?",
+            "How to manage mergers and acquisitions?",
+            "Tips for business expansion strategies.",
+            "What is international trade?",
+            "How to export goods and services?",
+            "Explain import regulations.",
+            "What are global supply chain challenges?",
+            "How to mitigate geopolitical risks for businesses?",
+            "Tips for navigating international markets.",
+            "What is foreign exchange risk?",
+            "How to manage currency fluctuations?",
+            "Explain international financial reporting standards.",
+            "What are global tax considerations?",
+            "How to comply with international business laws?",
+            "Tips for cross-border investments.",
+            "What is the World Trade Organization (WTO)?",
+            "How do trade agreements work?",
+            "Explain economic sanctions.",
+            "What are trade wars?",
+            "How to assess country risk?",
+            "Tips for political risk analysis.",
+            "What is the role of diplomacy in international business?",
+            "How to negotiate with international partners?",
+            "Explain cultural intelligence for business leaders.",
+            "What are communication styles across cultures?",
+            "How to build trust in global teams?",
+            "Tips for managing cultural differences in the workplace.",
+            "What is virtual team management?",
+            "How to foster collaboration in remote global teams?",
+            "Explain digital nomad lifestyle.",
+            "What are remote work trends?",
+            "How to build a successful distributed company?",
+            "Tips for managing time zones effectively.",
+            "What is the future of work post-pandemic?",
+            "How will automation affect jobs?",
+            "Explain the gig economy's impact on employment.",
+            "What are new job roles in emerging technologies?",
+            "How to prepare for job displacement?",
+            "Tips for reskilling and upskilling for automation.",
+            "What is continuous learning in the workplace?",
+            "How to develop adaptability in your career?",
+            "Explain the importance of soft skills.",
+            "What are critical thinking skills for the future?",
+            "How to improve problem-solving abilities?",
+            "Tips for fostering creativity in your career.",
+            "What is emotional intelligence in the professional world?",
+            "How to build strong professional networks?",
+            "Explain mentorship and sponsorship in career growth.",
+            "What are leadership development programs?",
+            "How to become an effective leader?",
+            "Tips for strategic thinking in leadership.",
+            "What is change leadership?",
+            "How to navigate organizational change?",
+            "Explain innovation management.",
+            "What are trends in organizational culture?",
+            "How to build a positive and inclusive workplace culture?",
+            "Tips for employee well-being initiatives.",
+            "What is mental health support in the workplace?",
+            "How to prevent burnout in high-stress jobs?",
+            "Explain work-life integration.",
+            "What are flexible work arrangements?",
+            "How to manage stress and anxiety at work?",
+            "Tips for promoting psychological safety.",
+            "What is diversity, equity, and inclusion (DEI) in organizations?",
+            "How to implement DEI strategies effectively?",
+            "Explain unconscious bias training.",
+            "What are microaggressions in the workplace?",
+            "How to create a sense of belonging for all employees?",
             "Tips for allyship in the workplace.",
             "What is inclusive hiring?",
             "How to reduce bias in recruitment?",
@@ -3112,6 +2731,78 @@
             "How to grow your own food?",
             "Explain urban gardening.",
             "What are permaculture principles?",
+            "How to support local food systems?",
+            "Tips for ethical eating.",
+            "What is plant-based diet?",
+            "How to reduce meat consumption?",
+            "Explain sustainable seafood choices.",
+            "What are benefits of buying local?",
+            "How to support fair trade products?",
+            "Tips for eco-friendly transportation.",
+            "What is active transportation?",
+            "How to use public transit efficiently?",
+            "Explain electric vehicles (EVs).",
+            "What are benefits of biking?",
+            "How to make your home more energy efficient?",
+            "Tips for water conservation at home.",
+            "What is rain harvesting?",
+            "How to reduce water waste?",
+            "Explain responsible waste management.",
+            "What are recycling best practices?",
+            "How to dispose of hazardous waste?",
+            "Tips for preventing pollution.",
+            "What is air quality monitoring?",
+            "How to reduce indoor air pollution?",
+            "Explain noise pollution effects.",
+            "What are light pollution solutions?",
+            "How to protect biodiversity?",
+            "Tips for wildlife conservation.",
+            "What is habitat restoration?",
+            "How to support endangered species?",
+            "Explain the impact of climate change on ecosystems.",
+            "What are climate change mitigation strategies?",
+            "How to adapt to climate change impacts?",
+            "Tips for climate resilience.",
+            "What is carbon sequestration?",
+            "How to promote reforestation?",
+            "Explain sustainable forestry.",
+            "What are ocean conservation efforts?",
+            "How to reduce plastic in oceans?",
+            "Tips for marine life protection.",
+            "What is coral reef conservation?",
+            "How to prevent overfishing?",
+            "Explain sustainable fisheries.",
+            "What are wetlands restoration projects?",
+            "How to protect freshwater sources?",
+            "Tips for water quality improvement.",
+            "What is environmental justice?",
+            "How to address environmental racism?",
+            "Explain indigenous environmental knowledge.",
+            "What are traditional ecological practices?",
+            "How to integrate indigenous perspectives in conservation?",
+            "Tips for citizen advocacy for environmental issues.",
+            "What is environmental policy?",
+            "How to engage with local government on environmental issues?",
+            "Explain international environmental agreements.",
+            "What are green technologies?",
+            "How to invest in renewable energy?",
+            "Tips for sustainable finance.",
+            "What is impact investing?",
+            "How to measure environmental social governance (ESG) performance?",
+            "Explain corporate sustainability reporting.",
+            "What are green jobs?",
+            "How to pursue a career in sustainability?",
+            "Tips for environmental education.",
+            "What is outdoor learning?",
+            "How to connect children with nature?",
+            "Explain nature-based solutions.",
+            "What are urban green spaces?",
+            "How to design sustainable cities?",
+            "Tips for community gardening.",
+            "What is food sovereignty?",
+            "How to promote local food systems?",
+            "Explain resilient food systems.",
+            "What are permaculture design principles?",
             "How to build a food forest?",
             "Tips for zero-waste cooking.",
             "What is food waste reduction?",
@@ -3127,45 +2818,14 @@
         let chatHistoryDiv;
         let userInput;
         let sendButton;
-        let themeSelect; // NEW
+        let darkModeToggle;
         let copyMessage;
-        let simulateTypingToggle; // NEW: Simulate typing toggle
+        let newChatBtn;
         let chatAttachmentsPreviewContainer;
         let chatImageUpload;
         let voiceInputBtn;
         let suggestionsContainer;
         let suggestionsList;
-        let stopButton; 
-        // Sidebar Elements
-        let chatSidebar; 
-        let newChatBtnSidebar; 
-        let toggleSidebarBtn; 
-        let mobileToggleSidebarBtn; 
-        let chatMainContent;
-        // NEW Sidebar Elements
-        let modelSelect;
-        // Renamed from systemPromptInput to systemPromptSelect
-        let systemPromptSelect; 
-        // Renamed from clearSystemPromptBtn
-        let clearSystemPromptBtn; 
-        let clearChatBtn;
-        let exportTxtBtn;
-        let exportPdfBtn;
-        // Renamed from exportDocBtn to exportMdBtn
-        let exportMdBtn; 
-
-        // NEW: Theme Constants
-        const THEMES = [
-            'cosmic-purple',
-            'starlight-lavender',
-            'emerald-galaxy',
-            'crimson-nebula',
-            'golden-aurora',
-            'cosmic-gold',
-            'neon-glitch', // Added new theme
-            'ancient-papyrus' // Added new theme
-        ];
-        const DEFAULT_THEME = 'cosmic-purple';
 
         // --- Lucide Icon Helper ---
         const createIcons = () => {
@@ -3220,13 +2880,7 @@
                 const languageDisplay = lang ? `<span class="text-xs font-semibold uppercase text-gray-400">${lang}</span>` : '';
                 const uniqueId = `code-block-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
                 
-                // Prism.js expects the raw (unescaped) code string and will handle escaping and highlighting.
-                const escapedCode = actualCodeContent
-                    .replace(/&/g, '&amp;')
-                    .replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;')
-                    .replace(/"/g, '&quot;')
-                    .replace(/'/g, '&#39;'); 
+                const escapedCode = actualCodeContent.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
                 return `
                     <div class="code-block-container">
@@ -3237,7 +2891,7 @@
                                 Copy code
                             </button>
                         </div>
-                        <pre><code id="${uniqueId}" class="language-${lang || 'plaintext'}">${escapedCode}</code></pre>
+                        <pre><code id="${uniqueId}">${escapedCode}</code></pre>
                     </div>
                 `;
             }
@@ -3245,61 +2899,26 @@
         marked.use({ renderer });
 
         // --- Chat UI & Logic ---
-        /**
-         * Appends a chat message to the UI. For AI messages, it appends an initially empty content area,
-         * which is later filled by simulateTyping or direct rendering.
-         * @param {string} role - 'user' or 'model'
-         * @param {string} text - The raw text content of the message.
-         * @param {Array} attachments - Array of attachment objects (for user messages).
-         * @param {string} messageId - Optional ID for the message div.
-         * @returns {object} An object containing references to the messageContentDiv and the full messageDiv.
-         */
-        function appendChatMessage(role, text, attachments = [], messageId = null) {
+        function appendChatMessage(role, text, attachments = []) {
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('chat-message', role);
             
-            messageId = messageId || `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            const messageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
             messageDiv.dataset.messageId = messageId;
             
-            // Store the raw text for copy/dictate before any display formatting
-            messageTextCache.set(messageId, text); 
-
-            // Create avatar element (img for AI, lucide icon for User)
-            let avatarElement;
-            if (role === 'user') {
-                avatarElement = document.createElement('div');
-                avatarElement.classList.add('lucide-avatar-icon');
-                const userIconSpan = document.createElement('span');
-                userIconSpan.setAttribute('data-lucide', USER_AVATAR_ICON);
-                avatarElement.appendChild(userIconSpan);
-                avatarElement.title = "You"; 
-            } else {
-                avatarElement = document.createElement('img');
-                avatarElement.src = AI_AVATAR_URL;
-                avatarElement.alt = 'AI Avatar';
-                avatarElement.classList.add('chat-avatar');
-                avatarElement.title = "Mystic Vision AI"; 
-            }
-
-            // Create the content bubble wrapper
-            const messageBubbleContent = document.createElement('div');
-            messageBubbleContent.classList.add('message-bubble-content');
-
-            // Create the actual message content area *inside* the bubble
-            const messageContentDiv = document.createElement('div');
-            messageContentDiv.classList.add('message-content');
+            let contentHTML = '';
+            let rawMessageContentForCache = ''; 
 
             if (role === 'user') {
-                messageContentDiv.innerHTML = `<span>${text}</span>`; // User text is plain HTML
-
+                rawMessageContentForCache = `You: ${text}`;
+                contentHTML += `<span class="font-bold">You:</span> ${text}`;
                 if (attachments.length > 0) {
-                    const attachmentsContainer = document.createElement('div');
-                    attachmentsContainer.classList.add('mt-2', 'flex', 'flex-wrap', 'gap-2');
+                    contentHTML += `<div class="mt-2 flex flex-wrap gap-2">`;
                     attachments.forEach(attachment => {
                         if (attachment.mimeType.startsWith('image/')) {
-                            attachmentsContainer.innerHTML += `<img src="data:${attachment.mimeType};base64,${attachment.data}" alt="${attachment.name || 'User attachment'}" class="chat-image w-24 h-24 object-cover">`;
+                            contentHTML += `<img src="data:${attachment.mimeType};base64,${attachment.data}" alt="${attachment.name || 'User attachment'}" class="chat-image w-24 h-24 object-cover">`;
                         } else {
-                            attachmentsContainer.innerHTML += `
+                            contentHTML += `
                                 <div class="chat-message-attachment-item">
                                     <span data-lucide="${getFileIcon(attachment.mimeType)}" class="w-4 h-4 flex-shrink-0"></span>
                                     <span class="truncate max-w-[120px]">${attachment.name || 'File'}</span>
@@ -3307,41 +2926,28 @@
                             `;
                         }
                     });
-                    messageContentDiv.appendChild(attachmentsContainer);
+                    contentHTML += `</div>`;
+                    rawMessageContentForCache += `\n[Attachments: ${attachments.map(a => a.name).join(', ')}]`;
                 }
-                
-                messageBubbleContent.appendChild(messageContentDiv); // Append user content to bubble
-                messageDiv.appendChild(messageBubbleContent);
-                messageDiv.appendChild(avatarElement); 
-            } else { // AI message: initialize empty, content filled later by simulateTyping or instant render
-                // For AI, the messageContentDiv is initially empty.
-                // It will be filled by simulateTyping or direct marked.parse later.
-                messageBubbleContent.appendChild(messageContentDiv); // Append initially empty content div
-                messageDiv.appendChild(avatarElement); 
-                messageDiv.appendChild(messageBubbleContent);
+            } else { 
+                rawMessageContentForCache = `AI: ${text}`;
+                contentHTML = `<div class="message-content">${marked.parse(text)}</div>`;
             }
             
-            // Add common actions to the messageBubbleContent (as a separate child)
-            const actionsDiv = document.createElement('div');
-            actionsDiv.classList.add('message-actions');
-            actionsDiv.innerHTML = `
-                <button class="copy-message-btn" title="Copy message" data-message-id="${messageId}">
-                    <span data-lucide="clipboard" class="w-4 h-4"></span>
-                </button>
-                <button class="dictate-message-btn" title="Dictate message" data-message-id="${messageId}">
-                    <span data-lucide="volume-2" class="w-4 h-4"></span>
-                </button>
-                ${role === 'user' ? `
-                <button class="edit-message-btn" title="Edit message" data-message-id="${messageId}">
-                    <span data-lucide="pencil" class="w-4 h-4"></span>
-                </button>` : `
-                <button class="regenerate-message-btn" title="Regenerate response" data-message-id="${messageId}">
-                    <span data-lucide="rotate-ccw" class="w-4 h-4"></span>
-                </button>`
-                }
-            `;
-            messageBubbleContent.appendChild(actionsDiv); // Append actions as a *new child* of the bubble
+            messageTextCache.set(messageId, rawMessageContentForCache); 
 
+            const actionsHTML = `
+                <div class="message-actions">
+                    <button class="copy-message-btn" title="Copy message" data-message-id="${messageId}">
+                        <span data-lucide="clipboard" class="w-4 h-4"></span>
+                    </button>
+                    <button class="dictate-message-btn" title="Dictate message" data-message-id="${messageId}">
+                        <span data-lucide="volume-2" class="w-4 h-4"></span>
+                    </button>
+                </div>
+            `;
+            
+            messageDiv.innerHTML = contentHTML + actionsHTML;
             chatHistoryDiv.appendChild(messageDiv);
             
             setTimeout(() => {
@@ -3349,18 +2955,13 @@
             }, 10);
             
             chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
+            
             createIcons(); 
-
-            // Return the specific message content div where text will eventually go
-            // and the full messageDiv for Prism.highlightAllUnder(element.closest(...))
-            return { messageContentDiv, messageDiv }; 
         }
 
-        let isApiCallInProgress = false; 
         function toggleLoading(show) {
             let loadingIndicator = document.getElementById('loadingIndicator');
             if (show) {
-                isApiCallInProgress = true;
                 if (!loadingIndicator) {
                     loadingIndicator = document.createElement('div');
                     loadingIndicator.id = 'loadingIndicator';
@@ -3371,82 +2972,19 @@
                             <div class="loader-dot"></div>
                             <div class="loader-dot"></div>
                         </div>
-                        <span class="mt-2 block">AI is thinking...</span>
+                        <span class="mt-2 block">AI is typing...</span>
                     `;
                     chatHistoryDiv.appendChild(loadingIndicator);
                 }
                 loadingIndicator.style.display = 'flex';
                 loadingIndicator.style.flexDirection = 'column'; 
                 chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-                sendButton.classList.add('hidden'); 
-                stopButton.classList.remove('hidden'); 
-                userInput.disabled = true; 
             } else {
-                isApiCallInProgress = false;
                 if (loadingIndicator) {
                     loadingIndicator.remove(); 
                 }
-                sendButton.classList.remove('hidden'); 
-                stopButton.classList.add('hidden'); 
-                userInput.disabled = false; 
-                userInput.focus();
             }
         }
-
-        // Simulate typing function (now receives the inner message-content div)
-        function simulateTyping(messageContentDiv, text, delay = 1) { 
-            if (!messageContentDiv) return;
-
-            messageContentDiv.innerHTML = ''; 
-            let currentTypedText = '';
-            let i = 0;
-            const renderBatchSize = 10; 
-
-            if (currentTypingInterval) {
-                clearInterval(currentTypingInterval);
-                currentTypingInterval = null;
-            }
-
-            currentTypingInterval = setInterval(() => {
-                if (!isGeneratingResponse) {
-                    clearInterval(currentTypingInterval);
-                    currentTypingInterval = null;
-                    messageContentDiv.innerHTML = marked.parse(text);
-                    if (typeof Prism !== 'undefined') {
-                        Prism.highlightAllUnder(messageContentDiv.closest('.chat-message'));
-                    }
-                    toggleLoading(false); 
-                    return;
-                }
-
-                if (i < text.length) {
-                    currentTypedText += text.charAt(i);
-
-                    if ((i + 1) % renderBatchSize === 0 || i === text.length - 1) {
-                        messageContentDiv.innerHTML = marked.parse(currentTypedText);
-                        if (typeof Prism !== 'undefined') {
-                            Prism.highlightAllUnder(messageContentDiv);
-                        }
-                    }
-                    
-                    i++;
-                    chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-                } else {
-                    clearInterval(currentTypingInterval);
-                    currentTypingInterval = null;
-                    
-                    messageContentDiv.innerHTML = marked.parse(text);
-                    if (typeof Prism !== 'undefined') {
-                        Prism.highlightAllUnder(messageContentDiv.closest('.chat-message'));
-                    }
-                    chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-                    toggleLoading(false); 
-                    isGeneratingResponse = false; 
-                    saveCurrentChat(); 
-                }
-            }, delay); 
-        }
-
 
         function displayChatAttachments() {
             chatAttachmentsPreviewContainer.innerHTML = '';
@@ -3571,29 +3109,6 @@
             if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || !GEMINI_API_KEY || GEMINI_API_KEY === "") { 
                 throw new Error("API Key is not set or is the default placeholder. Please replace 'YOUR_GEMINI_API_KEY_HERE' in the script with your actual Gemini API key.");
             }
-            
-            const dynamicApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${GEMINI_API_KEY}`;
-
-            // Filter out the 'id' property from messages before sending to Gemini API
-            const cleanContents = payload.contents.map(message => {
-                const newMessage = {
-                    role: message.role,
-                    parts: message.parts
-                };
-                // Ensure no unexpected properties are passed to the API
-                return newMessage;
-            });
-            
-            const requestBody = {
-                contents: cleanContents,
-            };
-
-            // NEW: Add system_instruction if it exists
-            if (systemInstruction) {
-                requestBody.system_instruction = {
-                    parts: [{ text: systemInstruction }]
-                };
-            }
 
             let response;
             let result;
@@ -3604,10 +3119,10 @@
 
             while (retryCount < maxRetries && !success) {
                 try {
-                    response = await fetch(dynamicApiUrl, {
+                    response = await fetch(API_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(requestBody) // Send the final request body with system_instruction
+                        body: JSON.stringify(payload)
                     });
 
                     if (response.status === 429) { 
@@ -3651,7 +3166,7 @@
         function filterSuggestions(query) {
             if (!query) return [];
             const lowerQuery = query.toLowerCase();
-            return autocompleteSuggestions.filter(s => s.toLowerCase().includes(query));
+            return autocompleteSuggestions.filter(s => s.toLowerCase().includes(lowerQuery));
         }
 
         function displaySuggestions(suggestions) {
@@ -3695,7 +3210,7 @@
 
             items[selectedSuggestionIndex].classList.add('selected');
             items[selectedSuggestionIndex].scrollIntoView({ block: 'nearest' });
-            userInput.value = items[selectedSuggestionIndex].textContent; 
+            userInput.value = items[selectedSuggestionIndex].textContent; // Auto-fill on arrow key
             userInput.style.height = 'auto'; 
             userInput.style.height = userInput.scrollHeight + 'px';
         }
@@ -3709,191 +3224,32 @@
             selectedSuggestionIndex = -1;
         }
 
-        // --- Chat History Management ---
-        function saveCurrentChat() {
-            if (conversationHistory.length > 0) {
-                localStorage.setItem(CURRENT_CHAT_STORAGE_KEY, JSON.stringify(conversationHistory));
-            } else {
-                // If the chat is empty (e.g., brand new chat), ensure no empty data is saved
-                localStorage.removeItem(CURRENT_CHAT_STORAGE_KEY);
-            }
-        }
-
         // --- New Chat Function ---
         function startNewChat() {
-            // Step 1: Immediately clear the *current* chat from local storage.
-            // The previous content is now effectively "lost" unless exported.
-            localStorage.removeItem(CURRENT_CHAT_STORAGE_KEY);
-
-            // Stop any ongoing speech or AI generation
             if (window.speechSynthesis.speaking) {
                 window.speechSynthesis.cancel();
                 isSpeaking = false;
                 currentUtterance = null;
                 document.querySelectorAll('.dictate-message-btn').forEach(btn => updateButtonIcon(btn, 'volume-2'));
             }
-            if (isGeneratingResponse) {
-                isGeneratingResponse = false;
-                clearInterval(currentTypingInterval);
-                currentTypingInterval = null;
-                toggleLoading(false);
-            }
 
-            // Step 2: Reset UI and in-memory history for a new chat
-            chatHistoryDiv.innerHTML = '';
-            conversationHistory = []; // Reset history to empty
-            chatAttachments = [];
-            chatImageUpload.value = '';
-            displayChatAttachments();
+            chatHistoryDiv.innerHTML = ''; // Clear existing messages
+            conversationHistory = []; // Reset conversation history
+            chatAttachments = []; // Clear attachments
+            chatImageUpload.value = ''; // Clear file input
+            displayChatAttachments(); // Hide attachment preview
             userInput.value = '';
-            userInput.style.height = 'auto';
-            messageTextCache.clear();
-            suggestionsContainer.classList.add('hidden');
+            userInput.style.height = 'auto'; 
+            messageTextCache.clear(); // Clear message text cache
+            suggestionsContainer.classList.add('hidden'); // Hide suggestions
             selectedSuggestionIndex = -1;
-            userInput.dataset.editingMessageId = '';
-            updateButtonIcon(sendButton, 'send', 'w-5 h-5');
 
-            // Step 3: Append the initial AI message for the new chat
-            const initialAiMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-            const { messageContentDiv: initialAiContentDiv, messageDiv: initialAiMessageDiv } = appendChatMessage('ai', initialAIMessage.parts[0].text, [], initialAiMessageId);
-            conversationHistory.push({ ...initialAIMessage, id: initialAiMessageId }); // Add to the *new* history
-
-            // For the initial message, it always renders instantly
-            initialAiContentDiv.innerHTML = marked.parse(initialAIMessage.parts[0].text);
-            if (typeof Prism !== 'undefined') {
-                requestAnimationFrame(() => {
-                    Prism.highlightAllUnder(initialAiMessageDiv);
-                });
-            }
-
-            if (window.innerWidth <= 768) {
-                chatSidebar.classList.remove('active-mobile-sidebar');
-                mobileToggleSidebarBtn.style.display = 'flex';
-            }
-
+            // Add the initial AI message
+            conversationHistory.push(initialAIMessage);
+            appendChatMessage('ai', initialAIMessage.parts[0].text);
+            
             userInput.focus();
         }
-
-        // --- Export Functions ---
-        function getFormattedChatHistoryTextForExport() {
-            let text = '';
-            conversationHistory.forEach(msg => {
-                let msgText = '';
-                msg.parts.forEach(part => {
-                    if (part.text) {
-                        msgText += part.text;
-                    }
-                    // For attachments, just indicate their presence. Full content not included in text export.
-                    if (part.inlineData) {
-                        msgText += ` [Attachment: ${part.inlineData.name || part.inlineData.mimeType}]`;
-                    }
-                });
-                text += `${msg.role.toUpperCase()}:\n${msgText}\n\n`;
-            });
-            return text;
-        }
-
-        // NEW: Export as Markdown (.md)
-        function exportAsMd() {
-            if (conversationHistory.length === 0) {
-                alert("No chat history to export.");
-                return;
-            }
-            let markdownContent = `# Mystic Vision AI Chat History\n\n`;
-            markdownContent += `*Export Date: ${new Date().toLocaleString()}*\n\n---\n\n`;
-
-            conversationHistory.forEach(msg => {
-                markdownContent += `## ${msg.role === 'user' ? 'You' : 'Mystic Vision'}\n\n`;
-                msg.parts.forEach(part => {
-                    if (part.text) {
-                        markdownContent += `${part.text}\n\n`;
-                    }
-                    if (part.inlineData) {
-                        // For image attachments, provide a placeholder markdown syntax
-                        if (part.inlineData.mimeType.startsWith('image/')) {
-                            markdownContent += `![Attachment: ${part.inlineData.name || 'Image'}](${part.inlineData.mimeType};base64,${part.inlineData.data})\n\n`;
-                        } else {
-                            // For other file types, just list them
-                            markdownContent += `[File Attachment: ${part.inlineData.name || part.inlineData.mimeType}]\n\n`;
-                        }
-                    }
-                });
-                markdownContent += `---\n\n`; // Separator between messages
-            });
-
-            const blob = new Blob([markdownContent], { type: 'text/markdown;charset=utf-8' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `MysticVision_Chat_${new Date().toISOString().slice(0, 10)}.md`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(link.href);
-            alert('Chat exported as Markdown (.md)!');
-        }
-
-        function exportAsTxt() {
-            if (conversationHistory.length === 0) {
-                alert("No chat history to export.");
-                return;
-            }
-            const textContent = getFormattedChatHistoryTextForExport();
-            const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `MysticVision_Chat_${new Date().toISOString().slice(0, 10)}.txt`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(link.href);
-            alert('Chat exported as TXT!');
-        }
-
-        async function exportAsPdf() {
-            if (conversationHistory.length === 0) {
-                alert("No chat history to export.");
-                return;
-            }
-            // jsPDF library needs to be loaded via CDN in HTML head
-            if (typeof jspdf === 'undefined') {
-                alert('PDF export library (jsPDF) not loaded. Please ensure internet connection or check CDN.');
-                console.error("jsPDF not loaded. Add <script src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'><script> to your HTML header.");
-                return;
-            }
-            const { jsPDF } = jspdf;
-            const doc = new jsPDF();
-
-            const title = `Mystic Vision AI Chat History - ${new Date().toLocaleString()}`;
-            const textContent = getFormattedChatHistoryTextForExport();
-            const lines = doc.splitTextToSize(textContent, 180); // Max width of 180mm for text
-
-            let y = 15; // Starting Y position, leave some margin
-            const lineHeight = 7; // Approx line height for 12pt font
-            const pageHeight = doc.internal.pageSize.height;
-            const pageWidth = doc.internal.pageSize.width;
-
-            doc.setFontSize(14);
-            doc.text(title, pageWidth / 2, y, { align: 'center' }); // Centered title
-            y += lineHeight * 2;
-
-            doc.setFontSize(10); // Smaller font for chat content
-            lines.forEach(line => {
-                if (y + lineHeight > pageHeight - 15) { // Check if new page is needed, leave bottom margin
-                    doc.addPage();
-                    y = 15; // Reset Y for new page
-                    doc.setFontSize(12);
-                    doc.text(`Chat History (continued)`, pageWidth / 2, y, { align: 'center' });
-                    y += lineHeight * 2;
-                    doc.setFontSize(10);
-                }
-                doc.text(line, 10, y); // Left aligned text
-                y += lineHeight;
-            });
-
-            doc.save(`MysticVision_Chat_${new Date().toISOString().slice(0, 10)}.pdf`);
-            alert('Chat exported as PDF!');
-        }
-
 
         // --- Paste Functionality ---
         async function processPastedFile(file) {
@@ -3920,35 +3276,6 @@
             }
         }
 
-        // NEW: Function to apply theme
-        function applyTheme(themeName) {
-            // Remove all known theme classes from the body
-            THEMES.forEach(theme => {
-                document.body.classList.remove(theme);
-            });
-            // Ensure the old 'light' class is removed if it was manually added before
-            document.body.classList.remove('light'); 
-
-            // Add the new selected theme class
-            let themeToApply = themeName;
-            if (!THEMES.includes(themeName)) {
-                // Fallback to default if somehow an invalid theme is passed
-                themeToApply = DEFAULT_THEME;
-            }
-            document.body.classList.add(themeToApply);
-            localStorage.setItem('selected-theme', themeToApply); // Save user preference
-
-            // Update the select dropdown to show the current theme
-            if (themeSelect) {
-                themeSelect.value = themeToApply;
-            }
-            // Dynamically update the background-image for select dropdown arrow
-            // This part is a bit tricky with dynamic CSS variables and needs to be called after theme application
-            // A simple way to get current text-color for the SVG arrow:
-            // const arrowColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1);
-            // themeSelect.style.backgroundImage = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23${arrowColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>')`;
-        }
-
         // --- Initialization on Load ---
         window.addEventListener('load', () => {
             // --- Assign DOM Elements after the page is fully loaded ---
@@ -3956,118 +3283,24 @@
             chatHistoryDiv = document.getElementById('chatHistory');
             userInput = document.getElementById('userInput');
             sendButton = document.getElementById('sendButton');
-            themeSelect = document.getElementById('theme-select'); // NEW
-            simulateTypingToggle = document.getElementById('simulate-typing-toggle'); // NEW
+            darkModeToggle = document.getElementById('dark-mode-toggle');
             copyMessage = document.getElementById('copy-message');
+            newChatBtn = document.getElementById('newChatBtn');
             chatAttachmentsPreviewContainer = document.getElementById('chat-attachments-preview-container');
             chatImageUpload = document.getElementById('chat-image-upload');
             voiceInputBtn = document.getElementById('voice-input-btn');
             suggestionsContainer = document.getElementById('suggestions-container');
             suggestionsList = document.getElementById('suggestions-list');
-            stopButton = document.getElementById('stopButton');
-            // Sidebar Elements
-            chatSidebar = document.getElementById('chatSidebar'); 
-            newChatBtnSidebar = document.getElementById('newChatBtn'); 
-            toggleSidebarBtn = document.getElementById('toggleSidebarBtn'); 
-            mobileToggleSidebarBtn = document.getElementById('mobileToggleSidebarBtn'); 
-            chatMainContent = document.querySelector('.chat-main-content');
-            // NEW Sidebar Elements
-            modelSelect = document.getElementById('model-select');
-            systemPromptSelect = document.getElementById('systemPromptSelect'); // Renamed
-            clearSystemPromptBtn = document.getElementById('clearSystemPromptBtn'); // Renamed
-            clearChatBtn = document.getElementById('clearChatBtn');
-            exportTxtBtn = document.getElementById('exportTxtBtn');
-            exportPdfBtn = document.getElementById('exportPdfBtn');
-            exportMdBtn = document.getElementById('exportMdBtn'); // Renamed
 
             createIcons();
             userInput.style.height = userInput.scrollHeight + 'px';
 
-            // NEW: Initialize Theme based on localStorage or default
-            const savedTheme = localStorage.getItem('selected-theme');
-            applyTheme(savedTheme || DEFAULT_THEME);
+            // Initialize Dark Mode based on localStorage or default
+            const isDarkMode = localStorage.getItem('dark-mode') === 'true';
+            document.body.classList.toggle('light', !isDarkMode); // Toggle light class based on dark mode status
+            darkModeToggle.checked = isDarkMode;
 
-            // NEW: Event listener for Theme Selector
-            themeSelect.addEventListener('change', (event) => {
-                const selectedTheme = event.target.value;
-                applyTheme(selectedTheme);
-            });
-
-            // NEW: Initialize Simulate Typing Mode based on localStorage or default
-            const savedSimulateTyping = localStorage.getItem('simulate-typing');
-            if (savedSimulateTyping !== null) {
-                isSimulateTypingEnabled = savedSimulateTyping === 'true';
-            } else {
-                isSimulateTypingEnabled = true; // Default to true if no saved preference
-            }
-            simulateTypingToggle.checked = isSimulateTypingEnabled;
-
-            // Initialize Model Selector
-            modelSelect.value = currentModel;
-            modelSelect.addEventListener('change', (event) => {
-                currentModel = event.target.value;
-                localStorage.setItem('selected-gemini-model', currentModel);
-                console.log(`AI Model set to: ${currentModel}`);
-            });
-
-            // Initialize System Prompt (Persona) Select
-            systemPromptSelect.value = systemInstruction;
-            systemPromptSelect.addEventListener('change', () => {
-                systemInstruction = systemPromptSelect.value.trim();
-                localStorage.setItem('system-instruction', systemInstruction);
-            });
-            clearSystemPromptBtn.addEventListener('click', () => {
-                systemPromptSelect.value = '';
-                systemInstruction = '';
-                localStorage.removeItem('system-instruction');
-                alert('AI persona cleared for future messages.');
-            });
-
-            // Load the current session's chat history on startup
-            const storedHistory = localStorage.getItem(CURRENT_CHAT_STORAGE_KEY);
-            if (storedHistory) {
-                conversationHistory = JSON.parse(storedHistory);
-                const aiMessageDivsToHighlight = []; // For Prism.js highlighting
-                chatHistoryDiv.innerHTML = ''; // Clear existing UI
-
-                conversationHistory.forEach(msg => {
-                    let textContent = '';
-                    let attachments = [];
-                    msg.parts.forEach(part => {
-                        if (part.text) {
-                            textContent = part.text;
-                        } else if (part.inlineData) {
-                            attachments.push({
-                                mimeType: part.inlineData.mimeType,
-                                data: part.inlineData.data,
-                                name: part.inlineData.name || 'Attachment'
-                            });
-                        }
-                    });
-                    // Ensure message has an ID for action buttons even if loaded from older saves
-                    const msgId = msg.id || `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-                    const { messageContentDiv, messageDiv } = appendChatMessage(msg.role, textContent, attachments, msgId);
-                    if (!msg.id) msg.id = msgId; // Update history with new ID if missing
-
-                    if (msg.role === 'model') {
-                        messageContentDiv.innerHTML = marked.parse(textContent);
-                        aiMessageDivsToHighlight.push(messageDiv);
-                    }
-                });
-
-                if (typeof Prism !== 'undefined') {
-                    requestAnimationFrame(() => {
-                        aiMessageDivsToHighlight.forEach(div => {
-                            Prism.highlightAllUnder(div);
-                        });
-                    });
-                }
-                chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-            } else {
-                // If no stored history, start a truly new chat with the AI's first message
-                startNewChat();
-            }
-
+            // Register Service Worker for PWA
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('/service-worker.js')
                 .then(registration => {
@@ -4078,7 +3311,10 @@
                 });
             }
 
-            // --- Speech Recognition Setup ---
+            // Start a new chat on load to display initial message
+            startNewChat();
+
+            // --- Speech Recognition Setup (Must be inside load to ensure voiceInputBtn exists) ---
             if (SpeechRecognition) {
                 recognition = new SpeechRecognition();
                 recognition.continuous = true; 
@@ -4148,35 +3384,11 @@
                 voiceInputBtn.style.display = 'none'; 
             }
 
-            // NEW: Event listener for Simulate Typing Toggle
-            simulateTypingToggle.addEventListener('change', () => {
-                isSimulateTypingEnabled = simulateTypingToggle.checked;
-                localStorage.setItem('simulate-typing', isSimulateTypingEnabled);
-                
-                // If turning off simulation while AI is typing, immediately complete the response
-                if (!isSimulateTypingEnabled && isGeneratingResponse) {
-                    isGeneratingResponse = false; // Stop the animation loop
-                    if (currentTypingInterval) {
-                        clearInterval(currentTypingInterval);
-                        currentTypingInterval = null;
-                    }
-                    // Force complete rendering of the last AI message
-                    const lastAIMessageDiv = chatHistoryDiv.lastElementChild;
-                    if (lastAIMessageDiv && lastAIMessageDiv.classList.contains('ai')) {
-                        const messageContentDiv = lastAIMessageDiv.querySelector('.message-content');
-                        const messageId = lastAIMessageDiv.dataset.messageId;
-                        const fullTextFromCache = messageTextCache.get(messageId);
-                        
-                        if (messageContentDiv) {
-                            messageContentDiv.innerHTML = marked.parse(fullTextFromCache);
-                            if (typeof Prism !== 'undefined') {
-                                Prism.highlightAllUnder(lastAIMessageDiv); // Highlight the full message div
-                            }
-                        }
-                    }
-                    toggleLoading(false); // Hide loading indicator
-                    saveCurrentChat(); // Save the chat now that it's complete
-                }
+            // --- Event Listeners (Must be attached after elements are assigned) ---
+            darkModeToggle.addEventListener('change', () => {
+                const isChecked = darkModeToggle.checked;
+                document.body.classList.toggle('light', !isChecked);
+                localStorage.setItem('dark-mode', isChecked);
             });
 
             userInput.addEventListener('input', () => {
@@ -4194,20 +3406,23 @@
 
             userInput.addEventListener('keydown', (e) => {
                 if (suggestionsContainer.classList.contains('hidden')) {
+                    // If suggestions are hidden, handle Enter and Shift+Enter normally
                     if (e.key === 'Enter' && !e.shiftKey) { 
-                        e.preventDefault(); 
-                        sendButton.click(); 
+                        e.preventDefault(); // Prevent default new line
+                        sendButton.click(); // Send message
                     }
+                    // For Shift+Enter, the default behavior (new line) is allowed
                     return;
                 }
 
+                // If suggestions are visible, handle arrow keys and Enter for selection
                 if (e.key === 'ArrowDown') {
                     e.preventDefault(); 
                     navigateSuggestions('down');
                 } else if (e.key === 'ArrowUp') {
                     e.preventDefault(); 
                     navigateSuggestions('up');
-                } else if (e.key === 'Enter') { 
+                } else if (e.key === 'Enter') { // Handle Enter for selection when suggestions are active
                     e.preventDefault(); 
                     selectCurrentSuggestion();
                 } else if (e.key === 'Escape') {
@@ -4246,105 +3461,30 @@
             });
 
             sendButton.addEventListener('click', async () => {
-                if (isApiCallInProgress) return; 
-
                 const userMessage = userInput.value.trim();
-                const editingMessageId = userInput.dataset.editingMessageId;
-
-                // Stop any ongoing speech or voice input
+                if (!userMessage && chatAttachments.length === 0) {
+                    return;
+                }
+                
                 if (isVoiceInputActive && recognition) {
                     recognition.stop();
                 }
-                if (window.speechSynthesis.speaking) {
-                    window.speechSynthesis.cancel();
-                    isSpeaking = false;
-                    currentUtterance = null;
-                    document.querySelectorAll('.dictate-message-btn').forEach(btn => updateButtonIcon(btn, 'volume-2'));
+
+                const userParts = [];
+                if (userMessage) {
+                    userParts.push({ text: userMessage });
                 }
-
-                if (editingMessageId) {
-                    const editedText = userMessage; 
-                    const messageDivToEdit = document.querySelector(`.chat-message[data-message-id="${editingMessageId}"]`);
-                    
-                    if (messageDivToEdit) {
-                        const originalIndex = Array.from(chatHistoryDiv.children).indexOf(messageDivToEdit);
-                        if (originalIndex !== -1) {
-                            // 1. Update the conversation history with the edited user message and new/retained attachments
-                            conversationHistory[originalIndex].parts = [];
-                            if (editedText) {
-                                conversationHistory[originalIndex].parts.push({ text: editedText });
-                            }
-                            if (chatAttachments.length > 0) {
-                                for(const attachment of chatAttachments) {
-                                    conversationHistory[originalIndex].parts.push({
-                                        inlineData: { mimeType: attachment.mimeType, data: attachment.data }
-                                    });
-                                }
-                            }
-
-                            // 2. Remove all messages from UI and history *after* the edited message
-                            while (chatHistoryDiv.children.length > originalIndex + 1) {
-                                chatHistoryDiv.lastChild.remove();
-                                conversationHistory.pop();
-                            }
-                            
-                            // 3. Re-render the edited message content in the UI
-                            const messageBubbleContent = messageDivToEdit.querySelector('.message-bubble-content');
-                            if (messageBubbleContent) {
-                                // Clear its children completely except avatar and actions
-                                const messageContentDiv = messageBubbleContent.querySelector('.message-content');
-                                if (messageContentDiv) messageContentDiv.remove();
-
-                                // Re-create and append the new message content div
-                                const newMessageContentDiv = document.createElement('div');
-                                newMessageContentDiv.classList.add('message-content');
-                                newMessageContentDiv.innerHTML = `<span>${editedText}</span>`;
-
-                                if (chatAttachments.length > 0) {
-                                    const attachmentsContainer = document.createElement('div');
-                                    attachmentsContainer.classList.add('mt-2', 'flex', 'flex-wrap', 'gap-2');
-                                    chatAttachments.forEach(attachment => {
-                                        if (attachment.mimeType.startsWith('image/')) {
-                                            attachmentsContainer.innerHTML += `<img src="data:${attachment.mimeType};base64,${attachment.data}" alt="${attachment.name || 'User attachment'}" class="chat-image w-24 h-24 object-cover">`;
-                                        } else {
-                                            attachmentsContainer.innerHTML += `
-                                                <div class="chat-message-attachment-item">
-                                                    <span data-lucide="${getFileIcon(attachment.mimeType)}" class="w-4 h-4 flex-shrink-0"></span>
-                                                    <span class="truncate max-w-[120px]">${attachment.name || 'File'}</span>
-                                                </div>
-                                            `;
-                                        }
-                                    });
-                                    newMessageContentDiv.appendChild(attachmentsContainer);
-                                }
-                                messageBubbleContent.prepend(newMessageContentDiv); // Add updated content to the beginning of bubble
-                                
-                                createIcons(); 
-                            }
-                            // Store the raw text for copy/dictate
-                            messageTextCache.set(editingMessageId, editedText); 
-                            messageDivToEdit.classList.remove('editing'); 
+                for (const attachment of chatAttachments) {
+                    userParts.push({
+                        inlineData: {
+                            mimeType: attachment.mimeType,
+                            data: attachment.data
                         }
-                    }
-                } else if (!userMessage && chatAttachments.length === 0) {
-                    return; 
-                } else {
-                    const userParts = [];
-                    if (userMessage) {
-                        userParts.push({ text: userMessage });
-                    }
-                    for (const attachment of chatAttachments) {
-                        userParts.push({
-                            inlineData: {
-                                mimeType: attachment.mimeType,
-                                data: attachment.data
-                            }
-                        });
-                    }
-                    const newUserMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-                    appendChatMessage('user', userMessage, chatAttachments, newUserMessageId); 
-                    conversationHistory.push({ role: 'user', parts: userParts, id: newUserMessageId });
+                    });
                 }
+
+                conversationHistory.push({ role: 'user', parts: userParts });
+                appendChatMessage('user', userMessage, chatAttachments);
                 
                 userInput.value = '';
                 userInput.style.height = 'auto'; 
@@ -4353,83 +3493,31 @@
                 displayChatAttachments(); 
                 suggestionsContainer.classList.add('hidden'); 
                 selectedSuggestionIndex = -1;
-                delete userInput.dataset.editingMessageId; 
-                updateButtonIcon(sendButton, 'send', 'w-5 h-5'); 
-
-                isGeneratingResponse = true; 
-                toggleLoading(true); 
-
+                
+                sendButton.disabled = true;
+                
+                toggleLoading(true);
+                
                 try {
                     const payload = {
-                        contents: conversationHistory, 
+                        contents: conversationHistory,
                     };
                     
                     const responseText = await callGeminiAPI(payload);
                     
-                    if (isGeneratingResponse) { // Still check if the user hasn't stopped it during API call
-                        const newAiMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-                        // Append an empty AI message initially. Its actual content will be filled later.
-                        const { messageContentDiv: aiContentDiv, messageDiv: aiMessageDiv } = appendChatMessage('ai', responseText, [], newAiMessageId); 
-                        
-                        // Add the full AI message to history AFTER appending the empty shell
-                        conversationHistory.push({ role: 'model', parts: [{ text: responseText }], id: newAiMessageId });
-
-                        if (isSimulateTypingEnabled) {
-                            simulateTyping(aiContentDiv, responseText); // Fill content character by character
-                        } else {
-                            // Instant display mode: fill content immediately and highlight
-                            aiContentDiv.innerHTML = marked.parse(responseText);
-                            if (typeof Prism !== 'undefined') {
-                                Prism.highlightAllUnder(aiMessageDiv); // Highlight the full message div
-                            }
-                            chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-                            toggleLoading(false); // Hide loading indicator for instant mode
-                            isGeneratingResponse = false; // Mark generation as complete
-                            saveCurrentChat(); // Save the chat now that the response is complete
-                        }
-                    }
+                    conversationHistory.push({ role: 'model', parts: [{ text: responseText }] });
+                    appendChatMessage('ai', responseText);
                     
                 } catch (error) {
                     console.error('Chat API call failed:', error);
                     appendChatMessage('ai', `Oops! Something went wrong. Please try again. (${error.message})`);
-                    toggleLoading(false); 
-                    isGeneratingResponse = false;
-                } 
-            });
-            
-            stopButton.addEventListener('click', () => {
-                if (isGeneratingResponse) {
-                    isGeneratingResponse = false; 
-                    clearInterval(currentTypingInterval); 
-                    currentTypingInterval = null; 
-                    if (window.speechSynthesis.speaking || window.speechSynthesis.paused) {
-                        window.speechSynthesis.cancel(); 
-                        isSpeaking = false;
-                        currentUtterance = null;
-                        document.querySelectorAll('.dictate-message-btn').forEach(btn => updateButtonIcon(btn, 'volume-2'));
-                    }
-                    // Ensure the currently typing message is fully rendered and highlighted
-                    const lastAIMessageDiv = chatHistoryDiv.lastElementChild;
-                    if (lastAIMessageDiv && lastAIMessageDiv.classList.contains('ai')) {
-                        const messageContentDiv = lastAIMessageDiv.querySelector('.message-content');
-                        const messageId = lastAIMessageDiv.dataset.messageId;
-                        const fullTextFromCache = messageTextCache.get(messageId);
-
-                        if (messageContentDiv && messageContentDiv.innerHTML.trim() !== '') { 
-                            // The simulateTyping interval handler will now also call marked.parse and Prism.highlightAllUnder if stopped
-                            // But if it's already stopped, we need to ensure it's fully rendered manually:
-                            messageContentDiv.innerHTML = marked.parse(fullTextFromCache);
-                            if (typeof Prism !== 'undefined') {
-                                Prism.highlightAllUnder(lastAIMessageDiv);
-                            }
-                        }
-                    }
-                    toggleLoading(false); 
-                    console.log("AI generation stopped by user.");
-                    saveCurrentChat(); // Save the chat as it is, even if incomplete
+                } finally {
+                    sendButton.disabled = false;
+                    toggleLoading(false);
+                    userInput.focus();
                 }
             });
-
+            
             chatImageUpload.addEventListener('change', async (event) => {
                 const files = Array.from(event.target.files);
                 if (files.length > 0) {
@@ -4554,7 +3642,7 @@
                 const chatCopyButton = event.target.closest('.copy-message-btn');
                 if (chatCopyButton) {
                     const messageId = chatCopyButton.dataset.messageId;
-                    const messageContent = messageTextCache.get(messageId); // Get raw text
+                    const messageContent = messageTextCache.get(messageId);
                     if (messageContent) {
                         updateButtonIcon(chatCopyButton, 'check');
                         copyToClipboard(messageContent); 
@@ -4570,7 +3658,7 @@
                 const dictateButton = event.target.closest('.dictate-message-btn');
                 if (dictateButton) {
                     const messageId = dictateButton.dataset.messageId;
-                    const messageContent = messageTextCache.get(messageId); // Get raw text
+                    const messageContent = messageTextCache.get(messageId);
                     if (messageContent) {
                         toggleSpeech(messageContent, dictateButton);
                     } else {
@@ -4578,887 +3666,21 @@
                     }
                     return; 
                 }
-
-                const editButton = event.target.closest('.edit-message-btn');
-                if (editButton) {
-                    const messageId = editButton.dataset.messageId;
-                    const messageDivToEdit = document.querySelector(`.chat-message[data-message-id="${messageId}"]`);
-                    
-                    if (messageDivToEdit) {
-                        const originalIndex = Array.from(chatHistoryDiv.children).indexOf(messageDivToEdit);
-                        if (originalIndex !== -1) {
-                            const originalMessage = conversationHistory[originalIndex];
-                            
-                            let originalText = '';
-                            let originalAttachments = [];
-                            originalMessage.parts.forEach(part => {
-                                if (part.text) {
-                                    originalText = part.text;
-                                } else if (part.inlineData) {
-                                    originalAttachments.push({
-                                        file: null, 
-                                        mimeType: part.inlineData.mimeType,
-                                        data: part.inlineData.data,
-                                        name: part.inlineData.name || 'Attachment' 
-                                    });
-                                }
-                            });
-
-                            userInput.value = originalText;
-                            chatAttachments = originalAttachments; 
-                            displayChatAttachments(); 
-
-                            userInput.focus();
-                            userInput.style.height = 'auto';
-                            userInput.style.height = userInput.scrollHeight + 'px';
-
-                            chatHistoryDiv.querySelectorAll('.chat-message').forEach(msg => msg.classList.remove('editing'));
-                            messageDivToEdit.classList.add('editing');
-
-                            userInput.dataset.editingMessageId = messageId;
-                            updateButtonIcon(sendButton, 'save', 'w-5 h-5');
-                        }
-                    }
-                    return;
-                }
-
-                const regenerateButton = event.target.closest('.regenerate-message-btn');
-                if (regenerateButton) {
-                    const messageId = regenerateButton.dataset.messageId;
-                    const messageDiv = regenerateButton.closest('.chat-message');
-
-                    const aiMessageIndex = Array.from(chatHistoryDiv.children).indexOf(messageDiv);
-
-                    if (aiMessageIndex !== -1) {
-                        const aiMsgInHistoryIndex = conversationHistory.findIndex(msg => msg.id === messageId);
-                        if (aiMsgInHistoryIndex === -1) {
-                            console.error("AI message not found in history for regeneration.");
-                            alert("Could not regenerate: message not found in history.");
-                            return;
-                        }
-
-                        // Slice history *before* this AI message
-                        conversationHistory = conversationHistory.slice(0, aiMsgInHistoryIndex);
-                        
-                        // Remove messages from UI after this AI message (including itself)
-                        while (chatHistoryDiv.children.length > aiMessageIndex) {
-                            chatHistoryDiv.lastChild.remove();
-                        }
-                        
-                        if (conversationHistory.length > 0) {
-                            const lastUserMessage = conversationHistory[conversationHistory.length - 1];
-                            if (lastUserMessage.role === 'user' && lastUserMessage.parts) {
-                                let userTextForRegen = '';
-                                let userAttachmentsForRegen = [];
-                                lastUserMessage.parts.forEach(part => {
-                                    if (part.text) userTextForRegen = part.text;
-                                    if (part.inlineData) userAttachmentsForRegen.push({
-                                        mimeType: part.inlineData.mimeType,
-                                        data: part.inlineData.data,
-                                        name: part.inlineData.name || 'Attachment' 
-                                    });
-                                });
-
-                                userInput.value = userTextForRegen;
-                                chatAttachments = userAttachmentsForRegen; 
-                                displayChatAttachments(); 
-
-                                // Trigger send to re-send the last user message to the API
-                                sendButton.click(); 
-                            } else {
-                                console.error("Cannot regenerate: Last message in history is not a user message or is malformed.");
-                                alert("Could not regenerate. The previous user message was not found or was empty. Starting a new chat.");
-                                startNewChat();
-                            }
-                        } else {
-                            alert("Cannot regenerate. No previous user message to base regeneration on. Starting a new chat.");
-                            startNewChat();
-                        }
-                    }
-                    return;
-                }
             });
 
-            newChatBtnSidebar.addEventListener('click', startNewChat);
-
-            // Clear Current Chat Button Listener
-            clearChatBtn.addEventListener('click', () => {
-                if (confirm('Are you sure you want to clear the current chat history? This cannot be undone.')) {
-                    startNewChat(); // This now clears local storage and restarts the chat
-                }
-            });
-
-            // Add event listeners for the export buttons
-            exportTxtBtn.addEventListener('click', exportAsTxt);
-            exportPdfBtn.addEventListener('click', exportAsPdf);
-            exportMdBtn.addEventListener('click', exportAsMd); // Updated listener
-
-            mobileToggleSidebarBtn.addEventListener('click', () => {
-                chatSidebar.classList.add('active-mobile-sidebar');
-                mobileToggleSidebarBtn.style.display = 'none'; 
-            });
-
-            toggleSidebarBtn.addEventListener('click', () => {
-                chatSidebar.classList.remove('active-mobile-sidebar');
-                mobileToggleSidebarBtn.style.display = 'flex'; 
-            });
-
-            window.addEventListener('resize', () => {
-                const isMobile = window.innerWidth <= 768;
-                if (isMobile) {
-                    chatSidebar.classList.remove('hidden-sidebar'); // Ensure sidebar isn't hidden by default CSS when on mobile
-                    if (chatSidebar.classList.contains('active-mobile-sidebar')) {
-                        mobileToggleSidebarBtn.style.display = 'none';
-                    } else {
-                        mobileToggleSidebarBtn.style.display = 'flex';
-                    }
-                    toggleSidebarBtn.style.display = 'flex'; 
-                } else {
-                    chatSidebar.classList.remove('active-mobile-sidebar'); // Hide mobile sidebar if resizing to desktop
-                    mobileToggleSidebarBtn.style.display = 'none'; 
-                    toggleSidebarBtn.style.display = 'none'; 
-                }
-                createIcons(); 
-            });
+            // Event listener for the new chat button
+            newChatBtn.addEventListener('click', startNewChat);
         });
     </script>
 </body>
 </html>
 
---------------------------------------------------------------------------------------------------------------------------------------------------
-
-Okay, this is a great UX improvement! Merging the send and stop buttons into one, dynamically changing its icon and state, is a very common and effective pattern.
-
-Here's how we'll achieve this, with the exact lines to modify:
-
-**1. HTML Changes:**
-
-*   **Remove the `stopButton` element.**
-
-    ```html
-    <!-- BEFORE -->
-    <!-- Send Button -->
-    <button id="sendButton" class="icon-button">
-        <span data-lucide="send" class="w-5 h-5"></span>
-    </button>
-
-    <!-- Stop Button (initially hidden) -->
-    <button id="stopButton" class="icon-button hidden" title="Stop generating response">
-        <span data-lucide="square" class="w-5 h-5"></span>
-    </button>
-
-    <!-- AFTER -->
-    <!-- Send/Stop Button (Combined) -->
-    <button id="sendButton" class="icon-button">
-        <span data-lucide="send" class="w-5 h-5"></span>
-    </button>
-    ```
-    **Line to Edit:** Remove lines **508-511** (the `stopButton` definition).
-
-**2. CSS Changes:**
-
-*   **Add disabled styles to the `sendButton` and remove `stopButton` styles.**
-
-    ```css
-    /* BEFORE */
-    /* Action buttons in input area (Send, Mic, Paperclip) */
-    .chat-input .icon-button {
-        /* ... existing styles ... */
-    }
-
-    /* ... other .icon-button styles ... */
-
-    #sendButton {
-        background-color: var(--accent-color);
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    }
-    #sendButton:hover {
-        background-color: var(--button-hover-bg);
-        transform: translateY(-2px);
-    }
-    #sendButton:active {
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    }
-    /* NEW: Stop button */
-    #stopButton { /* <-- REMOVE THIS ENTIRE BLOCK */
-        background-color: var(--accent-error);
-        color: white;
-    }
-    #stopButton:hover { /* <-- REMOVE THIS ENTIRE BLOCK */
-        background-color: color-mix(in srgb, var(--accent-error) 80%, black 20%);
-    }
-
-    /* AFTER */
-    /* Action buttons in input area (Send, Mic, Paperclip) */
-    .chat-input .icon-button {
-        /* ... existing styles ... */
-    }
-
-    /* ... other .icon-button styles ... */
-
-    #sendButton {
-        background-color: var(--accent-color);
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease, opacity 0.3s ease, cursor 0.3s ease; /* Add opacity and cursor for disabled state */
-    }
-    #sendButton:hover {
-        background-color: var(--button-hover-bg);
-        transform: translateY(-2px);
-    }
-    #sendButton:active {
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    }
-    /* NEW: Disabled state for the sendButton */
-    #sendButton:disabled {
-        background-color: var(--tertiary-bg); /* Match other icon buttons or a neutral color */
-        cursor: not-allowed;
-        opacity: 0.6; /* Indicate disabled state */
-        box-shadow: none;
-        transform: none;
-    }
-    #sendButton:disabled .lucide {
-        color: var(--border-color); /* Faded icon color */
-    }
-    ```
-    **Lines to Edit:**
-    *   Remove lines **444-451** (the entire `#stopButton` and `#stopButton:hover` rules).
-    *   Add lines **460-468** (the `#sendButton:disabled` and `#sendButton:disabled .lucide` rules) right after `#sendButton:active`.
-    *   Modify line **454** to add `opacity 0.3s ease, cursor 0.3s ease;` to `transition`.
-
-**3. JavaScript Changes:**
-
-This will be the most significant part.
-
-*   **Remove `stopButton` from DOM elements.**
-    ```javascript
-    // BEFORE
-    let sendButton;
-    let themeSelect;
-    // ... other variables ...
-    let stopButton; // <-- REMOVE THIS LINE
-    // ... other variables ...
-
-    // AFTER
-    let sendButton;
-    let themeSelect;
-    // ... other variables ...
-    // let stopButton; // Removed
-    // ... other variables ...
-    ```
-    **Line to Edit:** Remove line **605**.
-
-*   **Create a new function `updateSendButtonState()` to manage the button's appearance and enabled/disabled state.**
-
-    ```javascript
-    // Add this function somewhere before `window.addEventListener('load')`
-    // For example, right after `updateButtonIcon` function.
-    function updateSendButtonState() {
-        const hasInput = userInput.value.trim().length > 0 || chatAttachments.length > 0;
-
-        if (isGeneratingResponse) {
-            // AI is generating, button should be 'stop'
-            updateButtonIcon(sendButton, 'square', 'w-5 h-5');
-            sendButton.disabled = false; // Always enabled to stop
-            sendButton.style.backgroundColor = 'var(--accent-error)'; // Red for stop
-            sendButton.style.color = 'white';
-        } else {
-            // AI is idle, button should be 'send'
-            updateButtonIcon(sendButton, 'send', 'w-5 h-5');
-            sendButton.style.backgroundColor = 'var(--accent-color)'; // Default accent color for send
-            sendButton.style.color = 'white'; // White icon for send
-            if (hasInput) {
-                sendButton.disabled = false; // Enable if there's text or attachments
-            } else {
-                sendButton.disabled = true; // Disable if no text and no attachments
-            }
-        }
-    }
-    ```
-    **Line to Add:** Add this new `updateSendButtonState` function around lines **643-662**.
-
-*   **Modify `toggleLoading()` to use the new `updateSendButtonState()` and remove `stopButton` references.**
-
-    ```javascript
-    // BEFORE
-    function toggleLoading(show) {
-        let loadingIndicator = document.getElementById('loadingIndicator');
-        if (show) {
-            isApiCallInProgress = true;
-            if (!loadingIndicator) {
-                // ... create loadingIndicator ...
-            }
-            loadingIndicator.style.display = 'flex';
-            loadingIndicator.style.flexDirection = 'column';
-            chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-            sendButton.classList.add('hidden'); // <-- MODIFY THIS LINE
-            stopButton.classList.remove('hidden'); // <-- MODIFY THIS LINE
-            userInput.disabled = true;
-        } else {
-            isApiCallInProgress = false;
-            if (loadingIndicator) {
-                loadingIndicator.remove();
-            }
-            sendButton.classList.remove('hidden'); // <-- MODIFY THIS LINE
-            stopButton.classList.add('hidden'); // <-- MODIFY THIS LINE
-            userInput.disabled = false;
-            userInput.focus();
-        }
-    }
-
-    // AFTER
-    function toggleLoading(show) {
-        let loadingIndicator = document.getElementById('loadingIndicator');
-        if (show) {
-            isApiCallInProgress = true;
-            if (!loadingIndicator) {
-                // ... create loadingIndicator ...
-            }
-            loadingIndicator.style.display = 'flex';
-            loadingIndicator.style.flexDirection = 'column';
-            chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-            // sendButton.classList.add('hidden'); // NO LONGER HIDING
-            // stopButton.classList.remove('hidden'); // NO LONGER HIDING
-            isGeneratingResponse = true; // Set state for button update
-            updateSendButtonState(); // Update button to 'stop' icon and enabled
-            userInput.disabled = true;
-        } else {
-            isApiCallInProgress = false;
-            if (loadingIndicator) {
-                loadingIndicator.remove();
-            }
-            // sendButton.classList.remove('hidden'); // NO LONGER HIDING
-            // stopButton.classList.add('hidden'); // NO LONGER HIDING
-            isGeneratingResponse = false; // Set state for button update
-            updateSendButtonState(); // Update button to 'send' icon and disabled/enabled based on input
-            userInput.disabled = false;
-            userInput.focus();
-        }
-    }
-    ```
-    **Lines to Edit:**
-    *   Line **708**: Change `sendButton.classList.add('hidden');` to `isGeneratingResponse = true;` (and remove `sendButton.classList.add('hidden');`).
-    *   Line **709**: Change `stopButton.classList.remove('hidden');` to `updateSendButtonState();` (and remove `stopButton.classList.remove('hidden');`).
-    *   Line **716**: Change `sendButton.classList.remove('hidden');` to `isGeneratingResponse = false;` (and remove `sendButton.classList.remove('hidden');`).
-    *   Line **717**: Change `stopButton.classList.add('hidden');` to `updateSendButtonState();` (and remove `stopButton.classList.add('hidden');`).
-
-*   **Modify `sendButton.addEventListener('click')` to handle both send and stop actions.**
-
-    ```javascript
-    // BEFORE
-    sendButton.addEventListener('click', async () => {
-        if (isApiCallInProgress) return;
-
-        const userMessage = userInput.value.trim();
-        const editingMessageId = userInput.dataset.editingMessageId;
-
-        // ... (rest of existing send logic) ...
-
-        isGeneratingResponse = true;
-        toggleLoading(true);
-
-        try {
-            // ... (API call and response handling) ...
-        } catch (error) {
-            // ... (error handling) ...
-            isGeneratingResponse = false; // Set this in error case
-        }
-    });
-
-    // BEFORE (stopButton listener)
-    stopButton.addEventListener('click', () => { // <-- REMOVE THIS ENTIRE BLOCK
-        if (isGeneratingResponse) {
-            isGeneratingResponse = false;
-            clearInterval(currentTypingInterval);
-            currentTypingInterval = null;
-            // ... (rest of stop logic) ...
-            toggleLoading(false);
-            console.log("AI generation stopped by user.");
-            saveCurrentChat();
-        }
-    });
-
-    // AFTER (MODIFIED sendButton listener)
-    sendButton.addEventListener('click', async () => {
-        // If AI is currently generating, this click means STOP
-        if (isGeneratingResponse) {
-            isGeneratingResponse = false;
-            clearInterval(currentTypingInterval);
-            currentTypingInterval = null;
-            if (window.speechSynthesis.speaking || window.speechSynthesis.paused) {
-                window.speechSynthesis.cancel();
-                isSpeaking = false;
-                currentUtterance = null;
-                document.querySelectorAll('.dictate-message-btn').forEach(btn => updateButtonIcon(btn, 'volume-2'));
-            }
-            // Ensure the currently typing message is fully rendered and highlighted
-            const lastAIMessageDiv = chatHistoryDiv.lastElementChild;
-            if (lastAIMessageDiv && lastAIMessageDiv.classList.contains('ai')) {
-                const messageContentDiv = lastAIMessageDiv.querySelector('.message-content');
-                const messageId = lastAIMessageDiv.dataset.messageId;
-                const fullTextFromCache = messageTextCache.get(messageId);
-
-                if (messageContentDiv && messageContentDiv.innerHTML.trim() !== '') {
-                    messageContentDiv.innerHTML = marked.parse(fullTextFromCache);
-                    if (typeof Prism !== 'undefined') {
-                        Prism.highlightAllUnder(lastAIMessageDiv);
-                    }
-                }
-            }
-            toggleLoading(false); // This will update the button state to 'send'
-            console.log("AI generation stopped by user.");
-            saveCurrentChat();
-            return; // Exit the function after handling stop
-        }
-
-        // If not generating, proceed with sending (original send logic)
-        // Add this check at the very beginning of the "send" part
-        const userMessage = userInput.value.trim();
-        const editingMessageId = userInput.dataset.editingMessageId;
-        const hasInput = userMessage.length > 0 || chatAttachments.length > 0;
-
-        if (!hasInput) {
-            // Optionally, provide visual feedback like a shake or a temporary message
-            console.warn("No input or attachments to send.");
-            // Example: Add a temporary pulse animation or border color change to the input
-            userInput.classList.add('border-accent-error', 'animate-pulse');
-            setTimeout(() => {
-                userInput.classList.remove('border-accent-error', 'animate-pulse');
-            }, 500);
-            return; // Prevent sending an empty message
-        }
-
-        // Stop any ongoing speech or voice input (redundant if voice input auto-stops on final, but safe)
-        if (isVoiceInputActive && recognition) {
-            recognition.stop();
-        }
-        if (window.speechSynthesis.speaking) {
-            window.speechSynthesis.cancel();
-            isSpeaking = false;
-            currentUtterance = null;
-            document.querySelectorAll('.dictate-message-btn').forEach(btn => updateButtonIcon(btn, 'volume-2'));
-        }
-
-        if (editingMessageId) {
-            // ... (original editing logic) ...
-            const editedText = userMessage;
-            const messageDivToEdit = document.querySelector(`.chat-message[data-message-id="${editingMessageId}"]`);
-            if (messageDivToEdit) {
-                const originalIndex = Array.from(chatHistoryDiv.children).indexOf(messageDivToEdit);
-                if (originalIndex !== -1) {
-                    conversationHistory[originalIndex].parts = [];
-                    if (editedText) {
-                        conversationHistory[originalIndex].parts.push({ text: editedText });
-                    }
-                    if (chatAttachments.length > 0) {
-                        for(const attachment of chatAttachments) {
-                            conversationHistory[originalIndex].parts.push({
-                                inlineData: { mimeType: attachment.mimeType, data: attachment.data }
-                            });
-                        }
-                    }
-
-                    while (chatHistoryDiv.children.length > originalIndex + 1) {
-                        chatHistoryDiv.lastChild.remove();
-                        conversationHistory.pop();
-                    }
-
-                    const messageBubbleContent = messageDivToEdit.querySelector('.message-bubble-content');
-                    if (messageBubbleContent) {
-                        const messageContentDiv = messageBubbleContent.querySelector('.message-content');
-                        if (messageContentDiv) messageContentDiv.remove();
-
-                        const newMessageContentDiv = document.createElement('div');
-                        newMessageContentDiv.classList.add('message-content');
-                        newMessageContentDiv.innerHTML = `<span>${editedText}</span>`;
-
-                        if (chatAttachments.length > 0) {
-                            const attachmentsContainer = document.createElement('div');
-                            attachmentsContainer.classList.add('mt-2', 'flex', 'flex-wrap', 'gap-2');
-                            chatAttachments.forEach(attachment => {
-                                if (attachment.mimeType.startsWith('image/')) {
-                                    attachmentsContainer.innerHTML += `<img src="data:${attachment.mimeType};base64,${attachment.data}" alt="${attachment.name || 'User attachment'}" class="chat-image w-24 h-24 object-cover">`;
-                                } else {
-                                    attachmentsContainer.innerHTML += `
-                                        <div class="chat-message-attachment-item">
-                                            <span data-lucide="${getFileIcon(attachment.mimeType)}" class="w-4 h-4 flex-shrink-0"></span>
-                                            <span class="truncate max-w-[120px]">${attachment.name || 'File'}</span>
-                                        </div>
-                                    `;
-                                }
-                            });
-                            newMessageContentDiv.appendChild(attachmentsContainer);
-                        }
-                        messageBubbleContent.prepend(newMessageContentDiv);
-                        createIcons();
-                    }
-                    messageTextCache.set(editingMessageId, editedText);
-                    messageDivToEdit.classList.remove('editing');
-                }
-            }
-        } else {
-            // ... (original new message logic) ...
-            const userParts = [];
-            if (userMessage) {
-                userParts.push({ text: userMessage });
-            }
-            for (const attachment of chatAttachments) {
-                userParts.push({
-                    inlineData: {
-                        mimeType: attachment.mimeType,
-                        data: attachment.data
-                    }
-                });
-            }
-            const newUserMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-            appendChatMessage('user', userMessage, chatAttachments, newUserMessageId);
-            conversationHistory.push({ role: 'user', parts: userParts, id: newUserMessageId });
-        }
-
-        userInput.value = '';
-        userInput.style.height = 'auto';
-        chatAttachments = [];
-        chatImageUpload.value = '';
-        displayChatAttachments();
-        suggestionsContainer.classList.add('hidden');
-        selectedSuggestionIndex = -1;
-        delete userInput.dataset.editingMessageId;
-        // updateButtonIcon(sendButton, 'send', 'w-5 h-5'); // No longer needed here, toggleLoading handles this
-
-        // isGeneratingResponse = true; // No longer needed directly here, toggleLoading handles it
-        toggleLoading(true); // This will set isGeneratingResponse and update button state
-
-        try {
-            const payload = {
-                contents: conversationHistory,
-            };
-
-            const responseText = await callGeminiAPI(payload);
-
-            if (isGeneratingResponse) { // Still check if the user hasn't stopped it during API call
-                const newAiMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-                const { messageContentDiv: aiContentDiv, messageDiv: aiMessageDiv } = appendChatMessage('ai', responseText, [], newAiMessageId);
-
-                conversationHistory.push({ role: 'model', parts: [{ text: responseText }], id: newAiMessageId });
-
-                if (isSimulateTypingEnabled) {
-                    simulateTyping(aiContentDiv, responseText);
-                } else {
-                    aiContentDiv.innerHTML = marked.parse(responseText);
-                    if (typeof Prism !== 'undefined') {
-                        Prism.highlightAllUnder(aiMessageDiv);
-                    }
-                    chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-                    toggleLoading(false);
-                    isGeneratingResponse = false;
-                    saveCurrentChat();
-                }
-            }
-        } catch (error) {
-            console.error('Chat API call failed:', error);
-            appendChatMessage('ai', `Oops! Something went wrong. Please try again. (${error.message})`);
-            toggleLoading(false); // This will update the button state to 'send'
-            isGeneratingResponse = false;
-        }
-    });
-    ```
-    **Lines to Edit:**
-    *   Remove lines **972-990** (the entire `stopButton.addEventListener` block).
-    *   **Crucially**: Modify the `sendButton.addEventListener('click', async () => { ... });` block by:
-        *   **Adding lines 972-999** (the `if (isGeneratingResponse) { ... } else { ... }` structure) to the very top of its body, including the `return;` statement. This will turn the existing listener into a combined send/stop handler.
-        *   Add the `hasInput` validation around line **1004**.
-        *   Around line **1048**: Remove `updateButtonIcon(sendButton, 'send', 'w-5 h-5');` (as `toggleLoading` will handle it).
-        *   Around line **1051**: Remove `isGeneratingResponse = true;` (as `toggleLoading` will handle it).
-
-*   **Update `userInput` and `chatAttachments` event listeners to call `updateSendButtonState()`:**
-
-    ```javascript
-    // BEFORE (in window.onload)
-    userInput.addEventListener('input', () => {
-        userInput.style.height = 'auto';
-        userInput.style.height = userInput.scrollHeight + 'px';
-
-        // ... (autocomplete logic) ...
-    });
-
-    chatImageUpload.addEventListener('change', async (event) => {
-        // ... (file processing) ...
-        displayChatAttachments();
-        userInput.focus();
-    });
-
-    chatAttachmentsPreviewContainer.addEventListener('click', (event) => {
-        const removeBtn = event.target.closest('.remove-attachment-btn');
-        if (removeBtn) {
-            const attachmentDiv = removeBtn.closest('[data-index]');
-            if (attachmentDiv) {
-                // ... (attachment removal) ...
-                displayChatAttachments();
-                userInput.focus();
-            }
-        }
-    });
-
-    // AFTER (in window.onload)
-    userInput.addEventListener('input', () => {
-        userInput.style.height = 'auto';
-        userInput.style.height = userInput.scrollHeight + 'px';
-
-        const query = userInput.value;
-        if (query.length > 0) {
-            const suggestions = filterSuggestions(query);
-            displaySuggestions(suggestions);
-        } else {
-            suggestionsContainer.classList.add('hidden');
-        }
-        updateSendButtonState(); // <-- ADD THIS LINE
-    });
-
-    chatImageUpload.addEventListener('change', async (event) => {
-        const files = Array.from(event.target.files);
-        if (files.length > 0) {
-            for (const file of files) {
-                const allowedTypes = [
-                    'image/', 'text/', 'application/pdf',
-                    'application/json', 'text/csv', 'application/xml', 'text/markdown'
-                ];
-                const isAllowed = allowedTypes.some(type => file.type.startsWith(type)) || file.name.endsWith('.md');
-
-                if (isAllowed) {
-                    if (file.size > 10 * 1024 * 1024) {
-                        alert(`File "${file.name}" is too large (>${10}MB). Max 10MB per file.`);
-                        continue;
-                    }
-                    try {
-                        const { mimeType, data } = await fileToBase64(file);
-                        chatAttachments.push({ file, mimeType, data, name: file.name });
-                    } catch (error) {
-                        alert(`Failed to read chat file ${file.name}.`);
-                        console.error('Chat file read error:', error);
-                    }
-                } else {
-                    alert(`File type not supported for chat: "${file.name}" (${file.type}).`);
-                }
-            }
-            displayChatAttachments();
-            userInput.focus();
-            updateSendButtonState(); // <-- ADD THIS LINE
-        }
-        chatImageUpload.value = '';
-    });
-
-    chatAttachmentsPreviewContainer.addEventListener('click', (event) => {
-        const removeBtn = event.target.closest('.remove-attachment-btn');
-        if (removeBtn) {
-            const attachmentDiv = removeBtn.closest('[data-index]');
-            if (attachmentDiv) {
-                const index = parseInt(attachmentDiv.dataset.index);
-                chatAttachments.splice(index, 1);
-                displayChatAttachments();
-                userInput.focus();
-                updateSendButtonState(); // <-- ADD THIS LINE
-            }
-        }
-    });
-
-    // Also call updateSendButtonState() after paste (if files were pasted)
-    chatbotContainer.addEventListener('drop', async (e) => {
-        // ... existing drag/drop logic ...
-        if (files.length > 0) {
-            // ... (file processing) ...
-            displayChatAttachments();
-            userInput.focus();
-            updateSendButtonState(); // <-- ADD THIS LINE
-        }
-    });
-    ```
-    **Lines to Add:**
-    *   Line **908**: Add `updateSendButtonState();`
-    *   Line **1096**: Add `updateSendButtonState();`
-    *   Line **1122**: Add `updateSendButtonState();`
-    *   Line **1163**: Add `updateSendButtonState();` (inside the `if (files.length > 0)` block for drag/drop).
-
-*   **Update `startNewChat()` to set the button state correctly.**
-
-    ```javascript
-    // BEFORE
-    function startNewChat() {
-        // ... (existing logic) ...
-        userInput.dataset.editingMessageId = '';
-        updateButtonIcon(sendButton, 'send', 'w-5 h-5'); // <-- REMOVE THIS LINE
-
-        // ... (rest of function) ...
-    }
-
-    // AFTER
-    function startNewChat() {
-        // ... (existing logic) ...
-        userInput.dataset.editingMessageId = '';
-        // updateButtonIcon(sendButton, 'send', 'w-5 h-5'); // Removed
-        updateSendButtonState(); // <-- ADD THIS LINE (replaces the removed line)
-
-        // ... (rest of function) ...
-    }
-    ```
-    **Line to Edit:** Replace line **819** with `updateSendButtonState();`.
-
-*   **Update Regenerate Button Click Handler to set the button state correctly.**
-
-    ```javascript
-    // BEFORE (inside chatHistoryDiv.addEventListener('click'))
-    const regenerateButton = event.target.closest('.regenerate-message-btn');
-    if (regenerateButton) {
-        // ... existing regenerate logic ...
-        sendButton.click(); // This will trigger the send logic
-    }
-
-    // AFTER
-    const regenerateButton = event.target.closest('.regenerate-message-btn');
-    if (regenerateButton) {
-        // ... existing regenerate logic ...
-        // No longer call sendButton.click(), directly run the send logic.
-        // This ensures the button state is managed by toggleLoading.
-        // Copy relevant parts of the sendButton.addEventListener logic here for regeneration.
-        const messageId = regenerateButton.dataset.messageId;
-        const messageDiv = regenerateButton.closest('.chat-message');
-
-        const aiMessageIndex = Array.from(chatHistoryDiv.children).indexOf(messageDiv);
-
-        if (aiMessageIndex !== -1) {
-            const aiMsgInHistoryIndex = conversationHistory.findIndex(msg => msg.id === messageId);
-            if (aiMsgInHistoryIndex === -1) {
-                console.error("AI message not found in history for regeneration.");
-                alert("Could not regenerate: message not found in history.");
-                return;
-            }
-
-            conversationHistory = conversationHistory.slice(0, aiMsgInHistoryIndex);
-
-            while (chatHistoryDiv.children.length > aiMessageIndex) {
-                chatHistoryDiv.lastChild.remove();
-            }
-
-            if (conversationHistory.length > 0) {
-                const lastUserMessage = conversationHistory[conversationHistory.length - 1];
-                if (lastUserMessage.role === 'user' && lastUserMessage.parts) {
-                    let userTextForRegen = '';
-                    let userAttachmentsForRegen = [];
-                    lastUserMessage.parts.forEach(part => {
-                        if (part.text) userTextForRegen = part.text;
-                        if (part.inlineData) userAttachmentsForRegen.push({
-                            mimeType: part.inlineData.mimeType,
-                            data: part.inlineData.data,
-                            name: part.inlineData.name || 'Attachment'
-                        });
-                    });
-
-                    userInput.value = userTextForRegen;
-                    chatAttachments = userAttachmentsForRegen;
-                    displayChatAttachments();
-
-                    // Directly trigger the API call logic without simulating a click,
-                    // and ensure the button state is correctly updated.
-                    toggleLoading(true); // Set to loading state immediately
-                    const userParts = [];
-                    if (userTextForRegen) {
-                        userParts.push({ text: userTextForRegen });
-                    }
-                    for (const attachment of chatAttachments) {
-                        userParts.push({
-                            inlineData: {
-                                mimeType: attachment.mimeType,
-                                data: attachment.data
-                            }
-                        });
-                    }
-                    const newUserMessageId = lastUserMessage.id; // Retain the original user message ID for regeneration context
-                    // Append user message if not already present, or re-use existing
-                    // This is handled by the slicing and the fact that we're effectively re-triggering the AI response for the last user message.
-
-                    try {
-                        const payload = {
-                            contents: conversationHistory,
-                        };
-                        const responseText = await callGeminiAPI(payload);
-
-                        if (isGeneratingResponse) { // Check if not stopped during API call
-                            const newAiMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-                            const { messageContentDiv: aiContentDiv, messageDiv: aiMessageDiv } = appendChatMessage('ai', responseText, [], newAiMessageId);
-                            conversationHistory.push({ role: 'model', parts: [{ text: responseText }], id: newAiMessageId });
-
-                            if (isSimulateTypingEnabled) {
-                                simulateTyping(aiContentDiv, responseText);
-                            } else {
-                                aiContentDiv.innerHTML = marked.parse(responseText);
-                                if (typeof Prism !== 'undefined') {
-                                    Prism.highlightAllUnder(aiMessageDiv);
-                                }
-                                chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-                                toggleLoading(false);
-                                isGeneratingResponse = false;
-                                saveCurrentChat();
-                            }
-                        }
-                    } catch (error) {
-                        console.error('Chat API call failed during regeneration:', error);
-                        appendChatMessage('ai', `Oops! Something went wrong during regeneration. Please try again. (${error.message})`);
-                        toggleLoading(false);
-                        isGeneratingResponse = false;
-                    }
-
-                    // Clear input area after successful "resend" from regeneration
-                    userInput.value = '';
-                    userInput.style.height = 'auto';
-                    chatAttachments = [];
-                    chatImageUpload.value = '';
-                    displayChatAttachments();
-                    suggestionsContainer.classList.add('hidden');
-                    selectedSuggestionIndex = -1;
-                    delete userInput.dataset.editingMessageId;
-                    updateSendButtonState(); // Ensure button is 'send' and disabled if no new input
-                } else {
-                    console.error("Cannot regenerate: Last message in history is not a user message or is malformed.");
-                    alert("Could not regenerate. The previous user message was not found or was empty. Starting a new chat.");
-                    startNewChat();
-                }
-            } else {
-                alert("Cannot regenerate. No previous user message to base regeneration on. Starting a new chat.");
-                startNewChat();
-            }
-            return;
-        }
-    ```
-    **Lines to Edit:** Replace lines **1285-1288** (the `regenerateButton` block) with the new, expanded logic above (lines **1285-1393** in the new code). This changes it from `sendButton.click()` to directly handling the regeneration process and calling `toggleLoading`.
-
-*   **Initial call to `updateSendButtonState` on load.**
-
-    ```javascript
-    // BEFORE (in window.onload)
-    createIcons();
-    userInput.style.height = userInput.scrollHeight + 'px';
-
-    // ... (theme and model init) ...
-
-    // Load the current session's chat history on startup
-    const storedHistory = localStorage.getItem(CURRENT_CHAT_STORAGE_KEY);
-    // ... (rest of history loading) ...
-
-    // AFTER (in window.onload)
-    createIcons();
-    userInput.style.height = userInput.scrollHeight + 'px';
-
-    // ... (theme and model init) ...
-
-    // Load the current session's chat history on startup
-    const storedHistory = localStorage.getItem(CURRENT_CHAT_STORAGE_KEY);
-    // ... (rest of history loading) ...
-
-    updateSendButtonState(); // <-- ADD THIS LINE AFTER INITIAL LOAD/HISTORY RESTORE
-    ```
-    **Line to Add:** Add `updateSendButtonState();` after the `if (storedHistory) { ... } else { ... }` block, around line **870**.
-
-By following these modifications, your `sendButton` will transform into a `stopButton` during AI generation, and will be disabled when there's no input to send, providing the desired dynamic behavior.
-
--------------------------------------------------------------------------------------
-
-send me the updated code.
+-----------------------------------------------------------------------------------------------------------------
+
+i want to edit the code to add a section to switch between different versions.
+the versions are : 
+
+main version : https://mystic-vision-ai-standalone-chatbot.netlify.app/
+lite version : https://mystic-vision-ai-lite.netlify.app/
+basic version : https://mystic-vision-ai-basic.netlify.app/
+mini version : https://mystic-vision-ai-mini.netlify.app/
