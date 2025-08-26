@@ -1028,7 +1028,8 @@
             </div>
 
             <div class="flex gap-2 items-end">
-                <input type="text" id="chat-input" class="chat-input flex-1 p-3 rounded-full border transition-colors shadow-sm" placeholder="Ask a question or type a command...">
+                <!-- MODIFIED: Input box width adjusted for mobile -->
+                <input type="text" id="chat-input" class="chat-input p-3 rounded-full border transition-colors shadow-sm w-[calc(100%-112px)] sm:flex-1 min-w-0" placeholder="Ask a question or type a command...">
                 
                 <button id="add-chat-attachment-btn" aria-label="Add attachment or voice input" class="flex items-center justify-center w-12 h-12 rounded-full shadow-lg cursor-pointer transition-all duration-300 flex-shrink-0">
                     <span data-lucide="plus" class="w-5 h-5"></span>
