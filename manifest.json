@@ -1,11 +1,11 @@
 {
-  "name": "Mystic Vision AI Chat",
-  "short_name": "Mystic Vision AI",
-  "description": "Chat with Mystic Vision AI for insights and predictions.",
+  "name": "Mystic Vision AI Mini",
+  "short_name": "Mystic Vision Mini",
+  "description": "A standalone AI Chatbot powered by Gemini.",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#0C0C2F",
-  "theme_color": "#C070FF",
+  "background_color": "#0a0a0f",
+  "theme_color": "#6366f1",
   "icons": [
     {
       "src": "icons/icon-72x72.png",

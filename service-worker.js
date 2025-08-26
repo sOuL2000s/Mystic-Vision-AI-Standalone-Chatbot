@@ -1,12 +1,14 @@
-const CACHE_NAME = 'mystic-vision-cache-v1';
+const CACHE_NAME = 'ai-chatbot-cache-v1'; // Updated cache name
 const urlsToCache = [
     './',
     './index.html',
     './manifest.json',
-    'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Montserrat:wght@400;600&display=swap',
+    'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap',
     'https://cdn.jsdelivr.net/npm/marked/marked.min.js',
     'https://cdn.jsdelivr.net/npm/lucide-dynamic@latest/dist/lucide.min.js',
     'https://unpkg.com/lucide@latest',
+    'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', // Keep dependency if in HTML head
+    'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js', // Keep dependency if in HTML head
     // Assuming icons are in an 'icons' folder at the root
     './icons/icon-72x72.png',
     './icons/icon-96x96.png',
