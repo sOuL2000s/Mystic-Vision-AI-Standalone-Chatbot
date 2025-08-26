@@ -1028,7 +1028,8 @@
             </div>
 
             <div class="flex gap-2 items-end">
-                <input type="text" id="chat-input" class="chat-input flex-1 p-3 rounded-full border transition-colors shadow-sm" placeholder="Ask a question or type a command...">
+                <!-- MODIFIED: Input box width adjusted for mobile -->
+                <input type="text" id="chat-input" class="chat-input p-3 rounded-full border transition-colors shadow-sm w-[calc(100%-112px)] sm:flex-1 min-w-0" placeholder="Ask a question or type a command...">
                 
                 <button id="add-chat-attachment-btn" aria-label="Add attachment or voice input" class="flex items-center justify-center w-12 h-12 rounded-full shadow-lg cursor-pointer transition-all duration-300 flex-shrink-0">
                     <span data-lucide="plus" class="w-5 h-5"></span>
@@ -1937,8 +1938,12 @@
 </body>
 </html>
 
-----------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------
 
-i want to : 
+i want to edit the code to add a section to switch between different versions.
+the versions are : 
 
-decrease the size/breadth of the text input box for the mobile version because the footer section where plus button and message send button are there the send button is getting cut off in mobile browser in the mobile version.
+main version : https://mystic-vision-ai-standalone-chatbot.netlify.app/
+lite version : https://mystic-vision-ai-lite.netlify.app/
+basic version : https://mystic-vision-ai-basic.netlify.app/
+mini version : https://mystic-vision-ai-mini.netlify.app/

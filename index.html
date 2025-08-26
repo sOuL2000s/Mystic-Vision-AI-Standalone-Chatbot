@@ -377,19 +377,19 @@
             color: #9ca3af; /* Tailwind gray-400 equivalent for dark mode consistency */
         }
 
-        /* Action buttons in header (Theme Selector, New Chat) */
-        #theme-selector-btn, #new-chat-btn {
+        /* Action buttons in header (Theme Selector, New Chat, Version Selector) */
+        #theme-selector-btn, #new-chat-btn, #version-selector-btn {
             background-color: var(--input-btn-bg-light);
             color: var(--input-btn-text-light); /* For the Lucide icon */
         }
-        #theme-selector-btn:hover, #new-chat-btn:hover {
+        #theme-selector-btn:hover, #new-chat-btn:hover, #version-selector-btn:hover {
             background-color: color-mix(in srgb, var(--input-btn-bg-light) 80%, black 10%);
         }
-        body.dark #theme-selector-btn, body.dark #new-chat-btn {
+        body.dark #theme-selector-btn, body.dark #new-chat-btn, body.dark #version-selector-btn {
             background-color: var(--input-btn-bg-dark);
             color: var(--input-btn-text-dark); /* For the Lucide icon */
         }
-        body.dark #theme-selector-btn:hover, body.dark #new-chat-btn:hover {
+        body.dark #theme-selector-btn:hover, body.dark #new-chat-btn:hover, body.dark #version-selector-btn:hover {
             background-color: color-mix(in srgb, var(--input-btn-bg-dark) 80%, white 10%);
         }
 
@@ -989,6 +989,27 @@
                     <span data-lucide="message-square-plus" class="w-5 h-5"></span>
                 </button>
                 
+                <!-- NEW: Version Selector -->
+                <div class="relative">
+                    <button id="version-selector-btn" aria-label="Select Version" class="flex items-center justify-center w-10 h-10 rounded-full shadow-sm transition-all duration-300 flex-shrink-0">
+                        <span data-lucide="layout-grid" class="w-5 h-5"></span>
+                    </button>
+                    <div id="version-dropdown" class="actions-dropdown hidden right-0 left-auto" style="bottom: auto; top: calc(100% + 8px);">
+                        <button class="version-option w-full justify-start text-left" data-url="https://mystic-vision-ai-standalone-chatbot.netlify.app/">
+                            <span data-lucide="layout-template" class="w-5 h-5"></span> Main Version
+                        </button>
+                        <button class="version-option w-full justify-start text-left" data-url="https://mystic-vision-ai-lite.netlify.app/">
+                            <span data-lucide="layout-list" class="w-5 h-5"></span> Lite Version
+                        </button>
+                        <button class="version-option w-full justify-start text-left" data-url="https://mystic-vision-ai-basic.netlify.app/">
+                            <span data-lucide="square" class="w-5 h-5"></span> Basic Version
+                        </button>
+                        <button class="version-option w-full justify-start text-left" data-url="https://mystic-vision-ai-mini.netlify.app/">
+                            <span data-lucide="layout-dashboard" class="w-5 h-5"></span> Mini Version (Current)
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Dark Mode Toggle -->
                 <span class="text-gray-500 text-sm hidden sm:inline">Light</span>
                 <label class="switch relative inline-block w-14 h-8">
@@ -1106,6 +1127,11 @@
         const themeSelectorBtn = document.getElementById('theme-selector-btn');
         const themeDropdown = document.getElementById('theme-dropdown');
         const themeOptions = document.querySelectorAll('.theme-option');
+
+        // NEW: Elements for Version Selector
+        const versionSelectorBtn = document.getElementById('version-selector-btn');
+        const versionDropdown = document.getElementById('version-dropdown');
+        const versionOptions = document.querySelectorAll('.version-option');
         
         // Copy message element
         const copyMessage = document.getElementById('copy-message');
@@ -1288,6 +1314,21 @@
             });
         });
 
+        // NEW: Event listener for version selector dropdown button
+        versionSelectorBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            versionDropdown.classList.toggle('hidden');
+            createIcons(); // Ensure icons within dropdown are rendered
+        });
+
+        // NEW: Event listeners for individual version options
+        versionOptions.forEach(button => {
+            button.addEventListener('click', (event) => {
+                const url = event.currentTarget.dataset.url;
+                window.location.href = url; // Redirect to the selected version
+            });
+        });
+
         // Close dropdowns when clicking anywhere else on the document
         document.addEventListener('click', (event) => {
             if (!chatActionsDropdown.contains(event.target) && !addChatAttachmentBtn.contains(event.target)) {
@@ -1296,6 +1337,10 @@
             // Also close the theme dropdown
             if (!themeDropdown.contains(event.target) && !themeSelectorBtn.contains(event.target)) {
                 themeDropdown.classList.add('hidden');
+            }
+            // NEW: Also close the version dropdown
+            if (!versionDropdown.contains(event.target) && !versionSelectorBtn.contains(event.target)) {
+                versionDropdown.classList.add('hidden');
             }
         });
 
