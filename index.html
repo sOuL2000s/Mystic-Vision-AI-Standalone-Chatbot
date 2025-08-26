@@ -496,6 +496,13 @@
             font-size: 0.9em;
             resize: vertical;
             transition: border-color 0.3s ease, background-color 0.3s ease, color 0.6s ease;
+            cursor: pointer; /* Added for select elements */
+            -webkit-appearance: none; /* For custom arrow */
+            -moz-appearance: none;
+            appearance: none;
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            padding-right: 28px; /* Space for arrow */
         }
         .sidebar-section input[type="password"]:focus,
         .sidebar-section textarea:focus,
@@ -650,14 +657,14 @@
             gap: 8px; /* Space between toggles */
             /*z-index: 3;*/
         }
-        .theme-selector-container label, .response-mode-container span { 
+        .theme-selector-container label, .response-mode-container span, .version-selector-container label { 
             color: var(--text-color); 
             transition: color 0.6s ease;
             font-size: 0.8em; /* Smaller text */
             vertical-align: middle;
             line-height: 1; 
         }
-        .theme-selector-container select {
+        .theme-selector-container select, .version-selector-container select {
             background-color: var(--input-bg);
             color: var(--text-color);
             border: 1px solid var(--border-color);
@@ -674,7 +681,7 @@
             background-position: right 8px center;
             padding-right: 28px; /* Make space for the custom arrow */
         }
-        .theme-selector-container select:hover {
+        .theme-selector-container select:hover, .version-selector-container select:hover {
             background-color: var(--secondary-bg);
         }
 
@@ -1394,10 +1401,10 @@
                 /*gap: 4px; /* Even less space */
             /*}*/
             
-            .theme-selector-container label, .response-mode-container span {
+            .theme-selector-container label, .response-mode-container span, .version-selector-container label {
                 font-size: 0.7em;
             }
-            .theme-selector-container select {
+            .theme-selector-container select, .version-selector-container select {
                 font-size: 0.7em;
                 padding: 3px 6px;
                 padding-right: 24px;
@@ -1626,6 +1633,14 @@
                         <span data-lucide="file-code" class="w-4 h-4"></span> Export as MD
                     </button>
                 </div>
+            </div>
+            
+            <!-- NEW: Version Selector -->
+            <div class="sidebar-section version-selector-container">
+                <h4 class="font-semibold text-accent-color mb-2">App Version</h4>
+                <select id="version-select" class="w-full">
+                    <!-- Options will be populated by JavaScript -->
+                </select>
             </div>
 
             <!-- Clear Current Chat Button -->
@@ -2490,7 +2505,7 @@
             "What is impact investing?",
             "How to support fair trade initiatives?",
             "Explain corporate social responsibility.",
-            "What are sustainable business practices?",
+            "What is sustainable business practices?",
             "How to measure social impact?",
             "Tips for ethical leadership.",
             "What is servant leadership?",
@@ -2533,7 +2548,7 @@
             "Explain employee engagement.",
             "What are performance management strategies?",
             "How to provide constructive feedback to employees?",
-            "Tips for conflict resolution in teams.",
+            "Tips for conflict resolution in teams?",
             "What is diversity and inclusion in HR?",
             "How to recruit top talent?",
             "Explain onboarding processes.",
@@ -3153,6 +3168,9 @@
         // Renamed from exportDocBtn to exportMdBtn
         let exportMdBtn; 
 
+        // NEW: Version Selector Element
+        let versionSelect;
+
         // NEW: Theme Constants
         const THEMES = [
             'cosmic-purple',
@@ -3165,6 +3183,15 @@
             'ancient-papyrus' // Added new theme
         ];
         const DEFAULT_THEME = 'cosmic-purple';
+
+        // NEW: App Versions (URLs)
+        const APP_VERSIONS = {
+            'Main': 'https://mystic-vision-ai-standalone-chatbot.netlify.app/',
+            'Lite': 'https://mystic-vision-ai-lite.netlify.app/',
+            'Basic': 'https://mystic-vision-ai-basic.netlify.app/',
+            'Mini': 'https://mystic-vision-ai-mini.netlify.app/'
+        };
+        const CURRENT_APP_NAME = 'Main'; // This file is the 'Main' version
 
         // --- Lucide Icon Helper ---
         const createIcons = () => {
@@ -3188,7 +3215,32 @@
             createIcons(); 
         }
 
-        // NEW: Function to manage the send/stop button's appearance and enabled/disabled state
+        // NEW: Function to update select arrow color (for theme and version selectors)
+        function updateSelectArrowColor(selectElement) {
+            const computedStyle = getComputedStyle(document.documentElement);
+            const textColorValue = computedStyle.getPropertyValue('--text-color').trim();
+            let arrowColor = '000000'; // Default to black
+            if (textColorValue.startsWith('#') && textColorValue.length === 7) {
+                arrowColor = textColorValue.substring(1);
+            } else if (textColorValue.startsWith('rgb')) {
+                const rgb = textColorValue.match(/\d+/g);
+                if (rgb && rgb.length >= 3) {
+                    arrowColor = ((1 << 24) + (parseInt(rgb[0]) << 16) + (parseInt(rgb[1]) << 8) + parseInt(rgb[2])).toString(16).slice(1);
+                }
+            }
+            selectElement.style.backgroundImage = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23${arrowColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>')`;
+        }
+
+        // NEW: Apply updatedSelectArrowColor to all select elements that need it after theme change
+        function updateAllSelectArrows() {
+            const selectElements = document.querySelectorAll('.sidebar-section select');
+            selectElements.forEach(selectElement => {
+                updateSelectArrowColor(selectElement);
+            });
+        }
+
+
+        // Function to manage the send/stop button's appearance and enabled/disabled state
         function updateSendButtonState() {
             const hasInput = userInput.value.trim().length > 0 || chatAttachments.length > 0;
 
@@ -3590,8 +3642,8 @@
 
         // --- API Call Function ---
         async function callGeminiAPI(payload) {
-            if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || !GEMINI_API_KEY || GEMINI_API_KEY === "") { 
-                throw new Error("API Key is not set or is the default placeholder. Please replace 'YOUR_GEMINI_API_KEY_HERE' in the script with your actual Gemini API key.");
+            if (GEMINI_API_KEY === "AIzaSyCzx6ReMk8ohPJcCjGwHHzu7SvFccJqAbA" || !GEMINI_API_KEY || GEMINI_API_KEY === "") { 
+                throw new Error("API Key is not set or is the default placeholder. Please replace 'AIzaSyCzx6ReMk8ohPJcCjGwHHzu7SvFccJqAbA' in the script with your actual Gemini API key.");
             }
             
             const dynamicApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${GEMINI_API_KEY}`;
@@ -3966,12 +4018,9 @@
             // Update the select dropdown to show the current theme
             if (themeSelect) {
                 themeSelect.value = themeToApply;
+                updateSelectArrowColor(themeSelect); // Update theme select arrow
             }
-            // Dynamically update the background-image for select dropdown arrow
-            // This part is a bit tricky with dynamic CSS variables and needs to be called after theme application
-            // A simple way to get current text-color for the SVG arrow:
-            // const arrowColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1);
-            // themeSelect.style.backgroundImage = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23${arrowColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>');`;
+            updateAllSelectArrows(); // Update all select arrows after theme change
         }
 
         // --- Initialization on Load ---
@@ -4005,6 +4054,7 @@
             exportTxtBtn = document.getElementById('exportTxtBtn');
             exportPdfBtn = document.getElementById('exportPdfBtn');
             exportMdBtn = document.getElementById('exportMdBtn'); // Renamed
+            versionSelect = document.getElementById('version-select'); // NEW Version Selector
 
             createIcons();
             userInput.style.height = userInput.scrollHeight + 'px';
@@ -4012,6 +4062,25 @@
             // NEW: Initialize Theme based on localStorage or default
             const savedTheme = localStorage.getItem('selected-theme');
             applyTheme(savedTheme || DEFAULT_THEME);
+            updateAllSelectArrows(); // Initial update for all select arrows
+
+            // NEW: Populate Version Selector
+            for (const [name, url] of Object.entries(APP_VERSIONS)) {
+                const option = document.createElement('option');
+                option.value = url;
+                option.textContent = name;
+                if (name === CURRENT_APP_NAME) {
+                    option.selected = true;
+                }
+                versionSelect.appendChild(option);
+            }
+            updateSelectArrowColor(versionSelect); // Update version select arrow color
+
+            // NEW: Event listener for Version Selector
+            versionSelect.addEventListener('change', (event) => {
+                window.location.href = event.target.value;
+            });
+
 
             // NEW: Event listener for Theme Selector
             themeSelect.addEventListener('change', (event) => {
