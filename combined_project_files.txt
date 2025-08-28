@@ -3684,3 +3684,5 @@ main version : https://mystic-vision-ai-standalone-chatbot.netlify.app/
 lite version : https://mystic-vision-ai-lite.netlify.app/
 basic version : https://mystic-vision-ai-basic.netlify.app/
 mini version : https://mystic-vision-ai-mini.netlify.app/
+
+Special Cosmic Version : https://cosmic-chat-ai-simple-ai-chatbot.netlify.app/
