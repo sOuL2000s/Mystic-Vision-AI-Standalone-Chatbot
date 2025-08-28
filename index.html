@@ -3642,7 +3642,7 @@
 
         // --- API Call Function ---
         async function callGeminiAPI(payload) {
-            if (GEMINI_API_KEY === "AIzaSyCzx6ReMk8ohPJcCjGwHHzu7SvFccJqAbA" || !GEMINI_API_KEY || GEMINI_API_KEY === "") { 
+            if (GEMINI_API_KEY === "" || !GEMINI_API_KEY || GEMINI_API_KEY === "") { 
                 throw new Error("API Key is not set or is the default placeholder. Please replace 'AIzaSyCzx6ReMk8ohPJcCjGwHHzu7SvFccJqAbA' in the script with your actual Gemini API key.");
             }
             
