@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ai-chatbot-cache-v2'; // Updated cache name
+const CACHE_NAME = 'ai-chatbot-cache-v3'; // Updated cache name
 const urlsToCache = [
     './',
     './index.html',
