@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mystic-vision-cache-v4';
+const CACHE_NAME = 'mystic-vision-cache-v4.1';
 const urlsToCache = [
     './',
     './index.html',
