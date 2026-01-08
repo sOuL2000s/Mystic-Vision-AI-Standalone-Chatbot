@@ -1747,10 +1747,11 @@
     <!-- Add more Prism.js language components as needed -->
 
     <script>
-        // !! IMPORTANT: REPLACE WITH YOUR ACTUAL GEMINI API KEY !!
-        // !! DO NOT USE THIS METHOD IN PRODUCTION. USE A SERVER-SIDE PROXY. !!
-        // The key below is a placeholder and WILL NOT WORK.
-        const GEMINI_API_KEY = 'AIzaSyBtIHW2V6Ic_f4_BdBSQ6YJxlI2yMTfy8c'; // <--- REPLACE THIS WITH YOUR ACTUAL KEY
+        // --- SECURE PROXY CONFIGURATION ---
+        // We now route the API call through a secure Netlify serverless function.
+        // The API key is stored securely as an environment variable on Netlify.
+        const API_PROXY_URL = '/.netlify/functions/gemini-proxy';
+        // ------------------------------------
 
         // --- Global State Variables and Constants ---
         let conversationHistory = []; // Current chat's history (roles & parts)
@@ -3643,15 +3644,10 @@
             window.speechSynthesis.speak(utterance);
         }
 
-        // --- API Call Function ---
+        // --- API Call Function (MODIFIED FOR PROXY) ---
         async function callGeminiAPI(payload) {
-            if (GEMINI_API_KEY === "" || !GEMINI_API_KEY || GEMINI_API_KEY === "") { 
-                throw new Error("API Key is not set or is the default placeholder. Please replace 'AIzaSyCzx6ReMk8ohPJcCjGwHHzu7SvFccJqAbA' in the script with your actual Gemini API key.");
-            }
             
-            const dynamicApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${GEMINI_API_KEY}`;
-
-            // Filter out the 'id' property from messages before sending to Gemini API
+            // 1. Prepare request body for the proxy
             const cleanContents = payload.contents.map(message => {
                 const newMessage = {
                     role: message.role,
@@ -3662,7 +3658,9 @@
             });
             
             const requestBody = {
+                // We send the history, the model, and the system instruction to the proxy
                 contents: cleanContents,
+                model: currentModel, 
             };
 
             // NEW: Add system_instruction if it exists
@@ -3681,24 +3679,17 @@
 
             while (retryCount < maxRetries && !success) {
                 try {
-                    response = await fetch(dynamicApiUrl, {
+                    // NOTE: Fetching from the secure proxy endpoint
+                    response = await fetch(API_PROXY_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(requestBody) // Send the final request body with system_instruction
+                        body: JSON.stringify(requestBody) // Send the full request body to the proxy
                     });
 
-                    if (response.status === 429) { 
-                        if (retryCount < maxRetries - 1) {
-                            console.warn(`API rate limit exceeded. Retrying in ${delay / 1000}s...`);
-                            await new Promise(res => setTimeout(res, delay));
-                            delay *= 2; 
-                            retryCount++;
-                        } else {
-                            throw new Error('API rate limit exceeded. Please try again later.');
-                        }
-                    } else if (!response.ok) {
+                    if (!response.ok) {
                         const errorData = await response.json();
-                        throw new Error(`API error: ${response.status} ${response.statusText} - ${errorData.error?.message || 'Unknown error'}`);
+                        // This error now comes from the proxy (which relays Google's error)
+                        throw new Error(`Proxy/API Error: ${response.status} ${response.statusText} - ${errorData.error || 'Unknown error'}`);
                     } else {
                         result = await response.json();
                         success = true;
@@ -3715,12 +3706,11 @@
                 }
             }
             
-            if (result && result.candidates && result.candidates.length > 0 &&
-                result.candidates[0].content && result.candidates[0].content.parts &&
-                result.candidates[0].content.parts.length > 0) {
-                return result.candidates[0].content.parts[0].text;
+            // The proxy should return { text: "..." }
+            if (result && result.text) {
+                return result.text;
             } else {
-                throw new Error('Failed to get a valid response from the AI. No candidates found or content is empty.');
+                throw new Error('Failed to get a valid text response from the AI through the proxy. Response was empty or malformed.');
             }
         }
 
